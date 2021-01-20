@@ -1,0 +1,72 @@
+% % Preamble BEGINN %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%% Preamble (Dokumentenklasse)
+\input{preamble/pre-class}
+
+%%% Alle Namen usw. im Titel und im hyperref-Paket
+\input{preamble/pre-work}
+
+%%% Preamble (Pakete)
+\input{preamble/pre-packages}
+
+%%% Neue Befehle
+\input{preamble/pre-newcommands}
+\input{preamble/pre-tablecommands} % Fuer Tabellen
+%%% Silbentrennung
+\input{preamble/pre-hyphenation}
+
+% % Nur diese Kapitel (Dateien) einbinden
+%\includeonly{
+%chapters/ch-aa-titel,
+%chapters/ch-aa-vorspiel,
+%chapters/ch-einleitung,
+%chapters/ch-hauptteil,
+%chapters/ch-schluss,
+%chapters/ch-zz-anhang
+%}
+% % Preamble ENDE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% % Inhalt BEGINN %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+% Tabellen-Einstellungen
+\input{preamble/pre-tablesettings}
+% % %%%%%% Vorspiel
+\begin{spacing}{1} % Vorspiel immer mit Standard-Zeilenabstand setzen
+	\frontmatter
+	% % Titelblatt
+	\include{chapters/ch-aa-titel}
+%	\include{chapters/ch-aa-vorspiel}
+	\include{chapters/ch-aa-zusfasg}
+	% % Verzeichnisse
+	\tableofcontents
+%	\include{chapters/ch-bb-akronyme} %Abk. Verzeichnis
+	\listoffigures
+	\addcontentsline{toc}{chapter}{Abbildungsverzeichnis}
+	\listoftables
+	\addcontentsline{toc}{chapter}{Tabellenverzeichnis}
+	\lstlistoflistings % Verzeichnis für Code-Listing
+	\addcontentsline{toc}{chapter}{Listings}
+\end{spacing}{1}
+% % %%%%%% Textteil (Eigentliche Arbeit)
+\mainmatter
+%
+\include{chapters/ch-einleitung}
+\include{chapters/ch-netsimile}
+\include{chapters/ch-midas}
+\include{chapters/ch-static}
+\include{chapters/ch-schluss}
+
+% % %%%%%% Anhang
+%\appendix
+%\include{chapters/ch-zz-anhang}
+
+% % %%%%%% Literaturverzeichnis (darf im deutschen nicht in den Anhang!)
+% Einfaches Literaturverzeichnis
+%\input{chapters/ch-zz-bibEinfach}
+% Literaturverzeichnis mit Bibtex
+
+\bibliography{bib/bib}
+\bibliographystyle{agsm}
+
+% %  Inhalt ENDE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}

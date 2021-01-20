@@ -1,0 +1,328 @@
+\chapter{OddBall}
+\label{chap:a-ob}
+\section{Threshold-Ergebnisse}
+\label{chap:a-ob-th}
+\begin{table}[H]
+	\centering
+	\includegraphics[width=\textwidth, height=0.72\textheight]{fig/tabelle-threshold-1}
+	\caption{Threshold-Ergebnisse}
+\end{table}
+
+\section{Local-Outlier-Factor-Ergebnisse}
+\label{chap:a-ob-lof}
+
+\begin{table}[H]
+\centering
+\includegraphics[width=\textwidth]{fig/tabelle-lof-1}
+\end{table}
+
+\begin{table}[H]
+\centering
+\includegraphics[width=\textwidth]{fig/tabelle-lof-2}
+\end{table}
+
+\begin{table}[H]
+\centering
+\includegraphics[width=\textwidth]{fig/tabelle-lof-3}
+\end{table}
+
+\begin{table}[H]
+\centering
+\includegraphics[width=\textwidth]{fig/tabelle-lof-4}
+\caption{Local-Outlier-Factor-Ergebnisse}
+\end{table}
+
+
+\section{Local-Outlier-Probability-Ergebnisse}
+\label{chap:a-ob-loop}
+\begin{table}[H]
+	\centering
+	\includegraphics[width=\textwidth]{fig/tabelle-loop-1}
+\end{table}
+
+\begin{table}[H]
+	\centering
+	\includegraphics[width=\textwidth]{fig/tabelle-loop-2}
+\end{table}
+
+\begin{table}[H]
+\centering
+\includegraphics[width=\textwidth]{fig/tabelle-loop-3}
+\end{table}
+
+\begin{table}[H]
+\centering
+\includegraphics[width=\textwidth]{fig/tabelle-loop-4}
+\end{table}
+
+\begin{table}[H]
+\centering
+\includegraphics[width=\textwidth]{fig/tabelle-loop-5}
+\end{table}
+
+\begin{table}[H]
+\centering
+\includegraphics[width=\textwidth]{fig/tabelle-loop-6}
+\caption{Local-Outlier-Probability-Ergebnisse}
+\end{table}
+
+\section{Vergleich LOF und LoOP}
+\label{chap:a-ob-lof-loop}
+
+\begin{table}[H]
+	\centering
+	\includegraphics[width=\textwidth]{fig/tabelle-lof-loop}
+	\caption{Vergleich LOF und LoOP}
+\end{table}
+
+\section{DBSCAN-Ergebnisse}
+\label{chap:a-ob-dbscan}
+
+\begin{table}[H]
+	\centering
+	\includegraphics[width=\textwidth]{fig/tabelle-dbscan-1}
+\end{table}
+
+\begin{table}[H]
+\centering
+\includegraphics[width=\textwidth]{fig/tabelle-dbscan-2}
+\end{table}
+
+\begin{table}[H]
+\centering
+\includegraphics[width=\textwidth]{fig/tabelle-dbscan-3}
+\caption{DBSCAN-Ergebnisse}
+\end{table}
+
+\section{DBSCAN+LoOP-Ergebnisse}
+\label{chap:a-ob-dbscan-loop}
+
+\begin{table}[H]
+	\centering
+	\includegraphics[width=\textwidth]{fig/tabelle-dbscan-loop-1}
+\end{table}
+
+\begin{table}[H]
+\centering
+\includegraphics[width=\textwidth]{fig/tabelle-dbscan-loop-4}
+\caption{DBSCAN+LoOP-Ergebnisse}
+\end{table}
+
+\chapter{SCAN-Ergebnisse}
+\label{chap:a-ob-scan}
+
+\begin{table}[H]
+	\centering
+	\includegraphics[width=\textwidth]{fig/tabelle-scan-1}
+\end{table}
+
+\begin{table}[H]
+\centering
+\includegraphics[width=\textwidth]{fig/tabelle-scan-2}
+\end{table}
+
+\begin{table}[H]
+\centering
+\includegraphics[width=\textwidth]{fig/tabelle-scan-3}
+\end{table}
+
+\begin{table}[H]
+\centering
+\includegraphics[width=\textwidth]{fig/tabelle-scan-4}
+\end{table}
+
+\begin{table}[H]
+\centering
+\includegraphics[width=\textwidth]{fig/tabelle-scan-5}
+\end{table}
+
+\begin{table}[H]
+\centering
+\includegraphics[width=\textwidth]{fig/tabelle-scan-6}
+\end{table}
+
+\begin{table}[H]
+\centering
+\includegraphics[width=\textwidth]{fig/tabelle-scan-7}
+\caption{SCAN-Ergebnisse}
+\end{table}
+
+
+\chapter{Random-Walk}
+\label{chap:a-rw}
+Die nachfolgend aufgelisteten Graphen zeigen die Ergebnisse der Ausreißer Erkennung mithilfe des Random-Walk Algorithmus. Die Graphen bestehen dabei aus unterschiedlichen Zeitreihen, den identifizierten Ausreißern sowie dem Ausreißer-Score. In den Kapiteln \autoref{chap:a-rw-3D} und \autoref{chap:a-rw-5D} wurden die Dimensionen 2-3 bzw. 2-5 nicht dargestellt, um die Übersichtlichkeit zu gewährleisten.
+
+\section{Zweidimensionales Signal}
+\label{chap:a-rw-2D}
+\begin{figure}[!htbp]
+	\centering
+	\begin{minipage}[t]{0.45\textwidth}
+		\includegraphics[width=\textwidth]{fig/rw-2d-1}
+		\caption{Anomalie: Einzelne Peaks}
+	\end{minipage}
+	\begin{minipage}[t]{0.45\textwidth}
+		\includegraphics[width=\textwidth]{fig/rw-2d-2}
+		\caption{Anomalie: Zunahme an Rauschen}
+	\end{minipage}
+\end{figure}
+
+\begin{figure}[!htbp]
+	\centering
+	\begin{minipage}[t]{0.45\textwidth}
+		\includegraphics[width=\textwidth]{fig/rw-2d-3}
+		\caption{Anomalie: Signal Drift}
+	\end{minipage}
+	\begin{minipage}[t]{0.45\textwidth}
+		\includegraphics[width=\textwidth]{fig/rw-2d-4}
+		\caption{Anomalie: Zunahme der Amplitude}
+	\end{minipage}
+\end{figure}
+
+\begin{figure}[!htbp]
+	\centering
+	\begin{minipage}[t]{0.49\textwidth}
+		\includegraphics[width=\textwidth]{fig/rw-2d-5}
+		\caption{Anomalie: Zyklus mit höherer Amplitude}
+	\end{minipage}
+	\begin{minipage}[t]{0.49\textwidth}
+		\includegraphics[width=\textwidth]{fig/rw-2d-6}
+		\caption{Anomalie: Zyklus mit geringerer Amplitude}
+	\end{minipage}
+\end{figure}
+
+\begin{figure}[!htbp]
+	\centering
+	\begin{minipage}[t]{0.49\textwidth}
+		\includegraphics[width=\textwidth]{fig/rw-2d-7}
+		\caption{Anomalie: Zyklus Aussetzer}
+	\end{minipage}
+	\begin{minipage}[t]{0.49\textwidth}
+		\includegraphics[width=\textwidth]{fig/rw-2d-8}
+		\caption{Anomalie: Signal Aussetzer}
+	\end{minipage}
+\end{figure}
+
+\begin{figure}
+	\centering
+	\begin{minipage}[t]{0.49\textwidth}
+		\includegraphics[width=\textwidth]{fig/rw-2d-9}
+		\caption{Anomalie: Frequenzänderung der Zyklen}
+	\end{minipage}
+\end{figure}
+
+\section{Dreidimensionales Signal}
+\label{chap:a-rw-3D}
+
+\begin{figure}[!htbp]
+	\centering
+	\begin{minipage}[t]{0.45\textwidth}
+		\includegraphics[width=\textwidth]{fig/rw-3d-1}
+		\caption{Anomalie: Einzelne Peaks}
+	\end{minipage}
+	\begin{minipage}[t]{0.45\textwidth}
+		\includegraphics[width=\textwidth]{fig/rw-3d-2}
+		\caption{Anomalie: Zunahme an Rauschen}
+	\end{minipage}
+\end{figure}
+
+\begin{figure}[!htbp]
+	\centering
+	\begin{minipage}[t]{0.45\textwidth}
+		\includegraphics[width=\textwidth]{fig/rw-3d-3}
+		\caption{Anomalie: Signal Drift}
+	\end{minipage}
+	\begin{minipage}[t]{0.45\textwidth}
+		\includegraphics[width=\textwidth]{fig/rw-3d-4}
+		\caption{Anomalie: Zunahme der Amplitude}
+	\end{minipage}
+\end{figure}
+
+\begin{figure}[!htbp]
+	\centering
+	\begin{minipage}[t]{0.45\textwidth}
+		\includegraphics[width=\textwidth]{fig/rw-3d-5}
+		\caption{Anomalie: Zyklus mit höherer Amplitude}
+	\end{minipage}
+	\begin{minipage}[t]{0.45\textwidth}
+		\includegraphics[width=\textwidth]{fig/rw-3d-6}
+		\caption{Anomalie: Zyklus mit geringerer Amplitude}
+	\end{minipage}
+\end{figure}
+
+\begin{figure}[!htbp]
+	\centering
+	\begin{minipage}[t]{0.45\textwidth}
+		\includegraphics[width=\textwidth]{fig/rw-3d-7}
+		\caption{Anomalie: Zyklus-Aussetzer}
+	\end{minipage}
+	\begin{minipage}[t]{0.45\textwidth}
+		\includegraphics[width=\textwidth]{fig/rw-3d-8}
+		\caption{Anomalie: Signal-Aussetzer}
+	\end{minipage}
+\end{figure}
+
+\begin{figure}
+	\centering
+	\begin{minipage}[t]{0.45\textwidth}
+		\includegraphics[width=\textwidth]{fig/rw-3d-9}
+		\caption{Anomalie: Frequenzänderung der Zyklen}
+	\end{minipage}
+\end{figure}
+\newpage
+
+\section{Fünfdimensionales Signal}
+\label{chap:a-rw-5D}
+
+\begin{figure}[!htbp]
+	\centering
+	\begin{minipage}[t]{0.45\textwidth}
+		\includegraphics[width=\textwidth]{fig/rw-5d-1}
+		\caption{Anomalie: Einzelne Peaks}
+	\end{minipage}
+	\begin{minipage}[t]{0.45\textwidth}
+		\includegraphics[width=\textwidth]{fig/rw-5d-2}
+		\caption{Anomalie: Zunahme an Rauschen}
+	\end{minipage}
+\end{figure}
+
+\begin{figure}[!htbp]
+	\centering
+	\begin{minipage}[t]{0.45\textwidth}
+		\includegraphics[width=\textwidth]{fig/rw-5d-3}
+		\caption{Anomalie: Signal Drift}
+	\end{minipage}
+	\begin{minipage}[t]{0.45\textwidth}
+		\includegraphics[width=\textwidth]{fig/rw-5d-4}
+		\caption{Anomalie: Zunahme der Amplitude}
+	\end{minipage}
+\end{figure}
+
+\begin{figure}[!htbp]
+	\centering
+	\begin{minipage}[t]{0.45\textwidth}
+		\includegraphics[width=\textwidth]{fig/rw-5d-5}
+		\caption{Anomalie: Zyklus mit höherer Amplitude}
+	\end{minipage}
+	\begin{minipage}[t]{0.45\textwidth}
+		\includegraphics[width=\textwidth]{fig/rw-5d-6}
+		\caption{Anomalie: Zyklus mit geringerer Amplitude}
+	\end{minipage}
+\end{figure}
+
+\begin{figure}[!htbp]
+	\centering
+	\begin{minipage}[t]{0.45\textwidth}
+		\includegraphics[width=\textwidth]{fig/rw-5d-7}
+		\caption{Anomalie: Zyklus-Aussetzer}
+	\end{minipage}
+	\begin{minipage}[t]{0.45\textwidth}
+		\includegraphics[width=\textwidth]{fig/rw-5d-8}
+		\caption{Anomalie: Signal-Aussetzer}
+	\end{minipage}
+\end{figure}
+
+\begin{figure}[H]
+		\centering
+		\includegraphics[width=8cm]{fig/rw-5d-9}
+		\caption{Anomalie: Frequenzänderung der Zyklen}
+\end{figure}
