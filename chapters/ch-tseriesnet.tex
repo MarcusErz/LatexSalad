@@ -1,12 +1,13 @@
 \newpage
 \chapter{Transformation Zeitreihe zu Netzwerk}
-Ziel unseres Forschungsprojektes war es verschiedene Algorithmen zur dynamischen Ausreißer Erkennung in Netzwerken, auf Zeitreihen anzuwenden. Um dies zu ermöglichen müssen die Zeitreihen hierzu zunächst in Netzwerke umgewandelt werden. In diesem Kapitel wird dieser Schritt erläutert. Je nach Algorithmus der verwendet werden soll, wird die Umwandlung unterschiedlich durchgeführt. Aus diesem Grund ist dieses Kapitel in weitere Unterkapitel aufgegliedert um auf die Besonderheiten bei der Umwandlung für unterschiedliche Algorithmen einzugehen.
+Ziel unseres Forschungsprojektes ist es unter anderem verschiedene Algorithmen, zur Ausreißer Erkennung in Netzwerken, auf Zeitreihendaten anzuwenden. Als erstes müssen hierzu die Zeitreihen in ein Netzwerk umgewandelt werden, dieser Schritt wird in diesem Kapitel erläutert. Je nach Ausreißer-Erkennung Algorithmus, muss die Transformation leicht unterschiedlich durchgeführt werden. Aus diesem Grund wird in \autoref{chap:trsnsNeti}, \autoref{chap:trsnsMidas} und \autoref{chap:trsnsMidasR} erläutert wie die Umwandlung für die jeweiligen Algorithmen funktioniert.
 \section{Netsimile}
 \label{chap:trsnsNeti}
-Der Netsimile Algorithmus erwartet für jeden Zeitabschnitt ein Netzwerk. Sodass später die einzelnen Netzwerke miteinander verglichen werden können um auffällige Netzwerke zu identifizieren. Hierzu muss die Zeitreihe zunächst in unterschiedliche Zeitabschnitte aufgeteilt werden. Je nach Datensatz kann hierbei ein unterschiedliches Intervall zum aufsplitten der Zeitreihe gewählt werden. Insofern die Zeitreihe eine Periodizität aufweist, kann diese bestimmt und als Intervall festgelegt werden.\\ 
-Anschließend muss jeder Zeitabschnitt in ein Netzwerk umgewandelt werden. Dies wird getan indem die Ähnlichkeit zwischen allen Elementen des Zeitabschnitts berechnet wird. Die Ähnlichkeiten bilden anschließend die Gewichte zwischen den Elementen im Netzwerk.
+Der erste Schritt der Transformation ist, die Zeitreihe in kleinere Intervalle aufzusplitten. Anschließend kann für jedes der Intervalle ein Netzwerk berechnet werden. Die Länge des Intervalls kann als Hyperparameter an den Algorithmus übergeben werden. Je nach Zeitreihe funktionieren unterschiedliche Intervallgrößen besser oder schlechter. Insofern die Zeitreihe eine Saisonalität aufweist, kann diese bestimmt und als Intervallgröße genutzt werden.
+\workTodo{Überprüfen ob Saisonalität der richtige Begriff ist.}\\
+Um die einzelne Zeitintervalle in ein Netzwerk umzuwandeln, wird zunächst die Distanz zwischen den einzelnen Elementen des Zeitintervalls berechnet. Hierzu wird auf das in \citep[vgl.][S.~2-3]{10.3389/fphy.2019.00194} vorgestellte Distanzmaß zurückgegriffen. Insofern für p = 2 eingesetzt wird, handelt es sich um die euklidische Distanz. Die Abstände bilden die Kantengewichte zwischen den jeweiligen Elementen im Netzwerk. Die Elemente der Zeitreihe bilden die Knoten des Netzwerks. Die Netzwerke werden intern als Adjazenzmatrizen gespeichert.
 $$D_{ij}=\left(\sum_{k} \left|v_{k}^{i}-v_{k}^{j}\right|^{p}\right)^{1/p}$$
-Das Ergebnis hiervon bildet eine Adjazenzmatrix. Diese Adjazensmatrix muss anschließend in ein Textfile geschrieben werden, sodass die Daten vom Netismile Algorithmus genutzt werden können. Dazu wird für jede Kante eine neue Zeile im File generiert, in dieser wird zunächst der Ursprungsknoten, dann der Zielknoten und anschließend die Gewichtung aufgeführt. Für jeden Zeitabschnitt muss ein einzelner File angelegt werden. 
+ Im nächsten Schritt müssen die Netzwerke in CSV-Dateien gespeichert werden, sodass der  Netsimile Algorithmus die Daten einlesen kann. Dazu wird für jede Kante des Netzwerks eine  Zeile im der Datei, mit folgendem Format generiert: Ursprungsknoten, Zielknoten, Gewichtung. Für jedes Zeitintervall muss eine einzelne CSV-Datei angelegt werden. Der Netsimile Algorithmus vergleicht...
 
 \begin{figure}[H]
 	\centering
@@ -20,7 +21,10 @@ Das Ergebnis hiervon bildet eine Adjazenzmatrix. Diese Adjazensmatrix muss ansch
 
 \section{MIDAS}
 \label{chap:trsnsMidas}
-Die Umwandlung in eine Zeitreihe funktioniert ähnlich wie in \autoref{chap:trsnsNeti}. Lediglich das Übergabeformat an den Algorithmus unterscheidet sich. Hierbei muss nicht für jeden Zeitabschnitt eine neue Datei angelegt werden. Anstatt dessen muss bei jeder Kante angegeben werden in welchem Abschnitt sie stattfindet. Außerdem kann an den Algorithmus nicht direkt eine Gewichtung der Kante übergeben werden. Es muss anstatt eine Gewichtung zu übergeben einfach 10 mal die gleiche Kante übergeben werden. Je nachdem wie hoch die Gewichtung der Kante ist.
+Die Transformation der Zeitreihe in mehrere Netzwerke funktioniert für den MIDAS Algorithmus gleich wie in \autoref{chap:trsnsNeti}. Allerdings kann der Algorithmus teilweise bessere Ergebnisse erzielen, wenn für p eine Zahl größer als zwei eingesetzt wird. Dadurch werden größere Abstände zwischen Elementen stärker gewichtet.\\
+Außerdem erwartet der MIDAS Algorithmus für die Netzwerkdaten ein anderes Übergabeformat. Hierbei können alle Daten der jeweiligen Zeitabschnitte in einen CSV-File geschrieben werden. Die CSV-Datei muss dabei folgendermaßen strukturiert sein: Ursprungsknoten, Zielknoten, Zeitintervall. Es ist nicht möglich die Kantengewichtung direkt an den Algorithmus zu übergeben. Um die Kantengewichtung trotzdem übergeben zu können, wird die gleiche Kante mehrmals in Abhängigkeit der Gewichtung an den Algorithmus übergeben.
+Wie funkt Midas ganz kurz..
+
 
 \begin{figure}[H]
 	\centering
