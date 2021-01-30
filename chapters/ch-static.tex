@@ -8,7 +8,8 @@ Für beide Algorithmen gilt, dass die Zeitreihe zunächst in ein Netzwerk umgewand
 	a=b
 \end{equation}
 $$D_{ij}=\left(\sum_{k} \left|v_{k}^{i}-v_{k}^{j}\right|^{p}\right)^{1/p}$$
-Formel 1 gibt an, wie ein Element ij der Distanzmatrix berechnet wird. Insofern für p gleich zwei eingesetzt wird, wird zwischen den Elementen die euklidische Distanz berechnet. Ein Element der Zeitreihe kann aus mehreren Werten bestehen z.B. bei multivariaten Zeitreihen. Die berechnete Distanzmatrix bildet ein Netzwerk, dabei bilden die Zeitreihen Elemente die Knoten und die Distanzen zwischen ihnen, die Gewichte \citep[vgl.][S.~2-3]{10.3389/fphy.2019.00194}.
+Formel 1 gibt an, wie ein Element ij der Distanzmatrix berechnet wird. Insofern für p gleich zwei eingesetzt wird, wird zwischen den Elementen die euklidische Distanz berechnet. Ein Element der Zeitreihe kann aus mehreren Werten bestehen z.B. bei multivariaten Zeitreihen. Die berechnete Distanzmatrix bildet ein Netzwerk, dabei bilden die Zeitreihen Elemente die Knoten und die Distanzen zwischen ihnen, die Gewichte \citep[vgl.][S.~2-3]{10.3389/fphy.2019.00194}.\\
+ Beide Algorithmen liefern lediglich einen Ausreißer Score zurück. Um zu bestimmen inwiefern ein Element konkret ein Ausreißer ist, wird zunächst den Mittelwert und die Standardabweichung des Outlier Scores berechnet. Falls ein Element in Abhängigkeit von der Standardabweichung sehr stark vom Mittelwert abweicht wird das Element als Ausreißer klassifiziert.
 \section{IsoMap Basierter Algorithmus}
 \label{chap:rw}
 Der Grundgedanke hinter diesem Ansatz ist, dass Informationen über Ausreißer bei der Reduzierung der Dimensionalität mit dem IsoMap Algorithmus verloren gehen. Insofern versucht wird, die Informationen zu rekonstruieren und mit der ursprünglichen Matrix vergleicht, können große Abweichungen bei Ausreißer Elementen festgestellt werden \citep[vgl.][S.~3]{10.3389/fphy.2019.00194}. 
@@ -82,34 +83,49 @@ Bei diesem Algorithmus werden schrittweiße die Kanten mit den höchsten Gewichten
 \label{sec:per-imp}
 Aus denselben Gründen wie in \autoref{sec:im-implement} erläutert, wurde für die Implementierung auf Python/Numpy zurückgegriffen.  Da die Distanzmatrix sehr umfangreich werden kann wurden einige Veränderungen an dem Algorithmus vorgenommen, um ihn Performanter zu machen. Eine Modifikation, die vorgenommen wurde, ist das die Kanten nicht einzeln, sondern in Gruppen entfernt werden. Dadurch muss seltener überprüft werden, ob ein Knoten mittlerweile komplett isoliert ist. Außerdem wurde ein Abbruchkriterium implementiert, bei welchem der Algorithmus angehalten wird sobald eine bestimmte Prozentzahl an Kanten entfernt wurde. Dies hat keine Auswirkungen auf die Qualität der Ausreißer Erkennung, da Ausreiser üblicherweise bereits zu beginn des Algorithmus isoliert werden. Der Algorithmus berechnet für jedes Element der Zeitreihe einen Ausreißer Score. Allerdings können die Ausreißer Scores sehr stark schwanken. Deshalb ist es schwierig Ausreißer zu identifizieren, welche sich über mehrere Zeitschritte erstrecken, da kein kontinuierliches Ansteigen des Scores beobachtet werden kann. Eine Möglichkeit, um diese Art der Ausreißer trotzdem zu identifizieren, ist es ein Sliding Window Verfahren einzusetzen. Dabei wird der Ausreißer Score für jedes Element neu berechnet, indem ein Mittelwert über die Zeitpunkte vor einem und nach einem Element gebildet wird. Dadurch werden die Schwankungen im Ausreißer Score abgemildert. Prinzipiell ist der Algorithmus parameterfrei, durch die Veränderungen kann jedoch die Größe des Sliding Window als Parameter übergeben werden.
 
+\begin{figure}[h]
+	\centering
+	\subfloat{
+		\includegraphics[width=0.5\textwidth]{fig/resultsPercolation/art_daily_jumpsup}}
+	\subfloat{
+		\includegraphics[width=0.5\textwidth]{fig/resultsPercolation/art_daily_jumpsup_ohne}}
+	\caption{Vergelich Perculation Algorithmus mit Sliding Window Verfahren und ohne Sliding Window Verfahren}
+	\label{img:vardir1}
+\end{figure}
+
 \subsection{Ergebnisse}
 \label{sec:per-result}
 
-\begin{tabular}{ |p{7cm}||p{3cm}|}
+\begin{tabular}{ |p{6cm}||p{6cm}||p{3cm}|}
 	\hline
-	\textbf{Ausreißer Typ}& 
+	\textbf{Ausreißer Typ}& \textbf{Datei Name}&
 	\textbf{1D}\\
 	\hline
 	\hline
-	Einzelne Peaks & *\\
+	Einzelne Peaks & anomaly-art-daily-peaks & *\\
 	\hline
-	Zunahme an Rauschen & *\\
+	Zunahme an Rauschen & anomaly-art-daily-increase-noise &****\\
 	\hline
-	Signal Drift & *\\
+	Signal Drift & anomaly-art-daily-drift &***\\
 	\hline
-	Kontinuierliche Zunahme der Amplitude & *\\
+	Kontinuierliche Zunahme der Amplitude& art-daily-amp-rise & ***\\
 	\hline
-	Zyklus mit höherer Amplitude & *\\
+	Zyklus mit höherer Amplitude & art-daily-jumpsup &****\\
 	\hline
-	Zyklus mit geringerer Amplitude & *\\
+	Zyklus mit geringerer Amplitude & art-daily-jumpsdown & ****\\
 	\hline
-	Zyklus-Aussetzer & *\\
+	Zyklus-Aussetzer & art-daily-flatmiddle &****\\
 	\hline
-	Signal-Aussetzer & *\\
+	Signal-Aussetzer & art-daily-nojump & -\\
 	\hline
-	Frequenzänderung & *\\
+	Frequenzänderung & anomaly-art-daily-sequence-change &-\\
 	\hline
 \end{tabular}
+
+\label{sec:per-results-text}
+Die Qualität der Ausreißer Erkennung mit dem Perculation Algorithmus kann großenteils als gut bis sehr gut bezeichnet werden. Lediglich die Ausreißer Typen Einzelne Peaks, Signal Aussetzer und Frequenzänderung können vom Algorithmus nicht erkannt werden. Bei den einzelnen Peaks liegt das an der Verwendung des Sliding Window Verfahren, dadurch werden die Ausschläge im Ausreißer Score weggemittelt und können nur noch sehr schlecht identifiziert werden. Wird jedoch kein Sliding Window Verfahren angewandt können die Ausreißer sehr gut identifiziert werden. Signal Aussetzer und Frequenzänderungen können vom Perculation Algorithmus nicht identifiziert werden, weil die Werte der Zeitreihe hierbei nicht von den Werten der restlichen Zeitreihe abweichen.   
+
+
 
 \workTodo{Die richtigen Ergebnisse rein machen und bisschen was drüber schreiben}
 
