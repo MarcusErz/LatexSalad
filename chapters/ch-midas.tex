@@ -19,16 +19,22 @@ Erst erklären wie der MIDAS funktioniert. Und zum Laufen gebracht mit Graphen üb
 \workTodo{Stichworte sammeln}
 
 \section{Ergebnisse Ausreißererkennung in Zeitreihen}
-uiebwiebdciqbewd
+Wie in \autoref{chap:trsnsMidas} beschrieben muss die Zeitreihe zunächst in verschiedene Netzwerke umgewandelt werden. In \autoref{img:midasTSresults} ist das Ergebnis der Ausreißererkennung mit Midas abgebildet. Der Ausreißer wird von dem Algorithmus identifiziert, jedoch ist der Verlauf des Ausreißer Scores schwierig zu interpretieren. Es ist zu erkennen, das zu beginn jedes Abschnittes der Ausreißer Score sehr hoch ist und am Ende niedrig(Ausnahme Abschnitt mit Ausreißer). Grund hierfür ist, das der Algorithmus die Anzahl der Kanten in einem Abschnitt mit der Anzahl an Katen aus vorherigen Abschnitten vergleicht. Zu Beginn eines jeden Abschnitts ist die Anzahl an Kanten deutlich geringer, deshalb ist der Ausreißer Score auch höher. Am Ende eines Abschnitts ist die Anzahl an Kanten in Relation identisch, deshalb ist der Ausreißer Score höher. Der Abschnitt in welchem sich der Ausreißer befindet ist deutlich größer als die anderen Abschnitte. Der Grund hierfür ist, das die Anzahl an Kanten deutlich höher ist als in den anderen Abschnitten. Für jede Kante wird ein zusätzliches Element zum Ausreißer Score hinzugefügt. Da Kantengewichte in dem Abschnitt mit dem Ausreißer deutlich größer sind, resultiert dies in deutlich mehr Kanten. 
 \label{sec:resultsOTs}
 
 \begin{figure}[h]
 	\centering
-	\subfloat{
+	\subfloat[Caption for sub-figure1]{
 		\includegraphics[width=0.5\textwidth]{fig/resultsMidasTS/art_daily_jumpsup_MIDAS_hdrei_labeled_result.png}}
-	\subfloat{
+	\label{img:midasTSresult}
+	\subfloat[Caption for sub-figure1]{
 		\includegraphics[width=0.5\textwidth]{fig/resultsMidasTS/result_without_midas.png}}
+	\label{img:reultwoMidas}
 	\caption{Vergelich Perculation Algorithmus mit Sliding Window Verfahren und ohne Sliding Window Verfahren}
 	\label{img:midasTSresults}
 \end{figure}
+
+Da der Midas Algorithmus lediglich die Anzahl an Kanten zwischen zwei Knoten zählt um Ausreißer zu erkennen, verglichen wir den Midas Algorithmus mit einem naiven Algorithmus der lediglich die Gesamtanzahl an Knoten in einem Abschnitt zählt. Es konnte festgestellt werden, dass der naive Ansatz den Midas Algorithmus mithalten kann. Aus diesem Grund wurden keinerlei weitere Datensätze untersucht. 
+\workTodo{Vielleicht den Algorithmus einmal auf einzelne Peaks testen vielleicht bringt das was.}
+\label{sec:resultTSwithoutMidas}
 

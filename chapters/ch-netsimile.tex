@@ -18,6 +18,16 @@
 
 \section{Ergebnisse Zeitreihe}
 \label{sec:resultsTS}
+\workTodo{Bin mir nicht sicher ob ich meine Implementierung vom Netsimile genauer erklären soll}
+
+\workTodo{Außerdem funktioniert das mit den einzelnen Peaks irgenwie nicht. Das muss ich noch verbessern}
+
+\workTodo{Noch Parameter des ganzen erläutern}
+
+Um die Laufzeit des Netsimile Algorithmus zu optimieren wurde der Algorithmus zusätzlich noch ohne Verwendung eines Graphen Frameworks implementiert. Dadurch konnte die Laufzeit sehr stark auf wenige Sekunden reduziert werden. Für die Tests wurden ein und zweidimensionale Zeitreihen der Numenta Gruppe verwendet.\workTodo{Vielleicht Quelle noch rein machen}. Diese Zeitreihen enthalten verschiedene Ausreißer Typen, auf deren Erkennung der Algorithmus getestet wurde. Die Qualität der Ausreißererkennung wurde mithilfe eines Sternesystems bewertet. Das System geht von - Ausreißer nicht erkannt bis **** Ausreißer sehr gut erkannt.  
+
+\begin{table}
+\caption{Netsimile Time Series Perfomance}
 \begin{tabular}{ |p{4.5cm}||p{4.5cm}||p{3cm}||p{3cm}|}
 	\hline
 	\textbf{Ausreißer Typ}& \textbf{Datei Name}&
@@ -26,21 +36,24 @@
 	\hline
 	Einzelne Peaks & anomaly-art-daily-peaks & *& *\\
 	\hline
-	Zunahme an Rauschen & anomaly-art-daily-increase-noise &****& *\\
+	Zunahme an Rauschen & anomaly-art-daily-increase-noise &****& ***\\
 	\hline
-	Signal Drift & anomaly-art-daily-drift &***& *\\
+	Signal Drift & anomaly-art-daily-drift &***& -\\
 	\hline
-	Kontinuierliche Zunahme der Amplitude& art-daily-amp-rise & ***& *\\
+	Kontinuierliche Zunahme der Amplitude& art-daily-amp-rise & ***& ***\\
 	\hline
 	Zyklus mit höherer Amplitude & art-daily-jumpsup &****& *\\
 	\hline
-	Zyklus mit geringerer Amplitude & art-daily-jumpsdown & ****& *\\
+	Zyklus mit geringerer Amplitude & art-daily-jumpsdown & ****& -\\
 	\hline
-	Zyklus-Aussetzer & art-daily-flatmiddle &****& *\\
+	Zyklus-Aussetzer & art-daily-flatmiddle &****& ***\\
 	\hline
-	Signal-Aussetzer & art-daily-nojump & -& *\\
+	Signal-Aussetzer & art-daily-nojump & ****& ***\\
 	\hline
-	Frequenzänderung & anomaly-art-daily-sequence-change &-& *\\
+	Frequenzänderung & anomaly-art-daily-sequence-change &****& ***\\
 	\hline
 \end{tabular}
+\end{table}
+
+Die Qualität der Ausreißererkennung des Algorithmus im eindimensionalen Fall ist sehr gut. Lediglich bei den einzelnen Peaks wird der Außreißer nicht erkannt. Des weiteren wird beim Signal Drift und der kontinuirlichen Zunahme der Amplitude lediglich der Start des Ausreißers erkannt und nicht der komplette Ausreißer. Aus diesem Grund wurden die Ausreißer Fälle lediglich mit drei Sternen bewertet. Des weiteren wird häufig das sechste oder sibte Element der Zeitreihe als Ausreißer markiert. Der Grund dafür ist, das Standaradabeweichung bei Fenstergröße von fünf am Anfang null ist. Dieser Umstand wurde bei der bewertung nicht berücksichtigt und spielt bei mehreren Abschnitten auch keine Rolle mehr. Im zweidimensionalen Fall ist die Qualität der Ausreißererkennung etwas durchwachsener. Besonders auffallend ist, dass Zyklen mit höherer und niedriger Amplitude nicht erkannt werden, da diese von vielen Algorithmen sehr gut erkannt werden.  Des weiteren wird der Signal drift nicht mehr erkannt. Die weiteren Algorithmen erkennen die Ausreißer weiterhin, teilweiße aber nicht komplett und nur den Anfang. 
 
