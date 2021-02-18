@@ -26,10 +26,8 @@ Wie in \autoref{chap:trsnsMidas} beschrieben muss die Zeitreihe zunächst in vers
 	\centering
 	\subfloat[Caption for sub-figure1]{
 		\includegraphics[width=0.5\textwidth]{fig/resultsMidasTS/art_daily_jumpsup_MIDAS_hdrei_labeled_result.png}}
-	\label{img:midasTSresult}
 	\subfloat[Caption for sub-figure1]{
 		\includegraphics[width=0.5\textwidth]{fig/resultsMidasTS/result_without_midas.png}}
-	\label{img:reultwoMidas}
 	\caption{Vergelich Perculation Algorithmus mit Sliding Window Verfahren und ohne Sliding Window Verfahren}
 	\label{img:midasTSresults}
 \end{figure}
@@ -42,35 +40,38 @@ Da der Midas Algorithmus lediglich die Anzahl an Kanten zwischen zwei Knoten zäh
 	\centering
 	\subfloat[Caption for sub-figure1]{
 		\includegraphics[width=0.5\textwidth]{fig/resultsMidasTS/art_daily_flatmiddle_MIDAS_hdrei_labeled_result.png}}
-	\label{img:midasTSresult}
 	\subfloat[Caption for sub-figure1]{
 		\includegraphics[width=0.5\textwidth]{fig/resultsMidasTS/anomaly_art_daily_sequence_change_MIDAS_hdrei_labeled_result.png}}
-	\label{img:reultwoMidas}
 	\caption{Vergelich Perculation Algorithmus mit Sliding Window Verfahren und ohne Sliding Window Verfahren}
 	\label{img:midasTSresults}
 \end{figure}
 
+Der Algorithmus funktioniert lediglich bei einem Ausschlag nach oben, weil der Ausschlag nach oben zu großen Gewichten innerhalb des Netzes führt. Die großen Gewichte führen zu vielen Kanten in den Daten was dan zu einem Anstieg des Ausreißer Scores führt.
+
+Bei anderen Ausreißer Typen ist teilweiße das genenteil der Fall, wie in 4.2a. Hier gibt es in dem Abschnitt mit dem Ausreißer nur sehr geringe Kantengewichte. Das führt sehr wenigen Kanten in den Daten. Jedoch schlägt der Ausreißer Score nicht stark aus. In 4.2b ist der Abschnitt ein bisschen größer.
+
 \begin{figure}[h]
 	\centering
 	\subfloat[Caption for sub-figure1]{
-		\includegraphics[width=0.5\textwidth]{fig/resultsMidasTS/anomaly_art_daily_sequence_change_MIDAS_hdrei_labeled_110_result.png}}
-	\label{img:midasTSresult}
+		\includegraphics[width=0.5\textwidth]{fig/resultsMidasTS/anomaly_art_daily_sequence_change_MIDAS_hdrei_labeled_110_result.png}}	
 	\subfloat[Caption for sub-figure1]{
 		\includegraphics[width=0.5\textwidth]{fig/resultsMidasTS/art_daily_jumpsup_MIDAS_hdrei_labeled_110_result.png}}
-	\label{img:reultwoMidas}
 	\caption{Vergelich Perculation Algorithmus mit Sliding Window Verfahren und ohne Sliding Window Verfahren}
 	\label{img:midasTSresults}
 \end{figure}
 
+
+Die Veränderung der Fenstergröße nutzt nur Bedingt etwas. Für den Ausreißer nach oben werden die ausschläge im Ausreißer Score noch deutlicher. Alle anderen funktionieren weiterhin nicht.
+
 \begin{figure}[h]
 	\centering
-	\subfloat[Caption for sub-figure1]{
+	\subfloat[lol]{
 		\includegraphics[width=0.5\textwidth]{fig/reultsMidasR/art_daily_jumpsdown_MIDAS_R_red_est_result}}
-	\label{img:midasTSresult}
-	\subfloat[Caption for sub-figure1]{
+	\subfloat[lol]{
 		\includegraphics[width=0.5\textwidth]{fig/reultsMidasR/art_daily_jumpsup_MIDAS_R_red_est_result}}
-	\label{img:reultwoMidas}
 	\caption{Vergelich Perculation Algorithmus mit Sliding Window Verfahren und ohne Sliding Window Verfahren}
 	\label{img:midasTSresults}
 \end{figure}
+
+Auch der Midas R Algorithmus führt nicht zu einer verbesserung der Ergebnisse. Der eine Ausreißer wird eriterhin erkannt. Alle anderen Ausreißer Typen werden nicht erkannt. 
 
