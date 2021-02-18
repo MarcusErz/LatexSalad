@@ -107,7 +107,7 @@
 \usepackage[stable,perpage, ragged,  multiple]{footmisc} % Fussnoten
 \usepackage[ngerman]{varioref} % Intelligente Querverweise
 \usepackage{enumitem} % Listen
-\usepackage[toc]{appendix} % Um Anhang zu gestallten
+%\usepackage[toc]{appendix} % Um Anhang zu gestallten
 
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 % 6. Pakete zum Zitieren
@@ -119,6 +119,8 @@
           {\begin{quote}\small}%
           {\end{quote}}%
 \SetBlockEnvironment{myquote}
+\usepackage[numbers]{natbib}
+%\bibliographystyle{abbrvnat}
 
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 % 7. PDF related packages
@@ -179,6 +181,7 @@
 \usepackage{booktabs}
 \usepackage{tabularx} % tabularx nach hyperref laden
 \usepackage{multirow}
+\usepackage{longtable}
 
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 % 9. figures and placement
@@ -220,34 +223,29 @@
 %%% Doc: ftp://tug.ctan.org/pub/tex-archive/macros/latex/contrib/listings/listings-1.3.pdf
 \usepackage{listings}
 
-\definecolor{codegreen}{rgb}{0,0.6,0}
-\definecolor{codegray}{rgb}{0.5,0.5,0.5}
-\definecolor{codepurple}{rgb}{0.58,0,0.82}
-\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
-
-\lstdefinestyle{mystyle}{
-	backgroundcolor=\color{backcolour},   
-	commentstyle=\color{codegreen},
-	keywordstyle=\color{magenta},
-	numberstyle=\tiny\color{codegray},
-	stringstyle=\color{codepurple},
-	basicstyle=\ttfamily\footnotesize,
-	breakatwhitespace=false,         
-	breaklines=true,                 
-	captionpos=b,                    
-	keepspaces=true,                 
-	numbers=left,                    
-	numbersep=5pt,                  
-	showspaces=false,                
-	showstringspaces=false,
-	showtabs=false,                  
-	tabsize=2
+\lstset{
+basicstyle =\ttfamily\color{black}\small, % Standardschrift
+keywordstyle =, % \bfseries\color{blue}	  % Schlüsselwort-Style
+%identifierstyle =\underbar,
+commentstyle =\color{teal},
+stringstyle =\itshape,
+numbers = left,			  % Ort der Zeilennummern
+numberstyle =\tiny\color{black},	   % Stil der Zeilennummern
+numbers = left,			  % Ort der Zeilennummern
+tabsize=2,			  % Groesse von Tabs
+breaklines,			  % Zeilen werden Umgebrochen
+breakatwhitespace,			  % An Leerzeichen umbrechen
+%showspaces=true,			  % Leerzeichen anzeigen
+backgroundcolor=\color{lightgray},	  % % Hintergrundfarbe der Listings
 }
-
-\lstset{style=mystyle}
-
  \lstloadlanguages{% Check Dokumentation for further languages ...
-         Python
+%	[Visual]Basic
+         [AlLaTeX]TeX,
+         %Pascal
+         %C
+         %C++
+         %XML
+         %HTML
  }
 
 %%% Doc: ftp://tug.ctan.org/pub/tex-archive/macros/latex/contrib/examplep/eurotex_2005_examplep.pdf
@@ -397,14 +395,8 @@
 \colorlet{stringcolor}{green!40!black!100}
 \colorlet{commencolor}{blue!0!black!100}
 
-% --- Abkürzungsverzeichnis: ----------------------------
-
-\usepackage[nohyperlinks]{acronym}
-
-%--------------------------------------------------------
 
 % Auszufuehrende Befehle  ------------------------------------------------
-\usepackage{natbib}
 
 %\listfiles
 %------------------------------------------------------------------------

@@ -2,16 +2,47 @@
 \chapter{MIDAS}
 \label{chap:mc}
 \workTodo{In diesem Kapitel werden grundlegende Themen behandelt, die im Rahmen des Forschungsprojekts zum Verständnis der Ausreißer-Erkennung in Graphen gedient haben.}
+\workTodo{Related Work: Sedanspot, RHSS}
 
 Erst erklären wie der MIDAS funktioniert. Und zum Laufen gebracht mit Graphen über die Zeit ENRON \& DARPA. Im Anschluss auf Zeitreihendaten angewendet.
 
+
 \section{Grundlagen}
 \label{sec:mc-gl}
-\workTodo{Einführung in den Algorithmus}
+\workTodo{Einführung in den Algorithmus, NodeHash- sowie EdgeHash-Funktionen beschreiben}
+
+MIDAS, Eng. \textit{Microcluster-Based Detector of Anomalies in Edge Streams}, steht für einen Algorithmus, der plötzlich auftretende Ausbrüche von Aktivitäten in einem Netzwerk bzw. Graphen erkennt. Dieses vermehrte Auftreten von Aktivitäten zeigt sich durch viele sich wiederholende Knoten- und Kantenpaare in einem sich zeitlich entwickelnden Graphen, die Mikrocluster bezeichnet werden. Mikrocluster bestehen demnach aus einem vermehrten Vorkommen eines einzigen Quell- und Zielpaares bzw. einer Kante $(u,v)$  \workTodo{Folgender Absatz kann vor der Beschreibung des Algorithmus eingefügt werden, wie im Paper auch} Dies geschieht in Echtzeit, wobei jede Kante in konstanter Zeit und Speicher verarbeitet wird. In der Theorie garantiert er eine False-positive-Wahrscheinlichkeit und ist durch einen 162 bis 644 mal schnelleren Ansatz, sowie einer 42\% bis 48\% höhere Genauigkeit, im Hinblick auf die AUC, sehr effektiv. \citep[vgl.][S.~1]{MIDAS}
+
+Anwendungsfälle für MIDAS sind die Erkennung von Anomalien in Computer-Netzwerken, wie SPAM oder DoS-Angriffe oder Anomalien in Kreditkartentransaktionen.
 
 
-\subsection{Count-min Sketch}
+\subsubsection{Count-Min-Sketch}
 \label{sec:mc-gl-cms}
+Damit die relevanten Informationen für den Algorithmus mit einem konstanten Speicher verarbeitet werden, wird Count-Min-Sketch genutzt, dass eine Streaming-Datenstruktur mithilfe der Nutzung von Hash-Funktionen entspricht. Count-Min-Sketch zählt somit die Frequenz einer Aktivität bei Streaming-Daten. Diese Datenstruktur hat ebenfalls den Vorteil, dass man zu Beginn keine Kenntnis über die Anzahl an Quell- und Zielpaaren haben muss.
+
+MIDAS verwendet zwei Arten von CMS. Die erste Variante $s_{uv}$ wird als die Anzahl an Kanten von $u$ zu $v$ bis zum aktuellen Zeitpunkt $t$ definiert. Durch die CMS-Datenstruktur werden alle Zählungen von $s_{uv}$ approximiert, sodass jederzeit eine annähernde Abfrage $\hat{s}_{uv}$ erhalten werden kann.
+Die zweite Variante $a_{uv}$ wird als die Anzahl an Kanten  von $u$ zu $v$ im aktuellen Zeitpunkt $t$ definiert. Dieser CMS ist identisch zu $s_{uv}$, wobei bei jedem Übergang zum nächsten Zeitpunkt die Datenstruktur zurückgesetzt wird. Dadurch resultiert aus dem CMS für den aktuellen Zeitpunkt die annähernde Abfrage $\hat{a}_{uv}$. \citep[vgl.][S.~3]{MIDAS}
+
+
+\workTodo{chi-squared}
+
+
+\subsection{Erkennung von Mikrocluster}
+\label{sec:mc-gl-dm}
+
+
+\subsection{Experimente}
+\label{sec:m-ex}
+\workTodo{ausformulieren, bilder einfügen}
+- DARPA und ENRON Datensätze
+- Jumpsup Datensatz von Marcus
+
+-DARPA AUC 91%
+-ENRON identisch mit SEDANSPOT-labels außer September 2000
+
+Schwierigkeit geeignete Datensätze zu finden, dazu gibt es ein Paper
+
+Wenn man die Anomalyscores als gewichte nimmt, kommen Graphen in Networkx raus in denen man die anomalous nodes identifizieren kann dabei sollten es Edges sein..
 
 \subsubsection{Einführung}
 \label{sec:mc-gl-cms-in}
@@ -73,4 +104,6 @@ Da der Midas Algorithmus lediglich die Anzahl an Kanten zwischen zwei Knoten zäh
 	\caption{Vergelich Perculation Algorithmus mit Sliding Window Verfahren und ohne Sliding Window Verfahren}
 	\label{img:midasTSresults}
 \end{figure}
+
+
 
