@@ -34,9 +34,11 @@ Wie funkt Midas ganz kurz..
 	\caption{Datensatz Midas}
 	\label{img:tsToNetMiData}
 \end{figure}
-\workTodo{Vielleicht kleineren Auszug aus Datensatz verwenden}
 
 
 \section{MIDAS-R}
 \label{chap:trsnsMidasR}
+Der Midas-R Algorithmus speichert weitere Features über die Netzwerke. Dazu gehört die Gesamtzahl an Kanten, welche von einem Knoten ausgehen und die Aktuelle Anzahl an Kanten die von einem Knoten ausgehen. Aus diesem Grund sind die Berechnungen zur Ausreißer-Erkennung deutlich umfangreicher. Das Bewirkt, dass die Laufzeit des Algorithmus mit den Daten aus \autoref{chap:trsnsMidas} zu lange ist. Deshalb musste ein Lösung gefunden werden um den Umfang der Daten zu reduzieren, während die Informationen dennoch erhalten bleiben. Dazu wurde eine Hauptkomponenten Zerlegung durchgeführt, welche die Größe der Adjazenzmatrix verringert. Der Nachteil hiervon ist das nicht mehr genau gesagt werden kann, welche Kante genau der Ausreißer ist. 
+
+\workTodo{Midas R liefert eigentlich mehrere Ausreißer Scores es wäre vielleicht interessant diese einzeln zu betrachten und nicht zusammenaddiert.}
 \workTodo{Hab hier das mit der Hauptkomponentenzerlegung gemacht. Wenn es Ergebnisse hierfür gibt. Kann ich das hier noch erklären}
