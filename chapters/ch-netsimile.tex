@@ -5,16 +5,41 @@
 
 \section{Grundlagen}
 \label{sec:ns-gl}
-\workTodo{Einführung in den Algorithmus}
+
+NetSimile ist ein skalierbarer Algorithmus zur Erkennung von Ähnlichkeiten, sowie Anomalien, in Netzwerken unterschiedlicher Größen. Wenn der Datensatz eines Graphs über die Zeit in bestimmte Abstände, wie z.B. in Tage, unterteilt wird, so kann NetSimile die Veränderung des Graphs über die Zeit bewerten. Der Algorithmus extrahiert strukturelle Merkmale aus den Momentaufnahmen des Graphs für jeden Tag. Diese Merkmale bilden den Signaturvektor für jeden Graphen in der sich verändernden Netzwerkumgebung und bestehen aus den Ego-Netzeigenschaften, Knotengrad, Clustering-Koeffizient usw. Um die Ähnlichkeit zwischen zwei Graphen bewerten zu können, wird beim NetSimile der Abstand ihrer entsprechenden Signaturvektoren berechnet. Dieser Abstand wird Canberra Distance genannt. \citep[vgl.][S.~1]{Netsimile}
+
+Als Input für diesen Algorithmus wird eine Menge von $k$-anonymisierten Netzwerken mit beliebig unterschiedlichen Größen, die keine überlappenden Knoten oder Kanten besitzen sollten, herangezogen werden. Das Resultat sind Werte für die strukturelle Ähnlichkeit oder Abstands eines jeden Paares der gegebenen Netzwerke bzw. ein Merkmalsvektor für jedes Netzwerk. \citep[vgl.][S.~1]{Netsimile}
+
+NetSimile durchläuft drei Schritte, die im Folgenden erläutert werden.
+
+\subsubsection{Extrahierung von Merkmalen}
+Für jeden Knoten $i$ werden, basierend auf ihren Ego-Netzwerken, die folgenden Merkmale generiert:
 
 
-\subsection{Canberra Distance}
+\begin{description}
+	\item[$\overline{d}_i = |N(i)|$]\hfill\\ Die Anzahl der Nachbarn (d.h. Grad) von Knoten $i$, wobei $N(i)$ die Nachbarn von Knoten $i$ beschreibt.
+	\item[$\overline{c}_i$]\hfill\\ Der Clustering-Koeffizient von Knoten $i$, der als die Anzahl von Dreiecken, die mit Knoten $i$ verbunden sind, über die Anzahl von verbundenen Dreiecken, die auf Knoten $i$ zentriert sind, definiert ist.
+	\item[$d_{N(i)}$]\hfill\\ Die durchschnittliche Anzahl der Nachbarn von Knoten $i$, die zwei Schritte entfernt sind. Dieser wird berechnet als \workTodo{Paper Seite 2 unten Formel einfügen}
+	\item[$c_{N(i)}$]\hfill\\ Der durchschnittliche Clustering-Koeffizient von $N(i)$, der als \workTodo{Paper Seite 2 unten Formel einfügen} berechnet wird.
+	\item[$|E_{ego(i)}|$]\hfill\\ Die Anzahl der Kanten im Ego-Netzwerk vom Knoten $i$, wobei $ego(i)$ das Ego-Netzwerk von $i$ zurückgibt.
+	\item[$|E^{\circ}_{ego(i)}|$]\hfill\\ Die Anzahl der von $ego(i)$ ausgehenden Kanten. 
+	\item[$|N(ego(i))|$]\hfill\\ Die Anzahl von Nachbarn von $ego(i)$. 
+\end{description}
+
+\subsubsection{Aggregierung von Merkmalen}
+Im nächsten Schritt wird für jeden Graphen \textit{$G_j$} eine $Knoten \times Merkmal$-Matrix $F_{G_j}$ zusammengefasst. Dieser besteht aus den Merkmalsvektoren aus Schritt 1.
+Da der Vergleich von $k$-ten $F_{G_j}$ sehr aufwändig ist, wird für jede $F_{G_j}$ ein Signaturvektor $\vec{s}_{G_j}$ ausgegeben. Dieser aggregiert den Median, den Mittelwert, die Standardabweichung, die Schiefe, sowie die Kurtosis der Merkmale aus der Matrix.  
+
+\subsubsection{Vergleich der Signaturvektoren}
 \label{sec:ns-gl-cd}
 
-\subsubsection{Einführung}
-\label{sec:ns-gl-cd-int}
+Im letzten Schritt wird bei diesem Algorithmus die Canberra-Distance-Funktion als Ähnlichkeitsmaß herangezogen.
 
-\workTodo{Stichworte sammeln}
+\workTodo{Canberra Distance Formel Seite 3 in Paper einfügen oder von Dictionary of Distances Chapter 17 als neue Quelle, es gibt kein Paper mit einer Beschreibung hierfür}
+
+\workTodo{Info an Jeremy: Du könntest als Eigenarbeit weitere Distanzmetriken nutzen glaub. Hab ein Paper "Comprehensive Survey on Distance/Similarity Measures between Probability Density Functions\dq\space in dem Canberra in eine Kategorie mit Gower, Soergel, Kulczynski d, Lorentzian fällt und auch bei Netsimile wird erwähnt dass Canberra aus einer Vielzahl an Möglichkeiten gewählt wurde. }
+
+
 
 \section{Ergebnisse Ausreißer-Erkennung in Zeitreihen}
 \label{sec:resultsTS}
@@ -77,4 +102,3 @@ Als Testdaten   wurden, ein und zweidimensionale Zeitreihen der Numenta Gruppe v
 \end{table}
 
 \autoref{table:performanceNeti} zeigt die Ergebnisse der Tests. Es ist zu erkennen, dass die Qualität der Ausreißer-Erkennung im eindimensionalen Fall sehr gut ist. Lediglich einzelne Peaks können durch den Algorithmus nicht als Ausreißer identifiziert werden. Außerdem wird bei Signal Drifts und der kontinuierlichen Zunahme der Amplitude lediglich der Anfang des Ausreißers detektiert. Aus diesem Grund wurde eine Bewertung mit drei Sternen vergeben. Bei der Betrachtung der Graphiken in ... ist zu erkennen, dass das sechste oder siebte Intervall der Zeitreihe häufig als Ausreißer markiert wird. Der Grund hierfür ist, das bei einer Fenstergröße von fünf für die ersten fünf Abschnitte kein Ausreißer Score berechnet wird. Dadurch ist die Standardabweichung zu Beginn sehr niedrig wodurch Abschnitte schnell als Ausreißer gekennzeichnet werden. Dieser Umstand wurde bei der Bewertung in \autoref{table:performanceNeti} nicht berücksichtigt. Im zweidimensionalen Fall ist die Qualität der Ausreißer-Erkennung etwas durchwachsener. Auffallend ist, dass Zyklen mit höherer und niedriger Amplitude nicht als Ausreißer erkannt werden können. Insbesondere ist dies auffällig, da diese Ausreißer Typen üblicherweise zuverlässig erkannt werden \autoref{sec:rw-gl}.  Außerdem ist der Algorithmus im zweidimensionalen Fall nicht mehr dazu in der Lage Signal Drifts zu erkennen. Andere Ausreißer Typen können durch den Algorithmus weiterhin erkannt werden, jedoch oftmals nicht mit der selben Qualität. 
-
