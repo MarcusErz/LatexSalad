@@ -39,19 +39,24 @@ Im letzten Schritt wird bei diesem Algorithmus die Canberra-Distance-Funktion al
 
 \workTodo{Info an Jeremy: Du könntest als Eigenarbeit weitere Distanzmetriken nutzen glaub. Hab ein Paper "Comprehensive Survey on Distance/Similarity Measures between Probability Density Functions\dq\space in dem Canberra in eine Kategorie mit Gower, Soergel, Kulczynski d, Lorentzian fällt und auch bei Netsimile wird erwähnt dass Canberra aus einer Vielzahl an Möglichkeiten gewählt wurde. }
 
+\section{Anwendung auf Enron und Darpa Datensatz}
+\workTodo{Ergebnisse der Tests aufzeigen. Vielleicht die Visualisierung mit rein bringen. Vielleicht kurz Datensätze erklären und woher die Implementierung des Algorithmus stammt.}
 
+\section{Erweiterung des Algorithmus}
+\workTodo{Erklären warum ein neues Feature benötigt wird. Vergleich des Algorithmus mit Feature und ohne neues Feature}
 
-\section{Ergebnisse Ausreißer-Erkennung in Zeitreihen}
-\label{sec:resultsTS}
-\workTodo{Bin mir nicht sicher ob ich meine Implementierung vom Netsimile genauer erklären soll. Vielleicht sollte ich auf jeden Fall darauf eingehen wie bestimmt wird ob ein Ausreißer ein Ausreißer ist. Damit das auch für die Parameter verständlich ist.}
+\section{Optimierte Implementierung des Algorithmus}
+\label{sec:optiNeti}
+Unter Verwendung der Netsimile Implementierung aus \autoref{sec:ns-gl}, benötigte die Ausführung des Algorithmus teilweise bis zu 30 Minuten. Aus diesem Grund wurde der Algorithmus von uns neu implementiert.  Die Laufzeit konnte dabei auf wenige Sekunden reduziert werden, indem keine Graphen Bibliothek für die Implementierung verwendet wurde. Das heißt die Netzwerke der Zeitreihe werden nicht in ein Graphen Objekt umgewandelt, sondern als Adjazenzmatrix gespeichert. Dadurch können die Features deutlich effizienter berechnet werden. Des Weiteren wurden einige Features neu eingeführt und andere entfernt, sodass lediglich Features verwendet werden die für Fully Connected Graphen geeignet sind. So hat beispielsweise das Feature $|E_{ego(i)}|$ keine Aussagekraft in einem Fully Connected Netzwerk, da jeder Knoten die gleiche Anzahl Kanten in seinem Ego Netzwerk aufweist. Deshalb wurden folgende Features verwendet:
+\workTodo{Formeln ändern}
+\begin{description}
+	\item[$|E^{\circ}_{ego(i)}|$]\hfill\\ Arithmetisches Mittel der Kantengewichte in $ego(i)$.
+	\item[$|N(ego(i))|$]\hfill\\ Geometrisches Mittel der Kantengewichte in $ego(i)$.
+	\item[$|E^{\circ}_{ego(i)}|$]\hfill\\ Geometrischs Mittel 10 Prozent der höchsten Kantengewichte in $ego(i)$. 
+	\item[$|E^{\circ}_{ego(i)}|$]\hfill\\ Geometrischer Mittel 20 Prozent der höchsten Kantengewichte in $ego(i)$. 
+\end{description}
 
-\workTodo{Noch Parameter des ganzen erläutern und erklären wie bestimmt wird, ob ein Element ein Ausreißer ist oder nicht. Es muss auch noch das mit der Periodicität mit rein.}
-
-\workTodo{Wie genau wurde Netismile optimiert???. Vielleicht noch bisschen genauer darauf eingehen welche Features ich verwendet habe.}
-
-Unter Verwendung der Netsimile Implementierung von ..., benötigte die Ausführung des Algorithmus teilweise bis zu 30 Minuten. Aus diesem Grund wurde der Algorithmus von uns neu implementiert.  Die Laufzeit konnte dabei auf wenige Sekunden reduziert werden, indem keine Graphen Bibliothek für die Implementierung verwendet wurde. Das heißt die Netzwerke der Zeitreihe werden nicht in ein Graphen Objekt umgewandelt, sondern als Adjazenzmatrix gespeichert. Dadurch können die Features deutlich effizienter berechnet werden. Des Weiteren wurden einige Features neu eingeführt und andere entfernt, sodass lediglich Features verwendet werden die für Fully Connected Graphen geeignet sind. So hat beispielsweise das Feature durchschnittliche Anzahl an Nachbarknoten keine Aussagekraft in einem Fully Connected Netzwerk, da jeder Knoten die gleiche Anzahl an Nachbarn hat. Anstelle dieses Features wurde im optimierten Algorithmus das durchschnittliche Kantengewicht eines Knoten als Feature verwendet. \workTodo{Wie war das im orginalen Algorithmus. Hab ich das wirklich verändert}. Ein weiterer Aspekt der geändert wurde ist, das die Canbarra Distanz nicht zu allen vorherigen Zeitabschnitten berechnet wird. Dadurch wird einerseits die benötigte Rechenzeit verringert und andererseits wird ermöglicht das der Algorithmus dinge vergessen kann und sich an einen neuen Stand anpasst.   
-
-Als Testdaten   wurden, ein und zweidimensionale Zeitreihen der Numenta Gruppe verwendet. Diese Zeitreihen enthalten verschiedene Ausreißer Typen, auf deren Erkennung der Algorithmus getestet wurde. Die Qualität der Ausreißererkennung wurde  mithilfe eines Punktesystem bewertet. Dabei bedeuteten 0 Punkte, Ausreißer nicht erkannt und 4 Punkte bedeuteten Ausreißer sehr gut erkannt. Die Parameter, welche für die Tests gewählt werden mussten, werden in \autoref{table:parmeterNeti} beschrieben.\\
+Von diesen Features wurde dann auch den Median, den Mittelwert, die Standardabweichung, die Schiefe, sowie die Kurtosis berechnet. \workTodo{Bin mir nicht sicher zu welchen Elementen die Canbarra Distanz berechnet wird.}. Des Weiteren wurde ein neuer Parameter eingeführt. Über diesen kann gesteuert werden zu wie vielen vorgänger Abschnitten die Distanz berechnet werden soll. Dadurch kann gesteuert werden wie schnell ein Algorithmus vergisst. Eine Auflistung der Parameter des Algorithmus ist in \autoref{table:parmeterNeti} zu sehen.
 
 \begin{table}
 	\caption{Parameter Netismile Zeitreihen}
@@ -63,14 +68,17 @@ Als Testdaten   wurden, ein und zweidimensionale Zeitreihen der Numenta Gruppe v
 		\hline
 		Periodizität & Wie in \autoref{chap:trsnsNeti} erläutert muss die Zeitreihe in kleinere Intervalle aufgegliedert werden. Über diesen Parameter wird die Größe der Intervalle gesteuert. Für die Tests wurde der Parameter auf 288 gesetzt, da es sich hierbei um die Saisonalität der Zeitreihen handelt.\\
 		\hline
-		Fenstergröße & Bestimmt die Anzahl der vorangegangenen Abschnitte zu welchen die Canberra Distanz berechnet wird. Dieser Parameter wurde für die Tests auf 5 gesetzt. Da der Algorithmus auch in der Lage sein sollte zu vergessen kann die Canberra Distanz nicht zu allen vorherigen Abschnitten berechnet werden.\\
+		Fenstergröße & Wie in \autoref{sec:optiNeti} erklärt, bestimmt dieser Parameter die Anzahl der vorangegangenen Abschnitte zu welchen die Canberra Distanz berechnet wird. Dieser Parameter wurde für die Tests auf 5 gesetzt.\\
 		\hline
 		Abweichung & Legt fest ab wann es sich bei einem Abschnitt um einen Ausreißer handelt. Der Parameter wurde für die Tests auf 3 gesetzt. Bedeutet wenn der Ausreißer Score um das dreifache der Standardabweichung vom Durchschnitt abweicht, wird der Abschnitt als Ausreißer gekennzeichnet.\\
 		\hline
 	\end{tabular}
 \end{table}
 
- 
+\subsubsection{Anwendung auf Zeitreihen}
+
+Um zu untersuchen, wie gut der Algorithmus funktioniert, wurde er auf Zeitreihen getestet. Als Testdaten   wurden, ein und zweidimensionale Zeitreihen der Numenta Gruppe verwendet. Diese Zeitreihen enthalten verschiedene Ausreißer Typen, auf deren Erkennung der Algorithmus getestet wurde. Die Qualität der Ausreißererkennung wurde  mithilfe eines Punktesystem bewertet. Dabei bedeuteten 0 Punkte, Ausreißer nicht erkannt und 4 Punkte bedeuteten Ausreißer sehr gut erkannt. Die Parameter, welche für die Tests gewählt werden mussten, werden in \autoref{table:parmeterNeti} beschrieben.\\
+
 \begin{table}
 \caption{Netsimile Time Series Perfomance}
 \label{table:performanceNeti}
@@ -101,4 +109,4 @@ Als Testdaten   wurden, ein und zweidimensionale Zeitreihen der Numenta Gruppe v
 \end{tabular}
 \end{table}
 
-\autoref{table:performanceNeti} zeigt die Ergebnisse der Tests. Es ist zu erkennen, dass die Qualität der Ausreißer-Erkennung im eindimensionalen Fall sehr gut ist. Lediglich einzelne Peaks können durch den Algorithmus nicht als Ausreißer identifiziert werden. Außerdem wird bei Signal Drifts und der kontinuierlichen Zunahme der Amplitude lediglich der Anfang des Ausreißers detektiert. Aus diesem Grund wurde eine Bewertung mit drei Sternen vergeben. Bei der Betrachtung der Graphiken in ... ist zu erkennen, dass das sechste oder siebte Intervall der Zeitreihe häufig als Ausreißer markiert wird. Der Grund hierfür ist, das bei einer Fenstergröße von fünf für die ersten fünf Abschnitte kein Ausreißer Score berechnet wird. Dadurch ist die Standardabweichung zu Beginn sehr niedrig wodurch Abschnitte schnell als Ausreißer gekennzeichnet werden. Dieser Umstand wurde bei der Bewertung in \autoref{table:performanceNeti} nicht berücksichtigt. Im zweidimensionalen Fall ist die Qualität der Ausreißer-Erkennung etwas durchwachsener. Auffallend ist, dass Zyklen mit höherer und niedriger Amplitude nicht als Ausreißer erkannt werden können. Insbesondere ist dies auffällig, da diese Ausreißer Typen üblicherweise zuverlässig erkannt werden \autoref{sec:rw-gl}.  Außerdem ist der Algorithmus im zweidimensionalen Fall nicht mehr dazu in der Lage Signal Drifts zu erkennen. Andere Ausreißer Typen können durch den Algorithmus weiterhin erkannt werden, jedoch oftmals nicht mit der selben Qualität. 
+\autoref{table:performanceNeti} zeigt die Ergebnisse der Tests. Es ist zu erkennen, dass die Qualität der Ausreißer-Erkennung im eindimensionalen Fall sehr gut ist. Lediglich einzelne Peaks können durch den Algorithmus nicht als Ausreißer identifiziert werden. Außerdem wird bei Signal Drifts und der kontinuierlichen Zunahme der Amplitude lediglich der Anfang des Ausreißers detektiert. Aus diesem Grund wurde eine Bewertung mit drei Sternen vergeben. Bei der Betrachtung der Graphiken in \autoref{sec:appendix_net_one} und \autoref{sec:appendix_net_two} ist zu erkennen, dass das sechste oder siebte Intervall der Zeitreihe häufig als Ausreißer markiert wird. Der Grund hierfür ist, das bei einer Fenstergröße von fünf für die ersten fünf Abschnitte kein Ausreißer Score berechnet wird. Dadurch ist die Standardabweichung zu Beginn sehr niedrig wodurch Abschnitte schnell als Ausreißer gekennzeichnet werden. Dieser Umstand wurde bei der Bewertung in \autoref{table:performanceNeti} nicht berücksichtigt. Im zweidimensionalen Fall ist die Qualität der Ausreißer-Erkennung etwas durchwachsener. Auffallend ist, dass Zyklen mit höherer und niedriger Amplitude nicht als Ausreißer erkannt werden. Insbesondere ist dies auffällig, da diese Ausreißer Typen üblicherweise zuverlässig erkannt werden (vgl. \autoref{sec:rw-gl}).  Außerdem ist der Algorithmus im zweidimensionalen Fall nicht mehr dazu in der Lage Signal Drifts zu erkennen. Andere Ausreißer Typen können durch den Algorithmus weiterhin erkannt werden, jedoch oftmals nicht mit der selben Qualität. 
