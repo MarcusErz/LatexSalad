@@ -4,6 +4,31 @@
 Es ist mit dieser Art von Algorithmen möglich Ausreißer in einer vollständigen und abgeschlossenen Zeitreihe zu identifizieren. Es werden zwei Algorithmen vorgestellt, ein auf Percolation basierender Algorithmus und ein auf IsoMap basierender Algorithmus. Beide Algorithmen wurden dazu entwickelt Ausreißer in unterschiedlichen Typen von Datensätzen zu erkennen (z.B. Videos, Bilder, Netzwerke). Voraussetzung hierfür ist lediglich, dass eine Distanz zwischen unterschiedlichen Elementen des Datensatzes berechnet werden kann  \citep[vgl.][S.~2]{10.3389/fphy.2019.00194}. Im Folgenden werden die Algorithmen, hinsichtlich ihrer Fähigkeit Ausreißer in Zeitreihen zu identifizieren evaluiert.
 
 Für beide Algorithmen gilt, dass die Zeitreihe zunächst in ein Netzwerk umgewandelt werden muss. Hierzu wird ebenfalls Formel 1 verwendet. Beide Algorithmen liefern lediglich einen Ausreißer Score zurück. Um zu bestimmen inwiefern ein Element konkret ein Ausreißer ist, wird zunächst den Mittelwert und die Standardabweichung des Outlier Scores berechnet. Falls ein Element in Abhängigkeit von der Standardabweichung sehr stark vom Mittelwert abweicht wird das Element als Ausreißer klassifiziert.
+
+\section{Umwandlung Zeitreihe in Netzwerk}
+
+Ziel dieses Forschungsprojektes ist es unter anderem verschiedene Algorithmen, zur Ausreißer Erkennung in Netzwerken, auf andere Datenformen anzuwenden. Hierbei werden hauptsächlich Zeitreihen untersucht. Um die Algorithmen auf andere Datenformen anwenden zu können, müssen die Daten zunächst in ein Netzwerk umgewandelt werden. Die Voraussetzung dafür dass Daten in ein Netzwerk umgewandelt werden kann ist, . Dieser Schritt wird in diesem Kapitel erläutert. Exemplarisch wird der Vorgang an der Transformation von Zeitreihen aufgezeigt. 
+
+
+\label{chap:trsnsNeti}
+Der erste Schritt der Transformation ist, zunächst die Distanz zwischen den einzelnen Elementen des Zeitintervalls berechnet. Hierzu wird auf das in \citep[vgl.][S.~2-3]{10.3389/fphy.2019.00194} vorgestellte Distanzmaß zurückgegriffen. Insofern für p = 2 eingesetzt wird, handelt es sich um die euklidische Distanz. Die Abstände bilden die Kantengewichte zwischen den jeweiligen Elementen im Netzwerk. Die Elemente der Zeitreihe bilden die Knoten des Netzwerks. Die Netzwerke werden intern als Adjazenzmatrizen gespeichert. Des Weiteren kann ein Element der Zeitreihe aus mehreren Werten bestehen z.B. bei multivariaten Zeitreihen.
+\begin{equation}
+	D_{ij}=\left(\sum_{k} \left|v_{k}^{i}-v_{k}^{j}\right|^{p}\right)^{1/p}
+\end{equation}
+
+Für dynamische Algorithmen muss, die Zeitreihe in kleinere Intervalle aufzusplitten. Anschließend kann für jedes der Intervalle ein Netzwerk berechnet werden. Die Länge des Intervalls kann als Hyperparameter an den Algorithmus übergeben werden. Je nach Zeitreihe funktionieren unterschiedliche Intervallgrößen besser oder schlechter. Insofern die Zeitreihe eine Saisonalität aufweist, kann diese bestimmt und als Intervallgröße genutzt werden.
+\workTodo{Überprüfen ob Saisonalität der richtige Begriff ist.}\\
+
+Je nach Algorithmus der später verwendet werden soll, muss das Netzwerk in unterschiedliche Formate überführt werden.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=13cm]{fig/tsToNet/tsToCsv}
+	\caption{Umwandlung einer Zeitreihe in Netzwerk}
+	\label{img:tsToNet}
+\end{figure}
+\workTodo{Das Netzwerk aus der Grafik noch abändern}
+
 \section{IsoMap Basierter Algorithmus}
 \label{chap:rw}
 Der Grundgedanke hinter diesem Ansatz ist, dass Informationen über Ausreißer bei der Reduzierung der Dimensionalität mit dem IsoMap Algorithmus verloren gehen. Insofern versucht wird, die Informationen zu rekonstruieren und mit der ursprünglichen Matrix vergleicht, können große Abweichungen bei Ausreißer Elementen festgestellt werden \citep[vgl.][S.~3]{10.3389/fphy.2019.00194}. 
