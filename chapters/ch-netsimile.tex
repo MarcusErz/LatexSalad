@@ -1,10 +1,10 @@
 \newpage
-\chapter{Netsimile}
-\label{chap:ns}
+\section{Netsimile}
+\label{sec:ns}
 \workTodo{In diesem Kapitel werden grundlegende Themen behandelt, die im Rahmen des Forschungsprojekts zum Verständnis der Ausreißer-Erkennung in Graphen gedient haben.}
 
-\section{Grundlagen}
-\label{sec:ns-gl}
+\subsection{Grundlagen}
+\label{ssec:ns-gl}
 
 NetSimile ist ein skalierbarer Algorithmus zur Erkennung von Ähnlichkeiten, sowie Anomalien, in Netzwerken unterschiedlicher Größen. Wenn der Datensatz eines Graphs über die Zeit in bestimmte Abstände, wie z.B. in Tage, unterteilt wird, so kann NetSimile die Veränderung des Graphs über die Zeit bewerten. Der Algorithmus extrahiert strukturelle Merkmale aus den Momentaufnahmen des Graphs für jeden Tag. Diese Merkmale bilden den Signaturvektor für jeden Graphen in der sich verändernden Netzwerkumgebung und bestehen aus den Ego-Netzeigenschaften, Knotengrad, Clustering-Koeffizient usw. Um die Ähnlichkeit zwischen zwei Graphen bewerten zu können, wird beim NetSimile der Abstand ihrer entsprechenden Signaturvektoren berechnet. Dieser Abstand wird Canberra Distance genannt. \citep[vgl.][S.~1]{Netsimile}
 
@@ -39,17 +39,13 @@ Im letzten Schritt wird bei diesem Algorithmus die Canberra-Distance-Funktion al
 
 \workTodo{Info an Jeremy: Du könntest als Eigenarbeit weitere Distanzmetriken nutzen glaub. Hab ein Paper "Comprehensive Survey on Distance/Similarity Measures between Probability Density Functions\dq\space in dem Canberra in eine Kategorie mit Gower, Soergel, Kulczynski d, Lorentzian fällt und auch bei Netsimile wird erwähnt dass Canberra aus einer Vielzahl an Möglichkeiten gewählt wurde. }
 
-\section{Anwendung auf Enron und Darpa Datensatz}
+\subsection{Anwendung auf Enron und Darpa Datensatz}
 \workTodo{Ergebnisse der Tests aufzeigen. Vielleicht die Visualisierung mit rein bringen. Vielleicht kurz Datensätze erklären und woher die Implementierung des Algorithmus stammt.}
 
-\section{Erweiterung des Algorithmus}
+\subsection{Erweiterung des Algorithmus}
 \workTodo{Erklären warum ein neues Feature benötigt wird. Vergleich des Algorithmus mit Feature und ohne neues Feature}
 
-\section{Umwandlung der Daten in ein Netzwerk}
-
-
-
-\section{Optimierte Implementierung des Algorithmus}
+\subsection{Optimierte Implementierung des Algorithmus}
 \label{sec:optiNeti}
 Unter Verwendung der Netsimile Implementierung aus \autoref{sec:ns-gl}, benötigte die Ausführung des Algorithmus teilweise bis zu 30 Minuten. Aus diesem Grund wurde der Algorithmus von uns neu implementiert.  Die Laufzeit konnte dabei auf wenige Sekunden reduziert werden, indem keine Graphen Bibliothek für die Implementierung verwendet wurde. Das heißt die Netzwerke der Zeitreihe werden nicht in ein Graphen Objekt umgewandelt, sondern als Adjazenzmatrix gespeichert. Dadurch können die Features deutlich effizienter berechnet werden. Des Weiteren wurden einige Features neu eingeführt und andere entfernt, sodass lediglich Features verwendet werden die für Fully Connected Graphen geeignet sind. So hat beispielsweise das Feature $|E_{ego(i)}|$ keine Aussagekraft in einem Fully Connected Netzwerk, da jeder Knoten die gleiche Anzahl Kanten in seinem Ego Netzwerk aufweist. Deshalb wurden folgende Features verwendet:
 \workTodo{Formeln ändern}

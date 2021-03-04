@@ -1,0 +1,37 @@
+\newpage
+\chapter{Dynamische Algorithmen zur Ausreißer Erkennung}
+
+In diesem Kapitel werden zwei Algorithmen zur dynamischen Erkennung von Ausreißern vorgestellt. Hierbei handelt es sich um den Netismile (vgl. \autoref{sec:ns}) und den MIDAS (vgl. \autoref{sec:midas}) Algorithmus. Dynamische Algorithmen können im Gegensatz zu statischen Algorithmen, Ausreißer in Echtzeitdaten finden. Dies kann in der Praxis sehr wichtig sein, da Ausreißer möglichst schnell gefunden werden müssen um finanzielle Schäden abzuwenden.  Die dynamischen Algorithmen wurden genauso wie die statischen Algorithmen, von uns so gestaltet, das sie mit unterschiedlichen Daten Typen umgehen können. In unseren Experimenten wurden die Algorithmen auf Netzwerk- und Zeitreihen Daten angewandt.
+
+\section{Umwandlung der Daten in ein Netzwerk}
+Damit die Algorithmen auf den Daten angewandt werden können müssen diese ebenfalls zunächst in Netzwerkdaten umgewandelt werden. Die Umwandlung funktioniert hierbei ähnlich wie in \autoref{sec:trsnsNeti}. Jedoch werden nicht alle Daten auf einmal in ein großes Netzwerk umgewandelt. Es werden anstatt dessen immer kleine Abschnitte der Daten in kleine Netzwerke umgewandelt. In der Praxis kann somit immer kurz abgewartet werden bis einige Daten eintreffen. Diese Daten können dan in ein Netzwerk umgewandelt werden und dan nach Ausreißern darin suchen. Die Länge des Intervalls kann als Hyperparameter an den Algorithmus übergeben werden. Je nach Zeitreihe funktionieren unterschiedliche Intervallgrößen besser oder schlechter. Insofern die Zeitreihe eine Saisonalität aufweist, kann diese bestimmt und als Intervallgröße genutzt werden. Hier musste das ganze noch in CSV Dateien geschrieben werden damit das alles funktioniert. In Fig ist graphisch dargestellt wie die Umwandlung funktioniert. 
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=13cm]{fig/tsToNet/tsToCsv}
+	\caption{Umwandlung einer Zeitreihe in Netzwerk}
+	\label{img:tsToNet}
+\end{figure}
+
+\label{ssec:trsnsCSV}
+Bei Umwandlung in CSV kann bei Netismile die Gewichtung übergeben werden bei MIDAS geht das nicht. Deshalb muss die selbe Kante mehrmals in Anhängigkeit der Gewichtung an die CSV Datei übergeben werden Ursprungsknoten, Zielknoten, Zeitintervall.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=2cm]{fig/tsToNet/midasData}
+	\caption{Datensatz Midas}
+	\label{img:tsToNetMiData}
+\end{figure}
+
+
+
+\label{ssec:trsnsMidasR}
+Die Umwandlung der Daten für den MIDAS-R Algorithmus stellt ein spezial Fall dar. Der Midas-R Algorithmus speichert weitere Features über die Netzwerke. Dazu gehört die Gesamtzahl an Kanten, welche von einem Knoten ausgehen und die Aktuelle Anzahl an Kanten die von einem Knoten ausgehen. Aus diesem Grund sind die Berechnungen zur Ausreißer-Erkennung deutlich umfangreicher. Das Bewirkt, dass die Laufzeit des Algorithmus mit den Daten aus \autoref{chap:trsnsMidas} zu lange ist. Deshalb musste ein Lösung gefunden werden um den Umfang der Daten zu reduzieren, während die Informationen dennoch erhalten bleiben. Dazu wurde eine Hauptkomponenten Zerlegung durchgeführt, welche die Größe der Adjazenzmatrix verringert. Der Nachteil hiervon ist das nicht mehr genau gesagt werden kann, welche Kante genau der Ausreißer ist. 
+
+\workTodo{Midas R liefert eigentlich mehrere Ausreißer Scores es wäre vielleicht interessant diese einzeln zu betrachten und nicht zusammenaddiert.}
+
+\input{chapters/ch-netsimile}
+\input{chapters/ch-midas}
+
+%\include{chapters/ch-netsimile}
+%\include{chapters/ch-midas}
