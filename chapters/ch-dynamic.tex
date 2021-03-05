@@ -4,34 +4,30 @@
 In diesem Kapitel werden zwei Algorithmen zur dynamischen Erkennung von Ausreißern vorgestellt. Hierbei handelt es sich um den Netismile (vgl. \autoref{sec:ns}) und den MIDAS (vgl. \autoref{sec:midas}) Algorithmus. Dynamische Algorithmen können im Gegensatz zu statischen Algorithmen, Ausreißer in Echtzeitdaten finden. Dies kann in der Praxis sehr wichtig sein, da Ausreißer möglichst schnell gefunden werden müssen um finanzielle Schäden abzuwenden.  Die dynamischen Algorithmen wurden genauso wie die statischen Algorithmen, von uns so gestaltet, das sie mit unterschiedlichen Daten Typen umgehen können. In unseren Experimenten wurden die Algorithmen auf Netzwerk- und Zeitreihen Daten angewandt.
 
 \section{Umwandlung der Daten in ein Netzwerk}
-Damit die Algorithmen auf den Daten angewandt werden können müssen diese ebenfalls zunächst in Netzwerkdaten umgewandelt werden. Die Umwandlung funktioniert hierbei ähnlich wie in \autoref{sec:trsnsNeti}. Jedoch werden nicht alle Daten auf einmal in ein großes Netzwerk umgewandelt. Es werden anstatt dessen immer kleine Abschnitte der Daten in kleine Netzwerke umgewandelt. In der Praxis kann somit immer kurz abgewartet werden bis einige Daten eintreffen. Diese Daten können dan in ein Netzwerk umgewandelt werden und dan nach Ausreißern darin suchen. Die Länge des Intervalls kann als Hyperparameter an den Algorithmus übergeben werden. Je nach Zeitreihe funktionieren unterschiedliche Intervallgrößen besser oder schlechter. Insofern die Zeitreihe eine Saisonalität aufweist, kann diese bestimmt und als Intervallgröße genutzt werden. Hier musste das ganze noch in CSV Dateien geschrieben werden damit das alles funktioniert. In Fig ist graphisch dargestellt wie die Umwandlung funktioniert. 
+Dieser Schritt muss durchgeführt werden bevor die Algorithmen angewandt werden können. Dabei funktioniert die Umwandlung der Daten genauso wie für statische Algorithmen (vgl. \autoref{sec:trsnsNeti}). Einziger Unterschied hierbei ist, das jeweils kleine Abschnitte der Daten in Netzwerke umgewandelt werden. Um dies zu veranschaulichen ein kurzes Beispiel: Ein Temperatur Sensor liefert jede Sekunde einen Wert. Sobald 100 Werte des Sensors eingegangen sind erfolgt die Umwandlung dieser Daten in ein Netzwerk unter Verwendung von \autoref{eq:euklidianDist}. Dieser Vorgang wiederholt sich anschließend immer wieder. Der Wert für die Länge der Abschnitte ist hierbei frei wählbar und kann als Parameter übergeben werden. Insofern die Zeitreihe eine Saisonalität besitzt, bietet es sich an diese für die Länge der Abschnitte zu verwenden. In einem letzten Schritt werden anschließend die Netzwerkdaten in eine Datei geschrieben. Dieser Schritt ist aufgrund der Art und Weiße, wie die Algorithmen implementiert sind notwendig. In \autoref{sec:trsnsNeti} ist graphisch dargestellt wie die Umwandlung der Daten in ein Netzwerk funktioniert. 
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=13cm]{fig/tsToNet/tsToCsv}
-	\caption{Umwandlung einer Zeitreihe in Netzwerk}
+	\caption{Umwandlung einer Zeitreihe in Netzwerk. Bei dem Netzwerk handelt es sich hier um ein Symbolbild.}
 	\label{img:tsToNet}
 \end{figure}
 
 \label{ssec:trsnsCSV}
-Bei Umwandlung in CSV kann bei Netismile die Gewichtung übergeben werden bei MIDAS geht das nicht. Deshalb muss die selbe Kante mehrmals in Anhängigkeit der Gewichtung an die CSV Datei übergeben werden Ursprungsknoten, Zielknoten, Zeitintervall.
+Die verschiedenen Algorithmen erfordern unterschiedliche Übergabeformate. Aus diesem Grund werden anschließend kurz die Besonderheiten erklärt, auf welche dabei geachtet werden muss. \\
+\textbf{Netismile: } Das Übergabeformat für den Netismile Algorithmus ist in \autoref{img:tsToNet} ganz rechts dargestellt. Jede Zeile stellt hierbei eine Kante des Netzwerks dar. Bei der ersten Spalte handelt es sich um den Ursprungsknoten der Kante, bei der zweiten Spalte um den Zielknoten und bei der letzten Spalte um die Gewichtung.\\
+\textbf{MIDAS: } Beim MIDAS Algorithmus ist es nicht möglich die Gewichtung der Kanten direkt an den Algorithmus zu übergeben. Es ist jedoch möglich die Gewichtung der Kanten indirekt an den Algorithmus zu übergeben. Dazu wird die gleiche Kante mehrmals in Abhängigkeit der Gewichtung an den Algorithmus übergeben. In \autoref{img:tsToNetMiData} ist ein  kleiner Ausschnitt einer Datei für den MIDAS dargestellt.
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=2cm]{fig/tsToNet/midasData}
-	\caption{Datensatz Midas}
+	\caption{Datensatz Midas. 1Spalte: Ursprungsknoten, 2Spalte: Zielknoten, 3Spalte: Abschnitt}
 	\label{img:tsToNetMiData}
 \end{figure}
-
-
-
+\textbf{MIDAS-R: }. Die Berechnungen für den MIDAS-R Algorithmus sind im Verhältnis zum MIDAS Algorithmus umfangreicher. Insofern für den MIDAS-R Algorithmus die gleichen Daten verwendet werden wie für den MIDAS Algorithmus, benötigen die Berechnungen sehr lange. Aus diesem Grund wurde eine Hauptkomponenten Zerlegung durchgeführt, um die Größe der Adjazenzmatrix zu verringert. Es entsteht ein kleineres Netzwerk, welches an den MIDAS-R Algorithmus übergeben werden kann. 
 \label{ssec:trsnsMidasR}
-Die Umwandlung der Daten für den MIDAS-R Algorithmus stellt ein spezial Fall dar. Der Midas-R Algorithmus speichert weitere Features über die Netzwerke. Dazu gehört die Gesamtzahl an Kanten, welche von einem Knoten ausgehen und die Aktuelle Anzahl an Kanten die von einem Knoten ausgehen. Aus diesem Grund sind die Berechnungen zur Ausreißer-Erkennung deutlich umfangreicher. Das Bewirkt, dass die Laufzeit des Algorithmus mit den Daten aus \autoref{chap:trsnsMidas} zu lange ist. Deshalb musste ein Lösung gefunden werden um den Umfang der Daten zu reduzieren, während die Informationen dennoch erhalten bleiben. Dazu wurde eine Hauptkomponenten Zerlegung durchgeführt, welche die Größe der Adjazenzmatrix verringert. Der Nachteil hiervon ist das nicht mehr genau gesagt werden kann, welche Kante genau der Ausreißer ist. 
 
 \workTodo{Midas R liefert eigentlich mehrere Ausreißer Scores es wäre vielleicht interessant diese einzeln zu betrachten und nicht zusammenaddiert.}
 
 \input{chapters/ch-netsimile}
 \input{chapters/ch-midas}
-
-%\include{chapters/ch-netsimile}
-%\include{chapters/ch-midas}
