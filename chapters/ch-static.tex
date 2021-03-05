@@ -45,7 +45,7 @@ Mithilfe des IsoMap Algorithmus wurden für jedes Element neue Features ($V^{i} =
 Für den Iso Map Algorithmus stellt SciKit Learn eine sehr gute Implementierung zur Verfügung. Diese Implementierung konnten wir gut in unseren Algorithmus integrieren. Es musste lediglich geändert werden, dass auf die Matrix $D_{G}$ zugegriffen werden kann. Dies ist standardmäßig nicht der Fall. Für die Implementierung der weiteren Funktionalität wurde auf Python/Numpy zurückgegriffen. 
 
 \subsection{Ausreißererkennung in Zeitreihen}
-\workTodo{Erklären welche Zeitreihen verwendet wurden} 
+\workTodo{Erklären welche Zeitreihen verwendet wurden. Hab ich so ein bisschen gemacht vielleicht das noch in extra Kapitel machen.} 
 \label{sec:im-results}
 \begin{table}
 \caption{IsoMap Performance}
@@ -76,7 +76,7 @@ Für den Iso Map Algorithmus stellt SciKit Learn eine sehr gute Implementierung z
 \end{tabular}
 \end{table}
 
-Der IsoMap Algorithmus liefert eher schwache Ergebnisse bei der Erkennung von Ausreißern in Zeitreihen. Hauptproblem hierbei ist, dass starke Anstiege, bei welchen es sich nicht um Ausreißer handelt, fälschlicherweise zu einem starken Anstieg des Ausreißer Scores führen (vgl. \autoref{img:iso_trans} mit Pfeil markierte stellen). Dies kann, je nach Threshold, zu einer hohen Quote an falsch positiven Klassifizierungen führen. Aus diesem Grund können die tatsächlichen Ausreißer nicht eindeutig identifiziert werden. Eine Ähnliche Problematik trat in \citep {Uzun} bei der Verwendung des Random Walk Algorithmus auf. Das Problem konnte hierbei gelöst werden, indem vor der Anwendung des Algorithmus, eine Glättung der Zeitreihe durchgeführt wurde. Dadurch werden abrupte Übergange in der Zeitreihe abgemildert und deshalb nicht mehr als Ausreißer erkannt \citep[vgl.][S.~31,36]{Uzun}. Dies könnte ein möglicher Ansatz sein um zukünftig bessere Ergebnisse zu erzielen.\\
+Für die durchgeführten Tests wurden die Zeitreihen aus ... verwendet. Um zu bewerten wie gut der Algorithmus funktioniert, wurde ein Punktesystem eingeführt. In dem Punktesystem konnten maximal vier Sterne erreicht werden. Das bedeutet Ausreißer sehr gut erkannt. Null Sterne hingegen bedeuten Ausreißer überhaupt nicht erkannt. Der IsoMap Algorithmus liefert eher schwache Ergebnisse bei der Erkennung von Ausreißern in Zeitreihen. Hauptproblem hierbei ist, dass starke Anstiege, bei welchen es sich nicht um Ausreißer handelt, fälschlicherweise zu einem starken Anstieg des Ausreißer Scores führen (vgl. \autoref{img:iso_trans} mit Pfeil markierte stellen). Dies kann, je nach Threshold, zu einer hohen Quote an falsch positiven Klassifizierungen führen. Aus diesem Grund können die tatsächlichen Ausreißer nicht eindeutig identifiziert werden. Eine Ähnliche Problematik trat in \citep {Uzun} bei der Verwendung des Random Walk Algorithmus auf. Das Problem konnte hierbei gelöst werden, indem vor der Anwendung des Algorithmus, eine Glättung der Zeitreihe durchgeführt wurde. Dadurch werden abrupte Übergange in der Zeitreihe abgemildert und deshalb nicht mehr als Ausreißer erkannt \citep[vgl.][S.~31,36]{Uzun}. Dies könnte ein möglicher Ansatz sein um zukünftig bessere Ergebnisse zu erzielen.\\
 Des Weiteren ist zu erkennen, dass der Algorithmus für einige Ausreißer Typen nicht geeignet ist, hierzu gehören Siganl Aussetzer und Frequenzänderungen. Bei diesen Ausreißer Typen treten keinerlei unüblichen Werte auf, sondern es kommt zu Änderungen in der Saisonalität der Zeitreihe. 
 
 \workTodo{Wie genau bezieht man sich auf seine eigene Ausarbeitung} 
