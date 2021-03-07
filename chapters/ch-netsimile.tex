@@ -1,10 +1,10 @@
 \newpage
-\chapter{Netsimile}
-\label{chap:ns}
+\section{Netsimile}
+\label{sec:ns}
 \workTodo{In diesem Kapitel werden grundlegende Themen behandelt, die im Rahmen des Forschungsprojekts zum Verständnis der Ausreißer-Erkennung in Graphen gedient haben.}
 
-\section{Grundlagen}
-\label{sec:ns-gl}
+\subsection{Grundlagen}
+\label{ssec:ns-gl}
 
 NetSimile ist ein skalierbarer Algorithmus zur Erkennung von Ähnlichkeiten, sowie Anomalien, in Netzwerken unterschiedlicher Größen. Wenn der Datensatz eines Graphs über die Zeit in bestimmte Abstände, wie z.B. in Tage, unterteilt wird, so kann NetSimile die Veränderung des Graphs über die Zeit bewerten. Der Algorithmus extrahiert strukturelle Merkmale aus den Momentaufnahmen des Graphs für jeden Tag. Diese Merkmale bilden den Signaturvektor für jeden Graphen in der sich verändernden Netzwerkumgebung und bestehen aus den Ego-Netzeigenschaften, Knotengrad, Clustering-Koeffizient usw. Um die Ähnlichkeit zwischen zwei Graphen bewerten zu können, wird beim NetSimile der Abstand ihrer entsprechenden Signaturvektoren berechnet. Dieser Abstand wird Canberra Distance genannt. \citep[vgl.][S.~1]{Netsimile}
 
@@ -39,19 +39,231 @@ Im letzten Schritt wird bei diesem Algorithmus die Canberra-Distance-Funktion al
 
 \workTodo{Info an Jeremy: Du könntest als Eigenarbeit weitere Distanzmetriken nutzen glaub. Hab ein Paper "Comprehensive Survey on Distance/Similarity Measures between Probability Density Functions\dq\space in dem Canberra in eine Kategorie mit Gower, Soergel, Kulczynski d, Lorentzian fällt und auch bei Netsimile wird erwähnt dass Canberra aus einer Vielzahl an Möglichkeiten gewählt wurde. }
 
+\subsection{Ausreißer-Erkennung in Graphen}
+\workTodo{Ergebnisse der Tests aufzeigen. Vielleicht die Visualisierung mit rein bringen. Vielleicht kurz Datensätze erklären und woher die Implementierung des Algorithmus stammt.}
 
 
-\section{Ergebnisse Ausreißer-Erkennung in Zeitreihen}
-\label{sec:resultsTS}
-\workTodo{Bin mir nicht sicher ob ich meine Implementierung vom Netsimile genauer erklären soll. Vielleicht sollte ich auf jeden Fall darauf eingehen wie bestimmt wird ob ein Ausreißer ein Ausreißer ist. Damit das auch für die Parameter verständlich ist.}
+\workTodo{3.2.1 von Google Docs einfügen bis S.16 Datensätze Überschrift}
+\subsection{Erweiterung des Algorithmus}
+\workTodo{Erklären warum ein neues Feature benötigt wird. Vergleich des Algorithmus mit Feature und ohne neues Feature}
+Damit der Algorithmus auf Netzwerke angewendet werden kann, muss dieser vorab erweitert werden, da in Netzwerken ansonsten nur die Verbindung im Allgemeinen betrachtet wird, nicht aber die Häufigkeit an Verbindungen, die zwischen zwei Knoten stattgefunden hat. Damit würde ein großer Anteil des Datensatzes verloren gehen, da der Algorithmus keine Mehrfach-Verbindungen zwischen Knoten im Graphen darstellen kann.
+\\
+\\
+Hierfür werden die Mehrfach-Verbindungen aufsummiert und als Kanten-Gewichtung zwischen zwei Knoten dem Graphen hinzugefügt.
+\begin{lstlisting}[language=Python, caption=\workTodo{Platzhalter}, label=lst:netsimile:code1]
+for i in range(len(e_list)): 
+	g.add_edge(e_list[i][0], e_list[i][1], weight=e_list[i][2])
+\end{lstlisting}
+Anschließend muss die Gewichtung aus diesem Graphen extrahiert werden. Dafür wird die Summe aller ausgehenden Kanten eines Knotens gebildet und als Feature hinzugefügt. 
+\\
+\\
+Für die Anwendung des Algorithmus auf Zeitreihen ist die Erweiterung um das Feature Gewichtung ebenfalls relevant, da sonst der Algorithmus auf einen vollständigen Graphen angewendet wird.
 
-\workTodo{Noch Parameter des ganzen erläutern und erklären wie bestimmt wird, ob ein Element ein Ausreißer ist oder nicht. Es muss auch noch das mit der Periodicität mit rein.}
+\begin{figure}
+	\centering
+	\includegraphics[height=0.5\linewidth,width=\linewidth]{fig/netsimile/graph_11}
+	\caption{\workTodo{Platzhalter: Graph with 11 vertices}}
+	\label{img:netsimile:graph_11}
+\end{figure}
 
-\workTodo{Wie genau wurde Netismile optimiert???. Vielleicht noch bisschen genauer darauf eingehen welche Features ich verwendet habe.}
+Das Problem hierbei ist, dass jeder Knoten eines Graphens die gleichen Features beinhalten würde. Dadurch würden die Aggregationen überflüssig werden und der Signaturvektor auf sieben Features schrumpfen. Die Bildung von Cluster-Features wäre demnach nur noch bedingt möglich und die Betrachtung an Nachbarn, unabhängig ob im Ego-Netzwerk oder im gesamten Netzwerk würde sich die Gesamtanzahl an Knoten annähern. Im Folgenden wird das Verhältnis der Features zum Durchschnitt dargestellt.
 
-Unter Verwendung der Netsimile Implementierung von ..., benötigte die Ausführung des Algorithmus teilweise bis zu 30 Minuten. Aus diesem Grund wurde der Algorithmus von uns neu implementiert.  Die Laufzeit konnte dabei auf wenige Sekunden reduziert werden, indem keine Graphen Bibliothek für die Implementierung verwendet wurde. Das heißt die Netzwerke der Zeitreihe werden nicht in ein Graphen Objekt umgewandelt, sondern als Adjazenzmatrix gespeichert. Dadurch können die Features deutlich effizienter berechnet werden. Des Weiteren wurden einige Features neu eingeführt und andere entfernt, sodass lediglich Features verwendet werden die für Fully Connected Graphen geeignet sind. So hat beispielsweise das Feature durchschnittliche Anzahl an Nachbarknoten keine Aussagekraft in einem Fully Connected Netzwerk, da jeder Knoten die gleiche Anzahl an Nachbarn hat. Anstelle dieses Features wurde im optimierten Algorithmus das durchschnittliche Kantengewicht eines Knoten als Feature verwendet. \workTodo{Wie war das im orginalen Algorithmus. Hab ich das wirklich verändert}. Ein weiterer Aspekt der geändert wurde ist, das die Canbarra Distanz nicht zu allen vorherigen Zeitabschnitten berechnet wird. Dadurch wird einerseits die benötigte Rechenzeit verringert und andererseits wird ermöglicht das der Algorithmus dinge vergessen kann und sich an einen neuen Stand anpasst.   
+\begin{figure}
+	\centering
+	\includegraphics[height=\linewidth,width=\linewidth]{fig/netsimile/heatmap_1}
+	\caption{\workTodo{Platzhalter: Heatmap 1}}
+	\label{img:netsimile:heatmap_1}
+\end{figure}
+Man erkennt gut, dass die Features der einzelnen Graphen identisch sind, weshalb die Graphen denselben Threshold haben und somit den Wert 0 teilen. 
+\\
+\workTodo{ToDo: Warum ist die Einheit p vorhanden? Da überall der gleiche Grünton beim gleichen Feature ist, entspricht dies eigentlich dem Durchschnitt und müsste ebenfalls den Wert 0 annehmen ? überprüfen}
 
-Als Testdaten   wurden, ein und zweidimensionale Zeitreihen der Numenta Gruppe verwendet. Diese Zeitreihen enthalten verschiedene Ausreißer Typen, auf deren Erkennung der Algorithmus getestet wurde. Die Qualität der Ausreißererkennung wurde  mithilfe eines Punktesystem bewertet. Dabei bedeuteten 0 Punkte, Ausreißer nicht erkannt und 4 Punkte bedeuteten Ausreißer sehr gut erkannt. Die Parameter, welche für die Tests gewählt werden mussten, werden in \autoref{table:parmeterNeti} beschrieben.\\
+\begin{figure}
+	\centering
+	\includegraphics[height=0.6\linewidth,width=\linewidth]{fig/netsimile/anomalie_1}
+	\caption{\workTodo{Platzhalter: Anomaly 1}}
+	\label{img:netsimile:anomalie_1}
+\end{figure}
+
+Dadurch ist die Ausreißererkennung von Zeitreihen in Graphen nicht möglich. Fügt man die Gewichtung als weiteres Feature hinzu, wird hier eine erste Betrachtung der Ausreißer möglich. Der Graph 10 wird hier wie erhofft als Ausreißer identifiziert.
+
+\begin{figure}
+	\centering
+	\includegraphics[height=0.6\linewidth,width=\linewidth]{fig/netsimile/anomalie_2}
+	\caption{\workTodo{Platzhalter: Anomaly 2}}
+	\label{img:netsimile:anomalie_2}
+\end{figure}
+
+\workTodo{Struktur - Subsubsection}
+
+\FloatBarrier
+
+\subsubsection{Netzwerk}
+\label{sec:netsimile:netzwerk}
+
+\paragraph{\textbf{Enron}}
+
+\begin{figure}
+	\centering
+	\includegraphics[height=0.6\linewidth,width=\linewidth]{fig/netsimile/anomalie_3}
+	\caption{\workTodo{Platzhalter: Anomaly 3}}
+	\label{img:netsimile:anomalie_3}
+\end{figure}
+
+\begin{figure}
+	\centering
+	\includegraphics[height=0.8\linewidth,width=\linewidth]{fig/netsimile/heatmap_3}
+	\caption{\workTodo{Platzhalter: heatmap 3}}
+	\label{img:netsimile:heatmap_3}
+\end{figure}
+
+\begin{itemize}
+	\item Ausreißer werden erkannt
+	\item \workTodo{Dauer Berechnung}
+\end{itemize}
+
+\FloatBarrier
+
+\paragraph{\textbf{Darpa}}
+
+\begin{figure}
+	\centering
+	\includegraphics[height=0.6\linewidth,width=\linewidth]{fig/netsimile/anomalie_4}
+	\caption{\workTodo{Platzhalter: Anomaly 4}}
+	\label{img:netsimile:anomalie_4}
+\end{figure}
+
+\begin{figure}
+	\centering
+	\includegraphics[height=0.1\linewidth,width=\linewidth]{fig/netsimile/dauer_4}
+	\caption{\workTodo{Platzhalter: Dauer 4}}
+	\label{img:netsimile:dauer_4}
+\end{figure}
+
+\begin{itemize}
+	\item Ausreißer werden wahrgenommen
+	\item Dauer Berechnung: 11150.692071 seconds
+\end{itemize}
+
+\FloatBarrier
+\subsubsection{Zeitreihendaten}
+\label{sec:netsimile:zeitreihen}
+
+\paragraph{\textbf{Eindimensional}}
+
+\begin{figure}
+	\centering
+	\includegraphics[height=0.6\linewidth,width=\linewidth]{fig/netsimile/anomalie_5}
+	\caption{\workTodo{Platzhalter: Sequence Change}}
+	\label{img:netsimile:anomalie_5}
+\end{figure}
+
+\begin{figure}
+	\centering
+	\includegraphics[height=0.2\linewidth,width=0.5\linewidth]{fig/netsimile/dauer_5}
+	\caption{\workTodo{Platzhalter: Sequence Change}}
+	\label{img:netsimile:dauer_5}
+\end{figure}
+
+\begin{itemize}
+	\item Ausreißer werden wahrgenommen
+	\item Dauer Berechnung: 2991.50926781 seconds
+\end{itemize}
+
+\begin{figure}
+	\centering
+	\includegraphics[height=0.6\linewidth,width=\linewidth]{fig/netsimile/anomalie_6}
+	\caption{\workTodo{Platzhalter: Peaks}}
+	\label{img:netsimile:anomalie_6}
+\end{figure}
+
+\begin{figure}
+	\centering
+	\includegraphics[height=0.2\linewidth,width=0.5\linewidth]{fig/netsimile/dauer_6}
+	\caption{\workTodo{Platzhalter: Peaks}}
+	\label{img:netsimile:dauer_6}
+\end{figure}
+
+\begin{itemize}
+	\item Ausreißer werden wahrgenommen
+	\item Dauer Berechnung: 3691.66552711 seconds
+\end{itemize}
+
+\begin{figure}
+	\centering
+	\includegraphics[height=0.6\linewidth,width=\linewidth]{fig/netsimile/anomalie_7}
+	\caption{\workTodo{Platzhalter: No Jump}}
+	\label{img:netsimile:anomalie_7}
+\end{figure}
+
+\begin{figure}
+	\centering
+	\includegraphics[height=0.2\linewidth,width=0.5\linewidth]{fig/netsimile/dauer_7}
+	\caption{\workTodo{Platzhalter: No Jump}}
+	\label{img:netsimile:dauer_7}
+\end{figure}
+
+\begin{itemize}
+	\item Ausreißer werden wahrgenommen
+	\item Dauer Berechnung: 3945.95857 seconds
+\end{itemize}
+
+\begin{figure}
+	\centering
+	\includegraphics[height=0.6\linewidth,width=\linewidth]{fig/netsimile/anomalie_8}
+	\caption{\workTodo{Platzhalter: Increase Noise}}
+	\label{img:netsimile:anomalie_8}
+\end{figure}
+
+\begin{figure}
+	\centering
+	\includegraphics[height=0.2\linewidth,width=0.5\linewidth]{fig/netsimile/dauer_8}
+	\caption{\workTodo{Platzhalter: Increase Noise}}
+	\label{img:netsimile:dauer_8}
+\end{figure}
+
+\begin{itemize}
+	\item Ausreißer werden wahrgenommen
+	\item Dauer Berechnung: 3117.28531003 seconds
+\end{itemize}
+
+\begin{figure}
+	\centering
+	\includegraphics[height=0.6\linewidth,width=\linewidth]{fig/netsimile/anomalie_9}
+	\caption{\workTodo{Platzhalter: Flatmiddle}}
+	\label{img:netsimile:anomalie_9}
+\end{figure}
+
+\begin{figure}
+	\centering
+	\includegraphics[height=0.2\linewidth,width=0.5\linewidth]{fig/netsimile/dauer_9}
+	\caption{\workTodo{Platzhalter: Flatmiddle}}
+	\label{img:netsimile:dauer_9}
+\end{figure}
+
+\begin{itemize}
+	\item Ausreißer werden wahrgenommen
+	\item Dauer Berechnung: 3768.19052601 seconds
+\end{itemize}
+
+\paragraph{\textbf{Mehrdimensional}}
+
+Probleme
+\begin{itemize}
+	\item es werden Knoten generiert die gar nicht existieren im Datensatz
+\end{itemize}
+\subsection{Optimierte Implementierung des Algorithmus}
+\label{sec:optiNeti}
+Unter Verwendung der Netsimile Implementierung aus \autoref{sec:ns-gl}, benötigte die Ausführung des Algorithmus teilweise bis zu 30 Minuten. Aus diesem Grund wurde der Algorithmus von uns neu implementiert.  Die Laufzeit konnte dabei auf wenige Sekunden reduziert werden, indem keine Graphen Bibliothek für die Implementierung verwendet wurde. Das heißt die Netzwerke der Zeitreihe werden nicht in ein Graphen Objekt umgewandelt, sondern als Adjazenzmatrix gespeichert. Dadurch können die Features deutlich effizienter berechnet werden. Des Weiteren wurden einige Features neu eingeführt und andere entfernt, sodass lediglich Features verwendet werden die für Fully Connected Graphen geeignet sind. So hat beispielsweise das Feature $|E_{ego(i)}|$ keine Aussagekraft in einem Fully Connected Netzwerk, da jeder Knoten die gleiche Anzahl Kanten in seinem Ego Netzwerk aufweist. Deshalb wurden folgende Features verwendet:
+\workTodo{Formeln ändern}
+\begin{description}
+	\item[$|E^{\circ}_{ego(i)}|$]\hfill\\ Arithmetisches Mittel der Kantengewichte in $ego(i)$.
+	\item[$|N(ego(i))|$]\hfill\\ Geometrisches Mittel der Kantengewichte in $ego(i)$.
+	\item[$|E^{\circ}_{ego(i)}|$]\hfill\\ Geometrischs Mittel 10 Prozent der höchsten Kantengewichte in $ego(i)$. 
+	\item[$|E^{\circ}_{ego(i)}|$]\hfill\\ Geometrischer Mittel 20 Prozent der höchsten Kantengewichte in $ego(i)$. 
+\end{description}
+
+Von diesen Features wurde dann auch den Median, den Mittelwert, die Standardabweichung, die Schiefe, sowie die Kurtosis berechnet. \workTodo{Bin mir nicht sicher zu welchen Elementen die Canbarra Distanz berechnet wird.}. Des Weiteren wurde ein neuer Parameter eingeführt. Über diesen kann gesteuert werden zu wie vielen vorgänger Abschnitten die Distanz berechnet werden soll. Dadurch kann gesteuert werden wie schnell ein Algorithmus vergisst. Eine Auflistung der Parameter des Algorithmus ist in \autoref{table:parmeterNeti} zu sehen.
 
 \begin{table}
 	\caption{Parameter Netismile Zeitreihen}
@@ -61,16 +273,19 @@ Als Testdaten   wurden, ein und zweidimensionale Zeitreihen der Numenta Gruppe v
 		\textbf{Parameter}& \textbf{Beschreibung}\\
 		\hline
 		\hline
-		Periodizität & Wie in \autoref{chap:trsnsNeti} erläutert muss die Zeitreihe in kleinere Intervalle aufgegliedert werden. Über diesen Parameter wird die Größe der Intervalle gesteuert. Für die Tests wurde der Parameter auf 288 gesetzt, da es sich hierbei um die Saisonalität der Zeitreihen handelt.\\
+		Periodizität & Wie in \autoref{sec:trsnsNeti} \workTodo{Referenz sollte glaube ich autoref -> sec:trsnsNeti sein} erläutert muss die Zeitreihe in kleinere Intervalle aufgegliedert werden. Über diesen Parameter wird die Größe der Intervalle gesteuert. Für die Tests wurde der Parameter auf 288 gesetzt, da es sich hierbei um die Saisonalität der Zeitreihen handelt.\\
 		\hline
-		Fenstergröße & Bestimmt die Anzahl der vorangegangenen Abschnitte zu welchen die Canberra Distanz berechnet wird. Dieser Parameter wurde für die Tests auf 5 gesetzt. Da der Algorithmus auch in der Lage sein sollte zu vergessen kann die Canberra Distanz nicht zu allen vorherigen Abschnitten berechnet werden.\\
+		Fenstergröße & Wie in \autoref{sec:optiNeti} erklärt, bestimmt dieser Parameter die Anzahl der vorangegangenen Abschnitte zu welchen die Canberra Distanz berechnet wird. Dieser Parameter wurde für die Tests auf 5 gesetzt.\\
 		\hline
 		Abweichung & Legt fest ab wann es sich bei einem Abschnitt um einen Ausreißer handelt. Der Parameter wurde für die Tests auf 3 gesetzt. Bedeutet wenn der Ausreißer Score um das dreifache der Standardabweichung vom Durchschnitt abweicht, wird der Abschnitt als Ausreißer gekennzeichnet.\\
 		\hline
 	\end{tabular}
 \end{table}
 
- 
+\subsubsection{Ausreißer-Erkennung in Zeitreihen}
+
+Um zu untersuchen, wie gut der Algorithmus funktioniert, wurde er auf Zeitreihen getestet. Als Testdaten   wurden, ein und zweidimensionale Zeitreihen der Numenta Gruppe verwendet. Diese Zeitreihen enthalten verschiedene Ausreißer Typen, auf deren Erkennung der Algorithmus getestet wurde. Die Qualität der Ausreißererkennung wurde  mithilfe eines Punktesystem bewertet. Dabei bedeuteten 0 Punkte, Ausreißer nicht erkannt und 4 Punkte bedeuteten Ausreißer sehr gut erkannt. Die Parameter, welche für die Tests gewählt werden mussten, werden in \autoref{table:parmeterNeti} beschrieben.\\
+
 \begin{table}
 \caption{Netsimile Time Series Perfomance}
 \label{table:performanceNeti}
@@ -101,4 +316,4 @@ Als Testdaten   wurden, ein und zweidimensionale Zeitreihen der Numenta Gruppe v
 \end{tabular}
 \end{table}
 
-\autoref{table:performanceNeti} zeigt die Ergebnisse der Tests. Es ist zu erkennen, dass die Qualität der Ausreißer-Erkennung im eindimensionalen Fall sehr gut ist. Lediglich einzelne Peaks können durch den Algorithmus nicht als Ausreißer identifiziert werden. Außerdem wird bei Signal Drifts und der kontinuierlichen Zunahme der Amplitude lediglich der Anfang des Ausreißers detektiert. Aus diesem Grund wurde eine Bewertung mit drei Sternen vergeben. Bei der Betrachtung der Graphiken in ... ist zu erkennen, dass das sechste oder siebte Intervall der Zeitreihe häufig als Ausreißer markiert wird. Der Grund hierfür ist, das bei einer Fenstergröße von fünf für die ersten fünf Abschnitte kein Ausreißer Score berechnet wird. Dadurch ist die Standardabweichung zu Beginn sehr niedrig wodurch Abschnitte schnell als Ausreißer gekennzeichnet werden. Dieser Umstand wurde bei der Bewertung in \autoref{table:performanceNeti} nicht berücksichtigt. Im zweidimensionalen Fall ist die Qualität der Ausreißer-Erkennung etwas durchwachsener. Auffallend ist, dass Zyklen mit höherer und niedriger Amplitude nicht als Ausreißer erkannt werden können. Insbesondere ist dies auffällig, da diese Ausreißer Typen üblicherweise zuverlässig erkannt werden \autoref{sec:rw-gl}.  Außerdem ist der Algorithmus im zweidimensionalen Fall nicht mehr dazu in der Lage Signal Drifts zu erkennen. Andere Ausreißer Typen können durch den Algorithmus weiterhin erkannt werden, jedoch oftmals nicht mit der selben Qualität. 
+\autoref{table:performanceNeti} zeigt die Ergebnisse der Tests. Es ist zu erkennen, dass die Qualität der Ausreißer-Erkennung im eindimensionalen Fall sehr gut ist. Lediglich einzelne Peaks können durch den Algorithmus nicht als Ausreißer identifiziert werden. Außerdem wird bei Signal Drifts und der kontinuierlichen Zunahme der Amplitude lediglich der Anfang des Ausreißers detektiert. Aus diesem Grund wurde eine Bewertung mit drei Sternen vergeben. Bei der Betrachtung der Graphiken in \autoref{sec:appendix_net_one} und \autoref{sec:appendix_net_two} ist zu erkennen, dass das sechste oder siebte Intervall der Zeitreihe häufig als Ausreißer markiert wird. Der Grund hierfür ist, das bei einer Fenstergröße von fünf für die ersten fünf Abschnitte kein Ausreißer Score berechnet wird. Dadurch ist die Standardabweichung zu Beginn sehr niedrig wodurch Abschnitte schnell als Ausreißer gekennzeichnet werden. Dieser Umstand wurde bei der Bewertung in \autoref{table:performanceNeti} nicht berücksichtigt. Im zweidimensionalen Fall ist die Qualität der Ausreißer-Erkennung etwas durchwachsener. Auffallend ist, dass Zyklen mit höherer und niedriger Amplitude nicht als Ausreißer erkannt werden. Insbesondere ist dies auffällig, da diese Ausreißer Typen üblicherweise zuverlässig erkannt werden (vgl. \autoref{sec:rw-gl}).  Außerdem ist der Algorithmus im zweidimensionalen Fall nicht mehr dazu in der Lage Signal Drifts zu erkennen. Andere Ausreißer Typen können durch den Algorithmus weiterhin erkannt werden, jedoch oftmals nicht mit der selben Qualität. 

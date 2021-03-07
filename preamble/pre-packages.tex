@@ -193,7 +193,7 @@
 \usepackage{flafter} % Floats immer erst nach der Referenz setzen
 \usepackage{subfig} % Layout wird weiter unten festgelegt !
 \usepackage{wrapfig} % Bilder von Text Umfliessen lassen
-
+\usepackage{tikz}
 \usepackage{placeins} % Alle Floats bis \FloatBarrier ausgeben
 
 % Make float placement easier
@@ -222,31 +222,42 @@
 %% Listings Paket ------------------------------------------------------
 %%% Doc: ftp://tug.ctan.org/pub/tex-archive/macros/latex/contrib/listings/listings-1.3.pdf
 \usepackage{listings}
+\usepackage{color}
 
-\lstset{
-basicstyle =\ttfamily\color{black}\small, % Standardschrift
-keywordstyle =, % \bfseries\color{blue}	  % Schlüsselwort-Style
-%identifierstyle =\underbar,
-commentstyle =\color{teal},
-stringstyle =\itshape,
-numbers = left,			  % Ort der Zeilennummern
-numberstyle =\tiny\color{black},	   % Stil der Zeilennummern
-numbers = left,			  % Ort der Zeilennummern
-tabsize=2,			  % Groesse von Tabs
-breaklines,			  % Zeilen werden Umgebrochen
-breakatwhitespace,			  % An Leerzeichen umbrechen
-%showspaces=true,			  % Leerzeichen anzeigen
-backgroundcolor=\color{lightgray},	  % % Hintergrundfarbe der Listings
+% 0. Basic Color Theme
+\lstdefinestyle{colored}{ %
+	basicstyle=\ttfamily,
+	backgroundcolor=\color{white},
+	commentstyle=\color{green}\itshape,
+	keywordstyle=\color{blue}\bfseries\itshape,
+	stringstyle=\color{red},
 }
- \lstloadlanguages{% Check Dokumentation for further languages ...
-%	[Visual]Basic
-         [AlLaTeX]TeX,
-         %Pascal
-         %C
-         %C++
-         %XML
-         %HTML
- }
+\lstset{
+	captionpos=b,
+	basicstyle =\ttfamily\color{black}\small, % Standardschrift
+	keywordstyle =\color{blue}\bfseries\itshape, % \bfseries\color{blue}	  % Schlüsselwort-Style
+	%identifierstyle =\underbar,
+	commentstyle =\color{green}\itshape,
+	stringstyle =\color{red}\itshape,
+	numbers = left,			  % Ort der Zeilennummern
+	numberstyle =\tiny\color{black},	   % Stil der Zeilennummern
+	numbers = left,			  % Ort der Zeilennummern
+	tabsize=2,			  % Groesse von Tabs
+	breaklines,			  % Zeilen werden Umgebrochen
+	breakatwhitespace,			  % An Leerzeichen umbrechen
+	%showspaces=true,			  % Leerzeichen anzeigen
+	backgroundcolor=\color{white},	  % % Hintergrundfarbe der Listings
+}
+\lstloadlanguages{% Check Dokumentation for further languages ...
+	%	[Visual]Basic
+	[AlLaTeX]TeX,
+	Python,
+	%Pascal
+	%C
+	%C++
+	%XML
+	%HTML
+}
 
 %%% Doc: ftp://tug.ctan.org/pub/tex-archive/macros/latex/contrib/examplep/eurotex_2005_examplep.pdf
 % LaTeX Code und Ergebnis nebeneinander darstellen
