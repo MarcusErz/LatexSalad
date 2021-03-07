@@ -1,0 +1,33 @@
+\newpage
+\chapter{Dynamische Algorithmen zur Ausreißer Erkennung}
+
+In diesem Kapitel werden zwei Algorithmen zur dynamischen Erkennung von Ausreißern vorgestellt. Hierbei handelt es sich um den Netismile (vgl. \autoref{sec:ns}) und den MIDAS (vgl. \autoref{sec:midas}) Algorithmus. Dynamische Algorithmen können im Gegensatz zu statischen Algorithmen, Ausreißer in Echtzeitdaten finden. Dies kann in der Praxis sehr wichtig sein, da Ausreißer möglichst schnell gefunden werden müssen um finanzielle Schäden abzuwenden.  Die dynamischen Algorithmen wurden genauso wie die statischen Algorithmen, von uns so gestaltet, das sie mit unterschiedlichen Daten Typen umgehen können. In unseren Experimenten wurden die Algorithmen auf Netzwerk- und Zeitreihen Daten angewandt.
+
+\section{Umwandlung der Daten in ein Netzwerk}
+Dieser Schritt muss durchgeführt werden bevor die Algorithmen angewandt werden können. Dabei funktioniert die Umwandlung der Daten genauso wie für statische Algorithmen (vgl. \autoref{sec:trsnsNeti}). Einziger Unterschied hierbei ist, das jeweils kleine Abschnitte der Daten in Netzwerke umgewandelt werden. Um dies zu veranschaulichen ein kurzes Beispiel: Ein Temperatur Sensor liefert jede Sekunde einen Wert. Sobald 100 Werte des Sensors eingegangen sind erfolgt die Umwandlung dieser Daten in ein Netzwerk unter Verwendung von \autoref{eq:euklidianDist}. Dieser Vorgang wiederholt sich anschließend immer wieder. Der Wert für die Länge der Abschnitte ist hierbei frei wählbar und kann als Parameter übergeben werden. Insofern die Zeitreihe eine Saisonalität besitzt, bietet es sich an diese für die Länge der Abschnitte zu verwenden. In einem letzten Schritt werden anschließend die Netzwerkdaten in eine Datei geschrieben. Dieser Schritt ist aufgrund der Art und Weiße, wie die Algorithmen implementiert sind notwendig. In \autoref{sec:trsnsNeti} ist graphisch dargestellt wie die Umwandlung der Daten in ein Netzwerk funktioniert. 
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=13cm]{fig/tsToNet/tsToCsv}
+	\caption{Umwandlung einer Zeitreihe in Netzwerk. Bei dem Netzwerk handelt es sich hier um ein Symbolbild.}
+	\label{img:tsToNet}
+\end{figure}
+
+\label{ssec:trsnsCSV}
+Die verschiedenen Algorithmen erfordern unterschiedliche Übergabeformate. Aus diesem Grund werden anschließend kurz die Besonderheiten erklärt, auf welche dabei geachtet werden muss. \\
+\textbf{Netismile: } Das Übergabeformat für den Netismile Algorithmus ist in \autoref{img:tsToNet} ganz rechts dargestellt. Jede Zeile stellt hierbei eine Kante des Netzwerks dar. Bei der ersten Spalte handelt es sich um den Ursprungsknoten der Kante, bei der zweiten Spalte um den Zielknoten und bei der letzten Spalte um die Gewichtung.\\
+\textbf{MIDAS: } Beim MIDAS Algorithmus ist es nicht möglich die Gewichtung der Kanten direkt an den Algorithmus zu übergeben. Es ist jedoch möglich die Gewichtung der Kanten indirekt an den Algorithmus zu übergeben. Dazu wird die gleiche Kante mehrmals in Abhängigkeit der Gewichtung an den Algorithmus übergeben. In \autoref{img:tsToNetMiData} ist ein  kleiner Ausschnitt einer Datei für den MIDAS dargestellt.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=2cm]{fig/tsToNet/midasData}
+	\caption{Datensatz Midas. 1Spalte: Ursprungsknoten, 2Spalte: Zielknoten, 3Spalte: Abschnitt}
+	\label{img:tsToNetMiData}
+\end{figure}
+\textbf{MIDAS-R: }. Die Berechnungen für den MIDAS-R Algorithmus sind im Verhältnis zum MIDAS Algorithmus umfangreicher. Insofern für den MIDAS-R Algorithmus die gleichen Daten verwendet werden wie für den MIDAS Algorithmus, benötigen die Berechnungen sehr lange. Aus diesem Grund wurde eine Hauptkomponenten Zerlegung durchgeführt, um die Größe der Adjazenzmatrix zu verringert. Es entsteht ein kleineres Netzwerk, welches an den MIDAS-R Algorithmus übergeben werden kann. 
+\label{ssec:trsnsMidasR}
+
+\workTodo{Midas R liefert eigentlich mehrere Ausreißer Scores es wäre vielleicht interessant diese einzeln zu betrachten und nicht zusammenaddiert.}
+
+\input{chapters/ch-netsimile}
+\input{chapters/ch-midas}
