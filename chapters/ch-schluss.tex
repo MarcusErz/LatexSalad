@@ -5,6 +5,11 @@
 \label{sec:fua-f}
 
 \workTodo{Fazit schreiben}
+Der Perculation-based Algorithmus liefert bessere Ergebnisse für die meisten Ausreißer-Typen als der Iso Map. Bei den Ausreißer Typen ?Signal-Aussetzer? und ?Frequenzänderung? können beide Algorithmen keine Ausreißer identifizieren. 
+Zudem sind beide Algorithmen für die statische Analyse ausgerichtet und könnten deswegen bspw. nur als Feature für den Netsimile verwendet werden. 
+Der Netsimile hingegen erkennt auch diese beiden Ausreißer Typen mit einer hohen Genauigkeit, aber ist weniger geeignet für die Ausreißererkennung in Netzwerken, da sich die Ausreißer zu wenig voneinander unterscheiden und deswegen schwer zu interpretieren sind. Der MIDAS Algorithmus eignet sich hervorragend für die Ausreißererkennung in Netzwerken und liefert ähnliche Ausreißer im Enron Datensatz wie der veröffentlichte Algorithmus SEDANSPOT. Für die Ausreißererkennung in Zeitreihen ist der MIDAS aber eher ungeeignet. 
+Zwecks Performanz konnte der Netsimile soweit optimiert werden, dass dieser in wenigen Sekunden durchgeführt werden kann, sowie die beiden statischen Algorithmen. MIDAS hingegen benötigt mehrere Minuten zur Analyse. 
+Der Netsimile erfüllt demnach die Anforderungen am besten. Der Schwerpunkt hierbei liegt bei der Wahl der richtigen Features. Strukturelle Merkmale sind eher ungeeignet bei vollständig verknüpften Graphen und sollten ersetzt werden durch Features, wie bspw. die Gewichtung der Kanten. 
 
 
 \begin{table}[h]
@@ -65,5 +70,9 @@
 
 \section{Ausblick}
 \label{sec:fua-a}
+Der Netsimile Algorithmus wurde bisher nur auf Zeitreihendaten und Graphen angewendet. Interessant wären jedoch noch Bilder, Biologische Daten und andere Netzwerke. Die einzige Voraussetzung ist die Berechnung einer Distanz zwischen einzelnen Elementen in diesen Daten. Zudem gibt es viele statische Algorithmen, die als Feature dem Netsimile hinzugefügt werden können. Erkennt der Perculation Algorithmus bspw. Ausreißer-Typen wie Increase-noise, Jumpsdown, Jumpsup und Flatmiddle, so kann nach weiteren Algorithmen gesucht werden, die die anderen Ausreißer Typen erkennt. Zudem wird beim Netsimile Algorithmus lediglich der Graph zurückgegeben der als Ausreißer identifiziert wurde, nicht aber der Grund dafür. Hierfür könnten weitere Untersuchungen durchgeführt werden, wie bspw. die Analyse der Features, welches sich am meisten von den anderen unterschieden hat oder einer anschließenden Analyse durch den Oddball Algorithmus, welche die Anomalien innerhalb des Graphens untersucht. 
+
+Des weiteren könnte eine allgemeine Forschung gestartet werden, welche untersucht, welche Features für spezifische Anwendungsgebiete geeignet sein könnten. 
+
 
 \workTodo{Ausblick schreiben}
