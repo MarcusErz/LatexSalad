@@ -44,6 +44,9 @@ Im letzten Schritt wird bei diesem Algorithmus die Canberra-Distance-Funktion al
 
 
 \workTodo{3.2.1 von Google Docs einfügen bis S.16 Datensätze Überschrift}
+
+\FloatBarrier
+
 \subsection{Erweiterung des Algorithmus}
 \workTodo{Erklären warum ein neues Feature benötigt wird. Vergleich des Algorithmus mit Feature und ohne neues Feature}
 Damit der Algorithmus auf Netzwerke angewendet werden kann, muss dieser vorab erweitert werden, da in Netzwerken ansonsten nur die Verbindung im Allgemeinen betrachtet wird, nicht aber die Häufigkeit an Verbindungen, die zwischen zwei Knoten stattgefunden hat. Damit würde ein großer Anteil des Datensatzes verloren gehen, da der Algorithmus keine Mehrfach-Verbindungen zwischen Knoten im Graphen darstellen kann.
@@ -70,10 +73,11 @@ Das Problem hierbei ist, dass jeder Knoten eines Graphens die gleichen Features 
 
 \begin{figure}
 	\centering
-	\includegraphics[height=\linewidth,width=\linewidth]{fig/netsimile/heatmap_1}
+	\includegraphics[height=0.8\linewidth,width=\linewidth]{fig/netsimile/heatmap_1}
 	\caption{\workTodo{Platzhalter: Heatmap 1}}
 	\label{img:netsimile:heatmap_1}
 \end{figure}
+
 Man erkennt gut, dass die Features der einzelnen Graphen identisch sind, weshalb die Graphen denselben Threshold haben und somit den Wert 0 teilen. 
 \\
 \workTodo{ToDo: Warum ist die Einheit p vorhanden? Da überall der gleiche Grünton beim gleichen Feature ist, entspricht dies eigentlich dem Durchschnitt und müsste ebenfalls den Wert 0 annehmen ? überprüfen}
@@ -246,6 +250,62 @@ Dadurch ist die Ausreißererkennung von Zeitreihen in Graphen nicht möglich. Fügt
 	\item Dauer Berechnung: 3768.19052601 seconds
 \end{itemize}
 
+\begin{figure}
+	\centering
+	\includegraphics[height=0.6\linewidth,width=\linewidth]{fig/netsimile/anomalie_10}
+	\caption{\workTodo{Platzhalter: Jumpsup}}
+	\label{img:netsimile:anomalie_10}
+\end{figure}
+
+\begin{figure}
+	\centering
+	\includegraphics[height=0.2\linewidth,width=0.5\linewidth]{fig/netsimile/dauer_10}
+	\caption{\workTodo{Platzhalter: Jumpsup}}
+	\label{img:netsimile:dauer_10}
+\end{figure}
+
+\begin{figure}
+	\centering
+	\includegraphics[height=0.6\linewidth,width=\linewidth]{fig/netsimile/anomalie_11}
+	\caption{\workTodo{Platzhalter: Amprise}}
+	\label{img:netsimile:anomalie_11}
+\end{figure}
+
+\begin{figure}
+	\centering
+	\includegraphics[height=0.2\linewidth,width=0.5\linewidth]{fig/netsimile/dauer_11}
+	\caption{\workTodo{Platzhalter: Amprise}}
+	\label{img:netsimile:dauer_11}
+\end{figure}
+
+\begin{figure}
+	\centering
+	\includegraphics[height=0.6\linewidth,width=\linewidth]{fig/netsimile/anomalie_12}
+	\caption{\workTodo{Platzhalter: drift}}
+	\label{img:netsimile:anomalie_12}
+\end{figure}
+
+\begin{figure}
+	\centering
+	\includegraphics[height=0.2\linewidth,width=0.5\linewidth]{fig/netsimile/dauer_12}
+	\caption{\workTodo{Platzhalter: drift}}
+	\label{img:netsimile:dauer_12}
+\end{figure}
+
+\begin{figure}
+	\centering
+	\includegraphics[height=0.6\linewidth,width=\linewidth]{fig/netsimile/anomalie_13}
+	\caption{\workTodo{Platzhalter: jumpsdown}}
+	\label{img:netsimile:anomalie_13}
+\end{figure}
+
+\begin{figure}
+	\centering
+	\includegraphics[height=0.2\linewidth,width=0.5\linewidth]{fig/netsimile/dauer_13}
+	\caption{\workTodo{Platzhalter: jumpsdown}}
+	\label{img:netsimile:dauer_13}
+\end{figure}
+
 \paragraph{\textbf{Mehrdimensional}}
 
 Probleme
@@ -317,3 +377,5 @@ Um zu untersuchen, wie gut der Algorithmus funktioniert, wurde er auf Zeitreihen
 \end{table}
 
 \autoref{table:performanceNeti} zeigt die Ergebnisse der Tests. Es ist zu erkennen, dass die Qualität der Ausreißer-Erkennung im eindimensionalen Fall sehr gut ist. Lediglich einzelne Peaks können durch den Algorithmus nicht als Ausreißer identifiziert werden. Außerdem wird bei Signal Drifts und der kontinuierlichen Zunahme der Amplitude lediglich der Anfang des Ausreißers detektiert. Aus diesem Grund wurde eine Bewertung mit drei Sternen vergeben. Bei der Betrachtung der Graphiken in \autoref{sec:appendix_net_one} und \autoref{sec:appendix_net_two} ist zu erkennen, dass das sechste oder siebte Intervall der Zeitreihe häufig als Ausreißer markiert wird. Der Grund hierfür ist, das bei einer Fenstergröße von fünf für die ersten fünf Abschnitte kein Ausreißer Score berechnet wird. Dadurch ist die Standardabweichung zu Beginn sehr niedrig wodurch Abschnitte schnell als Ausreißer gekennzeichnet werden. Dieser Umstand wurde bei der Bewertung in \autoref{table:performanceNeti} nicht berücksichtigt. Im zweidimensionalen Fall ist die Qualität der Ausreißer-Erkennung etwas durchwachsener. Auffallend ist, dass Zyklen mit höherer und niedriger Amplitude nicht als Ausreißer erkannt werden. Insbesondere ist dies auffällig, da diese Ausreißer Typen üblicherweise zuverlässig erkannt werden (vgl. \autoref{sec:rw-gl}).  Außerdem ist der Algorithmus im zweidimensionalen Fall nicht mehr dazu in der Lage Signal Drifts zu erkennen. Andere Ausreißer Typen können durch den Algorithmus weiterhin erkannt werden, jedoch oftmals nicht mit der selben Qualität. 
+
+\FloatBarrier
