@@ -2,7 +2,7 @@
 \section{MIDAS}
 \label{sec:midas}
 \workTodo{In diesem Kapitel werden grundlegende Themen behandelt, die im Rahmen des Forschungsprojekts zum Verständnis der Ausreißer-Erkennung in Graphen gedient haben.}
-\workTodo{Related Work: Sedanspot, RHSS}
+
 
 Erst erklären wie der MIDAS funktioniert. Und zum Laufen gebracht mit Graphen über die Zeit ENRON \& DARPA. Im Anschluss auf Zeitreihendaten angewendet.
 
@@ -18,40 +18,139 @@ Anwendungsfälle für MIDAS sind die Erkennung von Anomalien in Computer-Netzwerke
 
 \subsubsection{Count-Min-Sketch}
 \label{sec:mc-gl-cms}
-Damit die relevanten Informationen für den Algorithmus mit einem konstanten Speicher verarbeitet werden, wird Count-Min-Sketch genutzt, dass eine Streaming-Datenstruktur mithilfe der Nutzung von Hash-Funktionen entspricht. Count-Min-Sketch zählt somit die Frequenz einer Aktivität bei Streaming-Daten. Diese Datenstruktur hat ebenfalls den Vorteil, dass man zu Beginn keine Kenntnis über die Anzahl an Quell- und Zielpaaren haben muss.
+Damit die relevanten Informationen für den Algorithmus mit einem konstanten Speicher verarbeitet werden, wird Count-Min-Sketch genutzt, dass eine Streaming-Datenstruktur mithilfe der Nutzung von Hash-Funktionen entspricht. Count-Min-Sketch zählt somit die Frequenz einer Aktivität bei Streaming-Daten. Diese Datenstruktur hat ebenfalls den Vorteil, dass man zu Beginn keine Kenntnis über die Anzahl an Quell- und Zielpaaren haben muss. \citep{CMS04}
 
 MIDAS verwendet zwei Arten von CMS. Die erste Variante $s_{uv}$ wird als die Anzahl an Kanten von $u$ zu $v$ bis zum aktuellen Zeitpunkt $t$ definiert. Durch die CMS-Datenstruktur werden alle Zählungen von $s_{uv}$ approximiert, sodass jederzeit eine annähernde Abfrage $\hat{s}_{uv}$ erhalten werden kann.
 Die zweite Variante $a_{uv}$ wird als die Anzahl an Kanten  von $u$ zu $v$ im aktuellen Zeitpunkt $t$ definiert. Dieser CMS ist identisch zu $s_{uv}$, wobei bei jedem Übergang zum nächsten Zeitpunkt die Datenstruktur zurückgesetzt wird. Dadurch resultiert aus dem CMS für den aktuellen Zeitpunkt die annähernde Abfrage $\hat{a}_{uv}$. \citep[vgl.][S.~3]{MIDAS}
 
 
-\workTodo{chi-squared}
-
-
-\subsection{Erkennung von Mikrocluster}
+\subsubsection{Erkennung von Mikrocluster}
 \label{sec:mc-gl-dm}
 
+Mithilfe der Näherungswerte $\hat{s}_{uv}$ und $\hat{a}_{uv}$ ist das Detektieren von Mikroclustern möglich. Hierzu wird der mittlere Pegel \workTodo{andere übersetzung für mean level?} (\dah die durchschnittliche Rate mit der Kanten erscheinen) betrachtet. Es wird hierbei angenommen, dass dieser für den aktuellen Zeitpunkt (\zB $t = 10$) äquivalent ist zu dem vor dem aktuellen Zeitpunkt ($t < 10$). Dadurch wird die Annahmen vermieden, dass die Daten auf einer bestimmten zugrundeliegenden Verteilung basieren oder Stationarität über die Zeit aufweisen.
+\\
+\\
+Durch die genannte Annahme lassen sich vergangene Kanten in zwei Klassen einteilen. Eine für den aktuellen Zeitpunkt $t = 10$ und eine für alle vergangenen Zeitpunkte $t < 10$. Hierbei beträgt die Anzahl der Ereignisse zum Zeitpunkt $t = 10$ $a_{uv}$ und die Anzahl der Kanten in vergangenen Zeitpunkten $t < 10$ ist $s_{uv} - a_{uv}$.
+\\
+\\
+Die Auswertung der Daten kann mithilfe des chi-squared goodnes-of-fit test erfolgen. Hierbei wird die Summe der Klassen $t = 10$ und $t < 10$ für $\frac{(\text{beobachtet} - \text{erwartet})^2}{\text{erwartet}}$ bestimmt. Bei einer Gesamtanzahl von $s_{uv}$ Kanten ergibt sich, auf Basis eines mittleren Pegels \workTodo{wie oben andere bezeichnung?}, für $t = 10$ eine erwartete Anzahl von $\frac{s_{uv}}{t}$ Kanten \workTodo{oder ereignisse?}. Analog hierzu ergibt sich für $t < 10$ eine erwartete Anzahl an $\frac{t - 1}{t}s_{uv}$ vergangenen Kanten. Daraus ergibt sich für die chi-squared Statistik \cite[vgl.][S.~3]{MIDAS}:
 
-\subsection{Experimente}
+\begin{align}
+	\chi^2 &= \frac{\left(\text{beobachtet}_{(t = 10)} - \text{erwartet}_{(t = 10)}\right)^2}{\text{erwartet}_{(t = 10)}} \nonumber \\
+	&+ \frac{\left(\text{beobachtet}_{(t < 10)} - \text{erwartet}_{(t < 10)}\right)^2}{\text{erwartet}_{(t < 10)}} \nonumber \\
+	&= \frac{\left(a_{uv} - \frac{s_{uv}}{t}\right)^2}{\frac{s_{uv}}{t}} + \frac{\left(\left(s_{uv} - a_{uv}\right) - \frac{t - 1}{t}s_{uv}\right)^2}{\frac{t - 1}{t}s_{uv}} \nonumber \\
+	&= \frac{\left(a_{uv} - \frac{s_{uv}}{t}\right)^2}{\frac{s_{uv}}{t}} + \frac{\left(a_{uv} - \frac{s_{uv}}{t}\right)^2}{\frac{t - 1}{t}s_{uv}} \nonumber \\
+	&= \left(a_{uv} - \frac{s_{uv}}{t}\right)^2\frac{t^2}{s_{uv}(t - 1)}
+	\label{eqn:midas:chi2}
+\end{align}
+
+Die Größen $a_{uv}$ und $s_{uv}$ können, mithilfe der CMS-Datenstruktur, approximiert werden. Daraus ergibt sich, unter Verwendung der approximierten Größen $\hat{a}_{uv}$ und $\hat{s}_{uv}$, der folgende Anomaly Score \cite[vgl.][S.~4]{MIDAS}:
+
+\begin{equation}
+	score((u,v,t)) = \left(\hat{a}_{uv} - \frac{\hat{s}_{uv}}{t}\right)^2\frac{t^2}{\hat{s}_{uv}(t - 1)}
+	\label{eqn:midas:score}
+\end{equation}
+
+Mithilfe des in \autoref{eqn:midas:score} angegeben Anomaly Score lässt sich eine neue Kante $(u,v)$ zum Zeitpunkt $t$ bewerten. Dieser wird in einem binären Entscheidungsverfahren verwendet, um zu bestimmen, ob es sich bei einer neuen Kante um Anomalie handelt oder nicht. Die Wahrscheinlichkeit von false positive Ergebnissen soll hierbei nicht einen benutzerdefinierten Schwellenwert $\epsilon$ übersteigen. CMS-Datenstrukturen mit einer angemessenen Größe besitzen die Eigenschaft, dass die Approximationen $\hat{a}_{uv}$, für beliebige $\epsilon$ und $\nu$, folgende Vorschrift mit einer Wahrscheinlichkeit von mindestens $1 - \frac{\epsilon}{2}$ erfüllen:
+
+\begin{equation}
+	\hat{a}_{uv} \leq a_{uv} + \nu \cdotp N_t
+\end{equation}
+
+$N_t$ beschreibt hierbei die Anzahl an Kanten zum Zeitpunkt $t$. Eine weitere Eigenschaft der CMS-Datenstrukturen ist, dass diese die tatsächlichen Anzahl an Kanten nur überbewerten können:
+
+\begin{equation}
+	s_{uv} \leq \hat{s}_{uv}
+\end{equation}
+
+Der in \autoref{eqn:midas:score} gegebene Score kann wie folgt angepasst werden:
+
+\begin{equation}
+	\~{a}_{uv} = \hat{a}_{uv} - \nu N_t
+\end{equation}
+
+Daraus lässt sich die in \autoref{eqn:midas:chi2} gegebene Statistik anpassen:
+
+\begin{equation}
+	\tilde{\chi}^2 = \left(\tilde{a}_{uv} - \frac{s_{uv}}{t}\right)^2\frac{t^2}{s_{uv}(t - 1)}
+	\label{eqn:midas:chi2angepasst}
+\end{equation}
+
+Bei Verwendung der Teststatistik in \autoref{eqn:midas:chi2angepasst} und eines Schwellenwertes von $\chi^2_{1 - \frac{\epsilon}{2}}(1)$ ergibt sich eine Wahrscheinlichkeit für ein false positive Ergebnis von höchstens $\epsilon$:
+
+\begin{equation}
+	P\left(\tilde{\chi}^2 > \chi^2_{1 - \frac{\epsilon}{2}}(1)\right) < \epsilon
+	\label{eqn:midas:prob}
+\end{equation}
+
+Der Term $\chi^2_{1 - \frac{\epsilon}{2}}(1)$ beschreibt hierbei das $1 - \frac{\epsilon}{2}$-Quantil.
+
+\section{Ausreißer-Erkennung in Graphen}
 \label{sec:m-ex}
-\workTodo{ausformulieren, bilder einfügen}
-- DARPA und ENRON Datensätze
-- Jumpsup Datensatz von Marcus
+\workTodo{ausformulieren}
 
--DARPA AUC 91%
--ENRON identisch mit SEDANSPOT-labels außer September 2000
-
-Schwierigkeit geeignete Datensätze zu finden, dazu gibt es ein Paper
-
-Wenn man die Anomalyscores als gewichte nimmt, kommen Graphen in Networkx raus in denen man die anomalous nodes identifizieren kann dabei sollten es Edges sein..
-
-\subsubsection{Einführung}
-\label{sec:mc-gl-cms-in}
-
-\workTodo{Stichworte sammeln}
+\begin{figure}[H]
+	\centering
+	\includegraphics[height=0.6\linewidth,width=\linewidth]{fig/midas/Enron_Anomaly}
+	\caption{Der Ausreißer-Score über die Zeit beim ENRON-Datensatz}
+	\label{img:midas:enron_anomaly}
+\end{figure}
 
 
 
-\subsection{Anwendung auf Zeitreihen}
+\begin{figure}[H]
+	\centering
+	\includegraphics[height=0.4\linewidth,width=\linewidth]{fig/midas/Enron_Label}
+	\caption{Die Ausreißer des SEDANSPOT-Algorithmus}
+	\label{img:midas:enron_label}
+\end{figure}
+
+Die Herausforderung geeignete \textit{labels} für die Datensätze zu finden wird in zwei Schritten eingedämmt. 
+
+Zum einen werden Erkenntnisse aus dem Schaubild des SEDANSPOT-Algorithmus gewonnen \workTodo{Quelle eingeben}. Hierbei kann man sehen, dass beide Algorithmen einen ähnlichen Verlauf vorweisen. 
+Im nächsten Schritt wird die selbe Vorgehensweise wie aus dem SEDANSPOT-Paper gewählt und die ENRON Timeline \workTodo{Quelle einfügen wie bei Datensatz-Kapitel} zur Erhebung von möglichen Auswirkungen für die Ausreißer hinzugezogen.
+
+Die \autoref{tab:enrontime} bietet eine Übersicht der historischen Ereignisse, die die Ausreißer des MIDAS-Algorithmus erklären. Im Vergleich zum SEDANSPOT-Algorithmus werden mehr Ausreißer erkannt.
+  
+\begin{table}[h!]
+	\centering
+    \begin{tabular}{p{0.05\linewidth}|p{0.89\linewidth}}
+	\toprule
+	1. & Aktie erreicht Allzeithoch. Federal Energy Regulatory Commission ordnet Untersuchung an.\\
+	\midrule
+	2. & \textbullet Vierteljährliche Telefonkonferenz zur Finanzsituation und erste Symptome eines Problems. \newline \textbullet \enquote{Geheimes} Treffen -- Schwarzenegger, Lay, Milken. Angebot zur Rettung der Deregulierung. \\
+	\midrule
+	3. & \textbullet Skilling (CEO) kündigt. Mitarbeiterin warnt Lay (Gründer) vor Pleite. Skilling verkauft seine Aktien. \newline \textbullet Enron veröffentlicht 618 Mio. \$ Verlust. Interessenskonflikt wird untersucht und Akten vernichtet. \\
+	\midrule
+	4. & \textbullet Beginn der Strafermittlung. Lay's Rücktritt \newline \textbullet Internen Ermittlung verteilt die Schuld auf Führungskräfte und den Vorstand \\
+	\bottomrule
+\end{tabular}
+	\caption{Übersicht über historische Ereignisse, die den Ausreißern zuzuordnen sind}
+	\label{tab:enrontime}
+\end{table}
+
+
+
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[height=0.6\linewidth,width=\linewidth]{fig/midas/Darpa_Anomaly}
+	\caption{Der Ausreißer-Score über die Zeit beim DARPA-Datensatz}
+	\label{img:midas:darpa_anomaly}
+\end{figure}
+
+Bei der Anwendung des MIDAS auf dem DARPA-Datensatz sieht man sehr schön einzelne Ausreißer, die entdeckt wurden. Für diesen Datensatz gibt es, speziell für MIDAS entwickelt, einen \textit{ground truth}, der die \textit{labels} für diesen Datensatz zur Verfügung stellt.
+
+Bei der Berechnung der \dq Area under the Curve \dq\space für die ermittelten Ausreißer-Scores wird ein Wert von $0.9172724836793507$ berechnet. Das bedeutet, dass der MIDAS-Algorithmus mit einer Wahrscheinlichkeit von ca. 91,73\% die Kanten des Datensatzes richtig klassifiziert.  
+
+Somit kann festgehalten werden, dass MIDAS ein sehr guter Algorithmus ist bei der Erkennung von Ausreißern in Graphen und eine sehr hohe Genauigkeit erreicht.
+
+\workTodo{Schwierigkeit geeignete Datensätze zu finden, dazu gibt es ein Paper. Wenn man die Anomalyscores als gewichte nimmt, kommen Graphen in Networkx raus in denen man die anomalous nodes identifizieren kann dabei sollten es Edges sein}
+
+
+\section{Ausreißer-Erkennung in Zeitreihen}
+\workTodo{Tabelle wie für Netsimile einfügen bzgl. den verschiedenen Numenta-Datensätzen. Bisher nicht dringlich gewesen, da MIDAS schlecht ist und wir das für den abstract nicht benötigen}
+
 Um den MIDAS Algorithmus auf Zeitreihen anwenden zu können muss die Zeitreihe, wie in \autoref{chap:trsnsMidas} beschrieben, zunächst in verschiedene Netzwerke umgewandelt werden. Bei den Tests konnte festgestellt werden, dass der MIDAS Algorithmus nicht dazu in der Lage ist Ausreißer in Zeitreihen zu erkennen. Die vollständigen Ergebnisse der Tests können in \autoref{chap:appendix_midas_ts} eingesehen werden. Hierbei ist jedoch der Verlauf des Ausreißer Scores schwierig zu interpretieren. Es ist zu erkennen, das der Ausreißer-Score zu Beginn eines jeden Abschnitts sehr hoch ist, am Ende des Abschnitts ist der Ausreißer Score hingegen relativ niedrig. Grund hierfür ist, das die Anzahl an Kanten zu Beginn eines Abschnittes im Verhältnis zu der Anzahl an Kanten aus den vorangegangenen Abschnitten deutlich niedriger ist. Im weiteren Verlauf werden weitere Kanten innerhalb des Abschnitts hinzugefügt. Dadurch gleicht sich die Anzahl an Kanten innerhalb der Abschnitte an und der Ausreißer Score sinkt.
 
 Der MIDAS Algorithmus ist lediglich bei einer Zeitreihe dazu in der Lage den Ausreißer zu identifizieren. Hierbei handelt es sich um die Zeitreihe mit erhöhter Amplitude (vgl. \autoref{img:midasTSresultJumpsup}). Durch den Ausschlag nach oben in der Zeitreihe entsteht ein Netzwerk, mit sehr hohen Gewichten. Die hohen Gewichte führen zu einer erhöhten Anzahl an Kanten, was schlussendlich zu einem Ausschlag des Ausreißer Scores führt. Die erhöhte Anzahl an Kanten führt ebenfalls dazu das der Abschnitt mit dem Ausreißer in der Abbildung deutlich breiter ist als die anderen. Bei anderen Ausreißer Typen sind die Differenzen zwischen den verschiedenen Elementen der Zeitreihe nicht so groß. Dadurch ergeben sich keinerlei hohe Kantengewichte und der Ausreißer kann nicht erkannt werden.
