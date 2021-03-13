@@ -47,34 +47,37 @@ Für den Iso Map Algorithmus stellt SciKit Learn eine sehr gute Implementierung z
 \subsection{Ausreißererkennung in Zeitreihen}
 \workTodo{Erklären welche Zeitreihen verwendet wurden. Hab ich so ein bisschen gemacht vielleicht das noch in extra Kapitel machen.} 
 \label{sec:im-results}
+
 \begin{table}
-\caption{IsoMap Performance}
-\begin{tabular}{ |p{4.5cm}||p{4.5cm}||p{3cm}|}
-	\hline
-	\textbf{Ausreißer Typ}& \textbf{Datei Name}&
-	\textbf{1D}\\
-	\hline
-	\hline
-	Einzelne Peaks & anomaly-art-daily-peaks & *\\
-	\hline
-	Zunahme an Rauschen & anomaly-art-daily-increase-noise &**\\
-	\hline
-	Signal Drift & anomaly-art-daily-drift &**\\
-	\hline
-	Kontinuierliche Zunahme der Amplitude& art-daily-amp-rise & **\\
-	\hline
-	Zyklus mit höherer Amplitude & art-daily-jumpsup &*\\
-	\hline
-	Zyklus mit geringerer Amplitude & art-daily-jumpsdown & **\\
-	\hline
-	Zyklus-Aussetzer & art-daily-flatmiddle &*\\
-	\hline
-	Signal-Aussetzer & art-daily-nojump & -\\
-	\hline
-	Frequenzänderung & anomaly-art-daily-sequence-change &-\\
-	\hline
-\end{tabular}
+	\centering
+	\begin{tabular}{p{0.47\linewidth}|p{0.4\linewidth}|P{0.05\linewidth}}
+		\toprule
+		\textbf{Ausreißer Typ}& \textbf{Datei Name}&
+		\textbf{1D}\\
+		\midrule
+		Einzelne Peaks & anomaly-art-daily-peaks & *\\
+		\midrule
+		Zunahme an Rauschen & anomaly-art-daily-increase-noise &**\\
+		\midrule
+		Signal Drift & anomaly-art-daily-drift &**\\
+		\midrule
+		Kontinuierliche Zunahme der Amplitude& art-daily-amp-rise & **\\
+		\midrule
+		Zyklus mit höherer Amplitude & art-daily-jumpsup &*\\
+		\midrule
+		Zyklus mit geringerer Amplitude & art-daily-jumpsdown & **\\
+		\midrule
+		Zyklus-Aussetzer & art-daily-flatmiddle &*\\
+		\midrule
+		Signal-Aussetzer & art-daily-nojump & -\\
+		\midrule
+		Frequenzänderung & anomaly-art-daily-sequence-change &-\\
+		\bottomrule
+	\end{tabular}
+	\caption{IsoMap Performance}
+	\label{tab:isomap:performance}
 \end{table}
+
 
 Für die durchgeführten Tests wurden die Zeitreihen aus ... verwendet. Um zu bewerten wie gut der Algorithmus funktioniert, wurde ein Punktesystem eingeführt. In dem Punktesystem konnten maximal vier Sterne erreicht werden. Das bedeutet Ausreißer sehr gut erkannt. Null Sterne hingegen bedeuten Ausreißer überhaupt nicht erkannt. Der IsoMap Algorithmus liefert eher schwache Ergebnisse bei der Erkennung von Ausreißern in Zeitreihen. Hauptproblem hierbei ist, dass starke Anstiege, bei welchen es sich nicht um Ausreißer handelt, fälschlicherweise zu einem starken Anstieg des Ausreißer Scores führen (vgl. \autoref{img:iso_trans} mit Pfeil markierte stellen). Dies kann, je nach Threshold, zu einer hohen Quote an falsch positiven Klassifizierungen führen. Aus diesem Grund können die tatsächlichen Ausreißer nicht eindeutig identifiziert werden. Eine Ähnliche Problematik trat in \citep {Uzun} bei der Verwendung des Random Walk Algorithmus auf. Das Problem konnte hierbei gelöst werden, indem vor der Anwendung des Algorithmus, eine Glättung der Zeitreihe durchgeführt wurde. Dadurch werden abrupte Übergange in der Zeitreihe abgemildert und deshalb nicht mehr als Ausreißer erkannt \citep[vgl.][S.~31,36]{Uzun}. Dies könnte ein möglicher Ansatz sein um zukünftig bessere Ergebnisse zu erzielen.\\
 Des Weiteren ist zu erkennen, dass der Algorithmus für einige Ausreißer Typen nicht geeignet ist, hierzu gehören Siganl Aussetzer und Frequenzänderungen. Bei diesen Ausreißer Typen treten keinerlei unüblichen Werte auf, sondern es kommt zu Änderungen in der Saisonalität der Zeitreihe. 
@@ -125,32 +128,33 @@ eine bestimmte Menge an Kanten aus dem Netzwerk entfernt wurde. Da der Algorithm
 \label{sec:per-result}
 
 \begin{table}
-\caption{Perculation Time Series Performance}
-\begin{tabular}{ |p{6cm}||p{6cm}||p{3cm}|}
-	\hline
-	\textbf{Ausreißer Typ}& \textbf{Datei Name}&
-	\textbf{1D}\\
-	\hline
-	\hline
-	Einzelne Peaks & anomaly-art-daily-peaks & *\\
-	\hline
-	Zunahme an Rauschen & anomaly-art-daily-increase-noise &****\\
-	\hline
-	Signal Drift & anomaly-art-daily-drift &***\\
-	\hline
-	Kontinuierliche Zunahme der Amplitude& art-daily-amp-rise & ***\\
-	\hline
-	Zyklus mit höherer Amplitude & art-daily-jumpsup &****\\
-	\hline
-	Zyklus mit geringerer Amplitude & art-daily-jumpsdown & ****\\
-	\hline
-	Zyklus-Aussetzer & art-daily-flatmiddle &****\\
-	\hline
-	Signal-Aussetzer & art-daily-nojump & -\\
-	\hline
-	Frequenzänderung & anomaly-art-daily-sequence-change &-\\
-	\hline
-\end{tabular}
+	\centering
+	\begin{tabular}{p{0.47\linewidth}|p{0.4\linewidth}|P{0.05\linewidth}}
+		\toprule
+		\textbf{Ausreißer Typ}& \textbf{Datei Name}&
+		\textbf{1D}\\
+		\midrule
+		Einzelne Peaks & anomaly-art-daily-peaks & *\\
+		\midrule
+		Zunahme an Rauschen & anomaly-art-daily-increase-noise &****\\
+		\midrule
+		Signal Drift & anomaly-art-daily-drift &***\\
+		\midrule
+		Kontinuierliche Zunahme der Amplitude& art-daily-amp-rise & ***\\
+		\midrule
+		Zyklus mit höherer Amplitude & art-daily-jumpsup &****\\
+		\midrule
+		Zyklus mit geringerer Amplitude & art-daily-jumpsdown & ****\\
+		\midrule
+		Zyklus-Aussetzer & art-daily-flatmiddle &****\\
+		\midrule
+		Signal-Aussetzer & art-daily-nojump & -\\
+		\midrule
+		Frequenzänderung & anomaly-art-daily-sequence-change &-\\
+		\bottomrule
+	\end{tabular}
+	\caption{Perculation Time Series Performance}
+	\label{tab:perculation:timeseriesperformance}
 \end{table}
 
 \label{sec:per-results-text}
