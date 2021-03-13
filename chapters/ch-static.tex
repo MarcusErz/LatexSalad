@@ -1,32 +1,30 @@
 \newpage
 \chapter{Statische Algorithmen zur Ausreißer Erkennung}
-In diesem Kapitel werden zunächst zwei statische Algorithmen zur Ausreißer Erkennung auf unterschiedlichen Datentypen (z.B. Videos, Bilder, Netzwerke) vorgestellt. Hierbei handelt es sich um ein auf Percolation basierender Algorithmus und ein auf IsoMap basierender Algorithmus. Statische Algorithmen kennzeichnet, das sie nicht mit Daten umgehen könne, welche kontinuierlich an sie übergeben werden. Damit die Algorithmen anwendbar sind müssen die Daten vollständig und abgeschlossen vorliegen. Eines unserer Hauptziele des Forschungsprojektes war die Ausreißer Erkennung in Zeitreihen, aus diesem Grund untersuchten wir die Algorithmen auf ihre Fähigkeit Ausreißer in Zeitreihen zu finden. In \autoref{sec:IsoBased} wird der Iso Map basierte Algorithmus vorgestellt in \autoref{sec:per-intro} wird der Perculation basierte Algorithmus vorgestellt. 
-
-Beide Algorithmen liefern lediglich einen Ausreißer Score zurück. Um zu bestimmen inwiefern ein Element konkret ein Ausreißer ist, wird zunächst den Mittelwert und die Standardabweichung des Outlier Scores berechnet. Falls ein Element in Abhängigkeit von der Standardabweichung sehr stark vom Mittelwert abweicht wird das Element als Ausreißer klassifiziert.
+In diesem Kapitel werden zunächst zwei statische Algorithmen zur Ausreißer-Erkennung auf unterschiedlichen Datentypen (z.B. Videos, Bilder, Netzwerke) vorgestellt. Hierbei handelt es sich um ein auf Percolation basierender Algorithmus und ein auf IsoMap basierender Algorithmus. Statische Algorithmen kennzeichnet, dass sie nicht mit Daten umgehen könne, welche kontinuierlich an sie übergeben werden. Damit die Algorithmen anwendbar sind, müssen die Daten vollständig und abgeschlossen vorliegen. Eines unserer Hauptziele des Forschungsprojektes war die Ausreißer Erkennung in Zeitreihen, aus diesem Grund haben wir uns in den Experimenten auf diese Art der Daten konzentriert. In \autoref{sec:IsoBased} wird der IsoMap basierte Algorithmus vorgestellt in \autoref{sec:per-intro} wird der Percolation basierte Algorithmus vorgestellt.
 
 \section{Umwandlung Zeitreihe in Netzwerk}
 
-Damit sowohl der auf Perculation basierende Algorithmus wie auch der auf Iso Map basierende Algorithmus angewandt werden können, müssen die Daten zunächst in ein einheitliches Format überführt werden. Dazu müssen die unterschiedlichen Daten in ein Netzwerk umgewandelt werden.  Hierzu ist erforderlich, dass eine Distanz zwischen unterschiedlichen Elementen des Datensatzes berechnet werden kann  \citep[vgl.][S.~2]{10.3389/fphy.2019.00194}. Der Algorithmus kann auf allen Daten angewandt werden, welche diese Vorraussetzung erfüllen. Nachfolgend wird exemplarisch beschrieben wie die Transformation für eine Zeitreihe funktionieren kann. 
+Damit sowohl der auf Percolation basierende Algorithmus wie auch der auf IsoMap basierende Algorithmus angewandt werden können, müssen die Daten zunächst in ein einheitliches Format überführt werden. Dazu müssen die unterschiedlichen Daten in ein Netzwerk umgewandelt werden.  Hierzu ist erforderlich, dass eine Distanz zwischen unterschiedlichen Elementen des Datensatzes berechnet werden kann  \citep[vgl.][S.~2]{10.3389/fphy.2019.00194}. Die Algorithmen können auf allen Daten angewandt werden, welche diese Voraussetzung erfüllen. Nachfolgend wird exemplarisch beschrieben wie die Transformation für eine Zeitreihe funktionieren kann. 
 
 
 \label{sec:trsnsNeti}
-Für die Transformation der Zeitreihe, muss zunächst die Distanz zwischen den einzelnen Elementen (Zeitpunkten) der Zeitreihe berechnet werden. Hierzu wird das Distanzmaß aus  \autoref{eq:euklidianDist} genutzt. 
+Für die Transformation der Zeitreihe muss zunächst die Distanz zwischen den einzelnen Elementen (Zeitpunkten) der Zeitreihe berechnet werden. Hierzu wird das Distanzmaß aus  \autoref{eq:euklidianDist} genutzt. 
 
 \begin{equation}
 	D_{ij}=\left(\sum_{k} \left|v_{k}^{i}-v_{k}^{j}\right|^{p}\right)^{1/p} \label{eq:euklidianDist}
 \end{equation}
 
-Insofern in die Gleichung für p = 2 eingesetzt wird, handelt es sich hierbei um die euklidische Distanz. Die mit \autoref{eq:euklidianDist} berechneten Distanzen bilden die Kantengewichte in dem neu erstellten Netzwerk. Das neue Netzwerk ist hierbei Fully Connected. Das heißt jeder Knoten ist mit allen anderen Knoten über eine Kante verknüpft. Die Knoten des Netzwerks repräsentieren die einzelnen ELemente(Zeitpunkte) der zeit reihe. \citep[vgl.][S.~2]{10.3389/fphy.2019.00194}. Es können mit dieser Vorgehensweiße auch multivariate Zeitreihen in ein Netzwerk transformiert werden.
+Insofern in die Gleichung für p = 2 eingesetzt wird, handelt es sich hierbei um die euklidische Distanz. Die mit \autoref{eq:euklidianDist} berechneten Distanzen bilden die Kantengewichte in dem neu erstellten Netzwerk. Dabei handelt es sich um ein vollständiges Netzwerk. Das heißt, jeder Knoten ist mit allen anderen Knoten über eine Kante verknüpft. Die Knoten des Netzwerks repräsentieren die einzelnen Elemente(Zeitpunkte) der Zeitreihe. \citep[vgl.][S.~2]{10.3389/fphy.2019.00194}. Es können mit dieser Vorgehensweise auch multivariate Zeitreihen in ein Netzwerk transformiert werden.
 
 
 \section{IsoMap Basierter Algorithmus}
 \label{sec:IsoBased}
-Der Ansatz dieses Algorithmus ist, dass Informationen über Ausreißer bei der Reduzierung der Dimensionalität mit dem IsoMap verloren gehen. Insofern versucht wird, die Informationen zu rekonstruieren und mit der ursprünglichen Matrix vergleicht, können große Abweichungen bei Ausreißer Elementen festgestellt werden \citep[vgl.][S.~3]{10.3389/fphy.2019.00194}. In \autoref{ssec:iso-algo} wird zunächst erklärt wie der Iso Map Algorithmus eine Reduzierung der Dimensionalität durchführt. Anschließend werden in \autoref{ssec:iso-weiter} die zusätzlichen Schritte erläutert, welche notwendig sind um Ausreißer mithilfe des IsoMap Algorithmus zu erkennen.
+Der Ansatz dieses Algorithmus ist, dass Informationen über Ausreißer bei der Reduzierung der Dimensionalität mit dem IsoMap verloren gehen. Insofern versucht wird, die Informationen zu rekonstruieren und mit der ursprünglichen Matrix vergleicht, können große Abweichungen bei Ausreißer Elementen festgestellt werden \citep[vgl.][S.~3]{10.3389/fphy.2019.00194}. In \autoref{ssec:iso-algo} wird zunächst erklärt wie der IsoMap Algorithmus eine Reduzierung der Dimensionalität durchführt. Anschließend werden in \autoref{ssec:iso-weiter} die zusätzlichen Schritte erläutert, welche notwendig sind um Ausreißer mithilfe des IsoMap Algorithmus zu erkennen.
 
 
 \subsection{IsoMap}
 \label{ssec:iso-algo}
-Beim IsoMap handelt es sich um einen Algorithmus zur nichtlinearen Dimensionsreduktion. Zunächst werden beim IsoMap Algorithmus die Nachbarn eines jeden Punktes(Knoten) über K-Nearest Neighbor bestimmt. Anschließend wird jeder Punkt mit den gefundenen Nachbarn verknüpft, wodurch ein neuer Körper(Netzwerk) entsteht. Daraufhin wird eine neue Distanzmatrix auf dem entstandenen Körper berechnet, indem die kürzeste Distanz zwischen allen Punkten auf dem Körper berechnet wird. Diese Matrix kann auch als geodätische Distanzmatrix $D_{G}$ bezeichnet werden. Die eigentliche Dimensionsreduktion wird anschließend über die Eigenvektoren und Eigenwerte der Matrix $D_{G}$ durchgeführt. Das Ergebnis der Dimensionsreduktion ist eine neue Menge an Features für jedes Element $V^{i} = {v^{i}_{1}. . . v^{i}_{r}}$ des ursprünglichen Datensatzes. Durch das Erzeugen der Matrix $D_{G}$ wird erreicht, das nichtlineare Zusammenhänge bei der Dimensionsreduktion erhalten bleiben. \citep[vgl.][S.~3-4]{Tenenbaum2319}.
+Beim IsoMap handelt es sich um einen Algorithmus zur nichtlinearen Dimensionsreduktion. Zunächst werden beim IsoMap Algorithmus die Nachbarn eines jeden Punktes(Knoten) über den Ball Tree Algorithmus oder den KD Tree Algorithmus bestimmt. Anschließend wird jeder Punkt mit den gefundenen Nachbarn verknüpft, wodurch ein neuer Körper(Netzwerk) entsteht. Daraufhin wird eine neue Distanzmatrix auf dem entstandenen Körper berechnet, indem die kürzeste Distanz zwischen allen Punkten auf dem Körper berechnet wird. Diese Matrix kann auch als geodätische Distanzmatrix $D_{G}$ bezeichnet werden. Die eigentliche Dimensionsreduktion wird anschließend über die Eigenvektoren und Eigenwerte der Matrix $D_{G}$ durchgeführt. Das Ergebnis der Dimensionsreduktion ist eine neue Menge an Features für jedes Element $V^{i} = {v^{i}_{1}. . . v^{i}_{r}}$ des ursprünglichen Datensatzes. Durch das Erzeugen der Matrix $D_{G}$ wird erreicht, das nichtlineare Zusammenhänge bei der Dimensionsreduktion erhalten bleiben. \citep[vgl.][S.~3-4]{Tenenbaum2319}.
 
 \begin{figure}[H]
 	\centering
@@ -36,16 +34,16 @@ Beim IsoMap handelt es sich um einen Algorithmus zur nichtlinearen Dimensionsred
 \end{figure}
 
 
-\subsection{IsoMap zur Erkennung von Ausreisern}
+\subsection{IsoMap Algorithmus zur Erkennung von Ausreißern}
 \label{ssec:iso-weiter}
-Mithilfe des IsoMap Algorithmus wurden für jedes Element neue Features ($V^{i} = {v^{i}_{1}. . . v^{i}_{r}}$) berechnet. Im nächsten Schritt wird versucht aus diesen Featurn die ursprüngliche Distanzmatrix zu rekonstruieren. Dazu wird aus den Featuren $V^{i}$ unter Verwendung von \autoref{eq:euklidianDist} eine neue Distanzmatrix $\hat{D}$ berechnet. Nun können die Matrizen $D_{G}$ und $\hat{D}$ miteinander verglichen werden. Hierzu muss die Pearson Korrelation zwischen den jeweiligen Spalten der Matrizen berechnet werden. Für Ausreißer wird erwartet, dass die Korrelation sehr niedrig ist, da Informationen über sie bei der Reduktion verloren gehen \citep[vgl.][S.~3]{10.3389/fphy.2019.00194}.
+Mithilfe des IsoMap Algorithmus wurden für jedes Element neue Features ($V^{i} = {v^{i}_{1}. . . v^{i}_{r}}$) berechnet. Im nächsten Schritt wird versucht aus diesen Eigenschaften die ursprüngliche Distanzmatrix zu rekonstruieren. Dazu wird aus den Eigenschaften $V^{i}$ unter Verwendung von \autoref{eq:euklidianDist} eine neue Distanzmatrix $\hat{D}$ berechnet. Nun können die Matrizen $D_{G}$ und $\hat{D}$ miteinander verglichen werden. Hierzu muss die Pearson Korrelation zwischen den jeweiligen Spalten der Matrizen berechnet werden. Für Ausreißer wird erwartet, dass die Korrelation sehr niedrig ist, da Informationen über sie bei der Reduktion verloren gehen \citep[vgl.][S.~3]{10.3389/fphy.2019.00194}. Die Korrelation kann also als Ausreißer Score genutzt werden. Um zu klassifizieren, ob es sich bei einem konkreten Element um einen Ausreißer handelt, wird zunächst der Mittelwert und die Standardabweichung des Ausreißer Score berechnet. Falls ein Element um einen bestimmten Threshold vom Mittelwert abweicht, wird das Element als Ausreißer klassifiziert.
 
 \subsection{Implementierung}
 \label{sec:im-implement}
-Für den Iso Map Algorithmus stellt SciKit Learn eine sehr gute Implementierung zur Verfügung. Diese Implementierung konnten wir gut in unseren Algorithmus integrieren. Es musste lediglich geändert werden, dass auf die Matrix $D_{G}$ zugegriffen werden kann. Dies ist standardmäßig nicht der Fall. Für die Implementierung der weiteren Funktionalität wurde auf Python/Numpy zurückgegriffen. 
+\workTodo{vielleicht link zu scikit learn rein machen}
+Für den IsoMap Algorithmus stellt scikit-learn eine sehr gute Implementierung zur Verfügung. Diese Implementierung konnten wir gut in unseren Algorithmus integrieren. Es musste lediglich geändert werden, dass auf die Matrix $D_{G}$ zugegriffen werden kann. Dies ist standardmäßig nicht der Fall. Für die Implementierung der weiteren Funktionalität wurde auf Python/NumPy zurückgegriffen. 
 
-\subsection{Ausreißererkennung in Zeitreihen}
-\workTodo{Erklären welche Zeitreihen verwendet wurden. Hab ich so ein bisschen gemacht vielleicht das noch in extra Kapitel machen.} 
+\subsection{Ausreißer-Erkennung in Zeitreihen}
 \label{sec:im-results}
 \begin{table}
 \caption{IsoMap Performance}
@@ -55,23 +53,23 @@ Für den Iso Map Algorithmus stellt SciKit Learn eine sehr gute Implementierung z
 	\textbf{1D}\\
 	\hline
 	\hline
-	Einzelne Peaks & anomaly-art-daily-peaks & *\\
+	Einzelne Peaks (vgl. \autoref{img:dailyPeaksIso}) & anomaly-art-daily-peaks & *\\
 	\hline
-	Zunahme an Rauschen & anomaly-art-daily-increase-noise &**\\
+	Zunahme an Rauschen (vgl. \autoref{img:increaseNoiseIso}) & anomaly-art-daily-increase-noise &**\\
 	\hline
-	Signal Drift & anomaly-art-daily-drift &**\\
+	Signal Drift (vgl. \autoref{img:dailyDriftIso}) & anomaly-art-daily-drift &**\\
 	\hline
-	Kontinuierliche Zunahme der Amplitude& art-daily-amp-rise & **\\
+	Kontinuierliche Zunahme der Amplitude (vgl. \autoref{img:ampRiseIso})& art-daily-amp-rise & **\\
 	\hline
-	Zyklus mit höherer Amplitude & art-daily-jumpsup &*\\
+	Zyklus mit höherer Amplitude (vgl. \autoref{img:jumpsupIso})& art-daily-jumpsup &*\\
 	\hline
-	Zyklus mit geringerer Amplitude & art-daily-jumpsdown & **\\
+	Zyklus mit geringerer Amplitude (vgl. \autoref{img:jumpsdownIso})& art-daily-jumpsdown & **\\
 	\hline
-	Zyklus-Aussetzer & art-daily-flatmiddle &*\\
+	Zyklus-Aussetzer (vgl. \autoref{img:flatmiddleIso})& art-daily-flatmiddle &*\\
 	\hline
-	Signal-Aussetzer & art-daily-nojump & -\\
+	Signal-Aussetzer (vgl. \autoref{img:nojumpIso})& art-daily-nojump & -\\
 	\hline
-	Frequenzänderung & anomaly-art-daily-sequence-change &-\\
+	Frequenzänderung (vgl. \autoref{img:sequenceChangeIso})& anomaly-art-daily-sequence-change &-\\
 	\hline
 \end{tabular}
 \end{table}
@@ -121,6 +119,8 @@ eine bestimmte Menge an Kanten aus dem Netzwerk entfernt wurde. Da der Algorithm
 	\label{img:vardir1}
 \end{figure}
 
+Um zu klassifizieren, ob es sich bei einem konkreten Element um einen Ausreißer handelt, wird zunächst der Mittelwert und die Standardabweichung des Ausreißer Score berechnet. Falls ein Element um einen bestimmten Threshold vom Mittelwert abweicht, wird das Element als Ausreißer klassifiziert.
+
 \subsection{Ausreißererkennung in Zeitreihen}
 \label{sec:per-result}
 
@@ -132,23 +132,23 @@ eine bestimmte Menge an Kanten aus dem Netzwerk entfernt wurde. Da der Algorithm
 	\textbf{1D}\\
 	\hline
 	\hline
-	Einzelne Peaks & anomaly-art-daily-peaks & *\\
+	Einzelne Peaks (vgl. \autoref{img:dailyPeaksPerc}) & anomaly-art-daily-peaks & *\\
 	\hline
-	Zunahme an Rauschen & anomaly-art-daily-increase-noise &****\\
+	Zunahme an Rauschen (vgl. \autoref{img:increaseNoisePerc}) & anomaly-art-daily-increase-noise &****\\
 	\hline
-	Signal Drift & anomaly-art-daily-drift &***\\
+	Signal Drift (vgl. \autoref{img:dailyDriftPerc}) & anomaly-art-daily-drift &***\\
 	\hline
-	Kontinuierliche Zunahme der Amplitude& art-daily-amp-rise & ***\\
+	Kontinuierliche Zunahme der Amplitude (vgl. \autoref{img:ampRisePerc}) & art-daily-amp-rise & ***\\
 	\hline
-	Zyklus mit höherer Amplitude & art-daily-jumpsup &****\\
+	Zyklus mit höherer Amplitude (vgl. \autoref{img:jumpsupPerc}) & art-daily-jumpsup &****\\
 	\hline
-	Zyklus mit geringerer Amplitude & art-daily-jumpsdown & ****\\
+	Zyklus mit geringerer Amplitude (vgl. \autoref{img:jumpsdownPerc}) & art-daily-jumpsdown & ****\\
 	\hline
-	Zyklus-Aussetzer & art-daily-flatmiddle &****\\
+	Zyklus-Aussetzer (vgl. \autoref{img:flatmiddlePerc}) & art-daily-flatmiddle  &****\\
 	\hline
-	Signal-Aussetzer & art-daily-nojump & -\\
+	Signal-Aussetzer (vgl. \autoref{img:nojumpPerc}) & art-daily-nojump & -\\
 	\hline
-	Frequenzänderung & anomaly-art-daily-sequence-change &-\\
+	Frequenzänderung (vgl. \autoref{img:sequenceChangePerc}) & anomaly-art-daily-sequence-change &-\\
 	\hline
 \end{tabular}
 \end{table}
