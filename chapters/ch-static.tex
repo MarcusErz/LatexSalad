@@ -40,8 +40,7 @@ Mithilfe des IsoMap Algorithmus wurden für jedes Element neue Features ($V^{i} =
 
 \subsection{Implementierung}
 \label{sec:im-implement}
-\workTodo{vielleicht link zu scikit learn rein machen}
-Für den IsoMap Algorithmus stellt scikit-learn eine sehr gute Implementierung zur Verfügung. Diese Implementierung konnten wir gut in unseren Algorithmus integrieren. Es musste lediglich geändert werden, dass auf die Matrix $D_{G}$ zugegriffen werden kann. Dies ist standardmäßig nicht der Fall. Für die Implementierung der weiteren Funktionalität wurde auf Python/NumPy zurückgegriffen. 
+Für den IsoMap Algorithmus stellt scikit-learn eine sehr gute Implementierung zur Verfügung \citep{sklearnIso}. Diese Implementierung konnten wir gut in unseren Algorithmus integrieren. Es musste lediglich geändert werden, dass auf die Matrix $D_{G}$ zugegriffen werden kann. Dies ist standardmäßig nicht der Fall. Für die Implementierung der weiteren Funktionalität wurde auf Python/NumPy zurückgegriffen. 
 
 \subsection{Ausreißer-Erkennung in Zeitreihen}
 \label{sec:im-results}
@@ -77,8 +76,6 @@ Für den IsoMap Algorithmus stellt scikit-learn eine sehr gute Implementierung zu
 Für die durchgeführten Tests wurden die Zeitreihen aus ... verwendet. Um zu bewerten wie gut der Algorithmus funktioniert, wurde ein Punktesystem eingeführt. In dem Punktesystem konnten maximal vier Sterne erreicht werden. Das bedeutet Ausreißer sehr gut erkannt. Null Sterne hingegen bedeuten Ausreißer überhaupt nicht erkannt. Der IsoMap Algorithmus liefert eher schwache Ergebnisse bei der Erkennung von Ausreißern in Zeitreihen. Hauptproblem hierbei ist, dass starke Anstiege, bei welchen es sich nicht um Ausreißer handelt, fälschlicherweise zu einem starken Anstieg des Ausreißer Scores führen (vgl. \autoref{img:iso_trans} mit Pfeil markierte stellen). Dies kann, je nach Threshold, zu einer hohen Quote an falsch positiven Klassifizierungen führen. Aus diesem Grund können die tatsächlichen Ausreißer nicht eindeutig identifiziert werden. Eine Ähnliche Problematik trat in \citep {Uzun} bei der Verwendung des Random Walk Algorithmus auf. Das Problem konnte hierbei gelöst werden, indem vor der Anwendung des Algorithmus, eine Glättung der Zeitreihe durchgeführt wurde. Dadurch werden abrupte Übergange in der Zeitreihe abgemildert und deshalb nicht mehr als Ausreißer erkannt \citep[vgl.][S.~31,36]{Uzun}. Dies könnte ein möglicher Ansatz sein um zukünftig bessere Ergebnisse zu erzielen.\\
 Des Weiteren ist zu erkennen, dass der Algorithmus für einige Ausreißer Typen nicht geeignet ist, hierzu gehören Siganl Aussetzer und Frequenzänderungen. Bei diesen Ausreißer Typen treten keinerlei unüblichen Werte auf, sondern es kommt zu Änderungen in der Saisonalität der Zeitreihe. 
 
-\workTodo{Wie genau bezieht man sich auf seine eigene Ausarbeitung} 
-
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=10cm]{fig/resultsIsoMap/problem_transitions.PNG}
@@ -102,12 +99,12 @@ Bei diesem Algorithmus werden schrittweise die Kanten mit den höchsten Gewichten
 \subsection{Implementierung}
 \label{sec:per-imp}
 Für die Implementierung des Perculation-basierten Algorithmus wurde genauso wie in \autoref{sec:im-implement}, Python/Numpy verwendet. Bei der Implementierung eines Prototypen des Algorithmus konnte festgestellt werden, das die Laufzeit des Algorithmus sehr langsam ist. Aus diesem Grund wurden einige Veränderungen an dem Algorithmus vorgenommen um die Performance zu verbessern. Dazu gehörte, dass nicht einzelne Kanten, sondern Gruppen an Kanten aus dem Netzwerk entfernt werden. Der Vorteil dieser Modifikation ist, dass seltener überprüft werden muss ob ein Knoten weiterhin mit den Rest des Netzwerks verbunden ist. Eine weitere Verbesserung, die eingeführt wurde, ist die Verankerung eines Abbruchkriteriums. Dabei wird der Algorithmus angehalten sobald 
-eine bestimmte Menge an Kanten aus dem Netzwerk entfernt wurde. Da der Algorithmus nicht alle Berechnungen ausführen muss, kann damit eine Optimierung der Laufzeit erreicht werden. Weiterhin konnte festgestellt werden, dass diese Veränderung keinen Einfluss auf die Qualität der Ausreißer Erkennung hat, da Ausreißer lediglich zu Beginn des Algorithmus gefunden werden. Ein weiteres Problem des Ursprünglichen Algorithmus war, das bei aufeinanderfolgenden Elemente der Zeitreihe teilweiße starke Schwankungen im Ausreißer Score auftraten (vgl. \autoref{img:vardir1}). Aus diesem Grund konnten Ausreißer, welche sich über mehrere Zeitpunkte hinweg erstrecken nicht komplett erkannt werden. Um die Schwankungen im Ausreißer Score abzumildern, wurde dieser geglättet. Dazu wurde der Gleitende Mittelwert des Ausreißer Scores berechnet. In \autoref{eq:slidingAverage} ist exemplarisch die Formel für einen Gleitenden Mittelwert der Ordnung drei dargestellt. In \autoref{img:vardir1} ist zu sehen wie sich der Ausreißer Score durch das Glätten verändert. 
+eine bestimmte Menge an Kanten aus dem Netzwerk entfernt wurde. Da der Algorithmus nicht alle Berechnungen ausführen muss, kann damit eine Optimierung der Laufzeit erreicht werden. Weiterhin konnte festgestellt werden, dass diese Veränderung keinen Einfluss auf die Qualität der Ausreißer Erkennung hat, da Ausreißer lediglich zu Beginn des Algorithmus gefunden werden. Ein weiteres Problem des Ursprünglichen Algorithmus war, das bei aufeinanderfolgenden Elemente der Zeitreihe teilweiße starke Schwankungen im Ausreißer Score auftraten (vgl. \autoref{img:vardir1}). Aus diesem Grund konnten Ausreißer, welche sich über mehrere Zeitpunkte hinweg erstrecken nicht komplett erkannt werden. Um die Schwankungen im Ausreißer Score abzumildern, wurde dieser geglättet. Dazu wurde der Gleitende Mittelwert des Ausreißer Score berechnet. In \autoref{eq:slidingAverage} ist exemplarisch die Formel für einen Gleitenden Mittelwert der Ordnung drei dargestellt. In \autoref{img:vardir1} ist zu sehen wie sich der Ausreißer Score durch das Glätten verändert. 
 \begin{equation}
 	m_{\text{MA}}^{(3)}(t)={\frac {1}{3}}{\Big (}x(t-1)+x(t)+x(t+1){\Big )} \label{}
 \end{equation} 
 
-\workTodo{Das Verfahren zur Glättung das hier eingesetzt wird heißt gleitender Mittelwert. Vielleicht FOrmel davon einfügen und dan noch passende Quelle finden}
+\workTodo{Das Verfahren zur Glättung das hier eingesetzt wird heißt gleitender Mittelwert. Vielleicht Formel davon einfügen und dan noch passende Quelle finden}
 \workTodo{Parameter noch erklären} 
 \begin{figure}[h]
 	\centering
