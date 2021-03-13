@@ -1,12 +1,11 @@
 \newpage
 \section{Netsimile}
 \label{sec:ns}
-\workTodo{In diesem Kapitel werden grundlegende Themen behandelt, die im Rahmen des Forschungsprojekts zum Verständnis der Ausreißer-Erkennung in Graphen gedient haben.}
 
 \subsection{Grundlagen}
 \label{ssec:ns-gl}
 
-NetSimile ist ein skalierbarer Algorithmus zur Erkennung von Ähnlichkeiten, sowie Anomalien, in Netzwerken unterschiedlicher Größen. Wenn der Datensatz eines Graphs über die Zeit in bestimmte Abstände, wie z.B. in Tage, unterteilt wird, so kann NetSimile die Veränderung des Graphs über die Zeit bewerten. Der Algorithmus extrahiert strukturelle Merkmale aus den Momentaufnahmen des Graphs für jeden Tag. Diese Merkmale bilden den Signaturvektor für jeden Graphen in der sich verändernden Netzwerkumgebung und bestehen aus den Ego-Netzeigenschaften, Knotengrad, Clustering-Koeffizient usw. Um die Ähnlichkeit zwischen zwei Graphen bewerten zu können, wird beim NetSimile der Abstand ihrer entsprechenden Signaturvektoren berechnet. Dieser Abstand wird Canberra Distance genannt. \citep[vgl.][S.~1]{Netsimile}
+NetSimile ist ein skalierbarer Algorithmus zur Erkennung von Ähnlichkeiten, sowie Anomalien in Netzwerken unterschiedlicher Größen. Hierfür wird der Datensatz in gleich große Zeitintervalle unterteilt, um die daraus resultierenden Graphen auf unterschiedliche Merkmale zu untersuchen. Die Merkmale sind hierbei strukturelle Eigenschaften der einzelnen Knoten wie bspw. die Dichte eines Knotens oder die Anzahl an Nachbarn in einem Ego-Netzwerk. Die Signatur ergibt sich aus den einzelnen Aggregationen der Knoten wie bspw. der Median aus der Dichte der jeweiligen Knoten. So entsteht bspw. aus sieben Merkmalen und fünf Aggregationen ein Signaturvektor mit 35 verschiedenen Signaturen. So ermöglicht der Signarturvektor die Beschreibung als auch den Vergleich der einzelnen Graphen. Für den Vergleich wird die Canberra Distanz aus den beiden Signaturvektoren zweier zeitlich nebeneinander liegenden Graphen berechnet. \citep[vgl.][S.~1]{Netsimile}
 
 Als Input für diesen Algorithmus wird eine Menge von $k$-anonymisierten Netzwerken mit beliebig unterschiedlichen Größen, die keine überlappenden Knoten oder Kanten besitzen sollten, herangezogen werden. Das Resultat sind Werte für die strukturelle Ähnlichkeit oder Abstands eines jeden Paares der gegebenen Netzwerke bzw. ein Merkmalsvektor für jedes Netzwerk. \citep[vgl.][S.~1]{Netsimile}
 
@@ -33,27 +32,19 @@ Da der Vergleich von $k$-ten $F_{G_j}$ sehr aufwändig ist, wird für jede $F_{G_j
 \subsubsection{Vergleich der Signaturvektoren}
 \label{sec:ns-gl-cd}
 
-Im letzten Schritt wird bei diesem Algorithmus die Canberra-Distance-Funktion als Ähnlichkeitsmaß herangezogen.
+Für die Ausreißererkennung werden die letzten drei Graphen anhand der Canberra-Distanz-Funktion, die als Ähnlichkeitsmaß dient, herangezogen. Steigt die Canberra Distanz zwischen zwei Graphen oberhalb des Thresholds so wird dies im Algorithmus festgehalten. Falls der darauf folgende Graph ebenfalls oberhalb des Thresholds liegt, so wird dieser als Ausreißer definiert. Dadurch wird die Anzahl der Ausreißer reduziert, damit nur diejenigen identifiziert werden, bei denen ein Trend hin zu einem abnormalen Verhalten erkennbar ist.
 
-\workTodo{Canberra Distance Formel Seite 3 in Paper einfügen oder von Dictionary of Distances Chapter 17 als neue Quelle, es gibt kein Paper mit einer Beschreibung hierfür}
-
-\workTodo{Info an Jeremy: Du könntest als Eigenarbeit weitere Distanzmetriken nutzen glaub. Hab ein Paper "Comprehensive Survey on Distance/Similarity Measures between Probability Density Functions\dq\space in dem Canberra in eine Kategorie mit Gower, Soergel, Kulczynski d, Lorentzian fällt und auch bei Netsimile wird erwähnt dass Canberra aus einer Vielzahl an Möglichkeiten gewählt wurde. }
-
-\subsection{Ausreißer-Erkennung in Graphen}
-\workTodo{Ergebnisse der Tests aufzeigen. Vielleicht die Visualisierung mit rein bringen. Vielleicht kurz Datensätze erklären und woher die Implementierung des Algorithmus stammt.}
-
-
-\workTodo{3.2.1 von Google Docs einfügen bis S.16 Datensätze Überschrift}
+Der Algorithmus arbeitet dabei dynamisch, da die Signaturen der Graphen in einzelne Teil-Berechnungen aufgesplittet und zwischengespeichert werden können, ohne das eine Neuberechnung notwendig ist. Der Threshold wird aus dem Median und dem Mean berechnet, welche ebenfalls Zwischengespeichert werden können und nach Bedarf um weitere Graphen ergänzt werden können.
 
 \FloatBarrier
 
 \subsection{Erweiterung des Algorithmus}
-\workTodo{Erklären warum ein neues Feature benötigt wird. Vergleich des Algorithmus mit Feature und ohne neues Feature}
+\label{sec:ns-ext}
 Damit der Algorithmus auf Netzwerke angewendet werden kann, muss dieser vorab erweitert werden, da in Netzwerken ansonsten nur die Verbindung im Allgemeinen betrachtet wird, nicht aber die Häufigkeit an Verbindungen, die zwischen zwei Knoten stattgefunden hat. Damit würde ein großer Anteil des Datensatzes verloren gehen, da der Algorithmus keine Mehrfach-Verbindungen zwischen Knoten im Graphen darstellen kann.
 \\
 \\
 Hierfür werden die Mehrfach-Verbindungen aufsummiert und als Kanten-Gewichtung zwischen zwei Knoten dem Graphen hinzugefügt.
-\begin{lstlisting}[language=Python, caption=\workTodo{Platzhalter}, label=lst:netsimile:code1]
+\begin{lstlisting}[language=Python, caption=Gewichtung als neues Feature, label=lst:netsimile:code1]
 for i in range(len(e_list)): 
 	g.add_edge(e_list[i][0], e_list[i][1], weight=e_list[i][2])
 \end{lstlisting}
@@ -65,7 +56,7 @@ Für die Anwendung des Algorithmus auf Zeitreihen ist die Erweiterung um das Feat
 \begin{figure}
 	\centering
 	\includegraphics[height=0.5\linewidth,width=\linewidth]{fig/netsimile/graph_11}
-	\caption{\workTodo{Platzhalter: Graph with 11 vertices}}
+	\caption{Vollständiger Graph mit 11 Knoten}
 	\label{img:netsimile:graph_11}
 \end{figure}
 
@@ -74,18 +65,18 @@ Das Problem hierbei ist, dass jeder Knoten eines Graphens die gleichen Features 
 \begin{figure}
 	\centering
 	\includegraphics[height=0.8\linewidth,width=\linewidth]{fig/netsimile/heatmap_1}
-	\caption{\workTodo{Platzhalter: Heatmap 1}}
+	\caption{Signaturvektoren der Zeitreihe mit vollständigen Graphen}
 	\label{img:netsimile:heatmap_1}
 \end{figure}
 
 Man erkennt gut, dass die Features der einzelnen Graphen identisch sind, weshalb die Graphen denselben Threshold haben und somit den Wert 0 teilen. 
 \\
-\workTodo{ToDo: Warum ist die Einheit p vorhanden? Da überall der gleiche Grünton beim gleichen Feature ist, entspricht dies eigentlich dem Durchschnitt und müsste ebenfalls den Wert 0 annehmen ? überprüfen}
+
 
 \begin{figure}
 	\centering
 	\includegraphics[height=0.6\linewidth,width=\linewidth]{fig/netsimile/anomalie_1}
-	\caption{\workTodo{Platzhalter: Anomaly 1}}
+	\caption{Ausreißer Score der vollständigen Graphen}
 	\label{img:netsimile:anomalie_1}
 \end{figure}
 
@@ -94,7 +85,7 @@ Dadurch ist die Ausreißererkennung von Zeitreihen in Graphen nicht möglich. Fügt
 \begin{figure}
 	\centering
 	\includegraphics[height=0.6\linewidth,width=\linewidth]{fig/netsimile/anomalie_2}
-	\caption{\workTodo{Platzhalter: Anomaly 2}}
+	\caption{Ausreißer Score der vollständigen Graphen mit gewichteten Kanten}
 	\label{img:netsimile:anomalie_2}
 \end{figure}
 
@@ -110,14 +101,14 @@ Dadurch ist die Ausreißererkennung von Zeitreihen in Graphen nicht möglich. Fügt
 \begin{figure}
 	\centering
 	\includegraphics[height=0.6\linewidth,width=\linewidth]{fig/netsimile/anomalie_3}
-	\caption{\workTodo{Platzhalter: Anomaly 3}}
+	\caption{Ausreißer Score Enron Datensatz}
 	\label{img:netsimile:anomalie_3}
 \end{figure}
 
 \begin{figure}
 	\centering
 	\includegraphics[height=0.8\linewidth,width=\linewidth]{fig/netsimile/heatmap_3}
-	\caption{\workTodo{Platzhalter: heatmap 3}}
+	\caption{Darstellung der Ausreißer in Heatmaps}
 	\label{img:netsimile:heatmap_3}
 \end{figure}
 
@@ -133,178 +124,65 @@ Dadurch ist die Ausreißererkennung von Zeitreihen in Graphen nicht möglich. Fügt
 \begin{figure}
 	\centering
 	\includegraphics[height=0.6\linewidth,width=\linewidth]{fig/netsimile/anomalie_4}
-	\caption{\workTodo{Platzhalter: Anomaly 4}}
+	\caption{Ausreißer Score DARPA}
 	\label{img:netsimile:anomalie_4}
 \end{figure}
 
-\begin{figure}
-	\centering
-	\includegraphics[height=0.1\linewidth,width=\linewidth]{fig/netsimile/dauer_4}
-	\caption{\workTodo{Platzhalter: Dauer 4}}
-	\label{img:netsimile:dauer_4}
-\end{figure}
 
 \begin{itemize}
 	\item Ausreißer werden wahrgenommen
 	\item Dauer Berechnung: 11150.692071 seconds
 \end{itemize}
 
+
 \FloatBarrier
 \subsubsection{Zeitreihendaten}
 \label{sec:netsimile:zeitreihen}
 
+\workTodo{Beschreibung als Fließtext, Verweise noch einfügen zu den Bildern}
+
+\begin{table}
+	\caption{Ursprünglicher Netismile Performance}
+	\label{table:performanceNeti}
+	\begin{tabular}{ |p{3.5cm}||p{3.5cm}||p{2.5cm}||p{2.5cm}||p{2.5cm}|}
+		\hline
+		\textbf{Ausreißer Typ}& \textbf{Datei Name}&
+		\textbf{1D}&\textbf{Beschreibung}&\textbf{Laufzeit}\\
+		\hline
+		\hline
+		Einzelne Peaks & anomaly-art-daily-peaks & **& Zwei gemeinsame Peaks werden erkannt, Einzelne eher schlecht
+		&61min\\
+		\hline
+		Zunahme an Rauschen & anomaly-art-daily-increase-noise &****& Ausreißer wird erkannt&51\\
+		\hline
+		Signal Drift & anomaly-art-daily-drift &**& Nur zwei von vier Ausreißer werden erkannt
+		Die letzten zwei werden also normal definiert
+		&57min\\
+		\hline
+		Kontinuierliche Zunahme der Amplitude& art-daily-amp-rise & ****& Ausreißer werden erkannt
+		&54min\\
+		\hline
+		Zyklus mit höherer Amplitude & art-daily-jumpsup &****& Ausreißer werden erkannt
+		&50\\
+		\hline
+		Zyklus mit geringerer Amplitude & art-daily-jumpsdown & ****& Ausreißer werden erkannt
+		&51min\\
+		\hline
+		Zyklus-Aussetzer & art-daily-flatmiddle &****& Ausreißer werden erkannt
+		&62min\\
+		\hline
+		Signal-Aussetzer & art-daily-nojump & ****& Ausreißer werden erkannt
+		&65min\\
+		\hline
+		Frequenzänderung & anomaly-art-daily-sequence-change &****& Ausreißer werden erkannt
+		&49min\\
+		\hline
+	\end{tabular}
+\end{table}
+
 \paragraph{\textbf{Eindimensional}}
 
-\begin{figure}
-	\centering
-	\includegraphics[height=0.6\linewidth,width=\linewidth]{fig/netsimile/anomalie_5}
-	\caption{\workTodo{Platzhalter: Sequence Change}}
-	\label{img:netsimile:anomalie_5}
-\end{figure}
 
-\begin{figure}
-	\centering
-	\includegraphics[height=0.2\linewidth,width=0.5\linewidth]{fig/netsimile/dauer_5}
-	\caption{\workTodo{Platzhalter: Sequence Change}}
-	\label{img:netsimile:dauer_5}
-\end{figure}
-
-\begin{itemize}
-	\item Ausreißer werden wahrgenommen
-	\item Dauer Berechnung: 2991.50926781 seconds
-\end{itemize}
-
-\begin{figure}
-	\centering
-	\includegraphics[height=0.6\linewidth,width=\linewidth]{fig/netsimile/anomalie_6}
-	\caption{\workTodo{Platzhalter: Peaks}}
-	\label{img:netsimile:anomalie_6}
-\end{figure}
-
-\begin{figure}
-	\centering
-	\includegraphics[height=0.2\linewidth,width=0.5\linewidth]{fig/netsimile/dauer_6}
-	\caption{\workTodo{Platzhalter: Peaks}}
-	\label{img:netsimile:dauer_6}
-\end{figure}
-
-\begin{itemize}
-	\item Ausreißer werden wahrgenommen
-	\item Dauer Berechnung: 3691.66552711 seconds
-\end{itemize}
-
-\begin{figure}
-	\centering
-	\includegraphics[height=0.6\linewidth,width=\linewidth]{fig/netsimile/anomalie_7}
-	\caption{\workTodo{Platzhalter: No Jump}}
-	\label{img:netsimile:anomalie_7}
-\end{figure}
-
-\begin{figure}
-	\centering
-	\includegraphics[height=0.2\linewidth,width=0.5\linewidth]{fig/netsimile/dauer_7}
-	\caption{\workTodo{Platzhalter: No Jump}}
-	\label{img:netsimile:dauer_7}
-\end{figure}
-
-\begin{itemize}
-	\item Ausreißer werden wahrgenommen
-	\item Dauer Berechnung: 3945.95857 seconds
-\end{itemize}
-
-\begin{figure}
-	\centering
-	\includegraphics[height=0.6\linewidth,width=\linewidth]{fig/netsimile/anomalie_8}
-	\caption{\workTodo{Platzhalter: Increase Noise}}
-	\label{img:netsimile:anomalie_8}
-\end{figure}
-
-\begin{figure}
-	\centering
-	\includegraphics[height=0.2\linewidth,width=0.5\linewidth]{fig/netsimile/dauer_8}
-	\caption{\workTodo{Platzhalter: Increase Noise}}
-	\label{img:netsimile:dauer_8}
-\end{figure}
-
-\begin{itemize}
-	\item Ausreißer werden wahrgenommen
-	\item Dauer Berechnung: 3117.28531003 seconds
-\end{itemize}
-
-\begin{figure}
-	\centering
-	\includegraphics[height=0.6\linewidth,width=\linewidth]{fig/netsimile/anomalie_9}
-	\caption{\workTodo{Platzhalter: Flatmiddle}}
-	\label{img:netsimile:anomalie_9}
-\end{figure}
-
-\begin{figure}
-	\centering
-	\includegraphics[height=0.2\linewidth,width=0.5\linewidth]{fig/netsimile/dauer_9}
-	\caption{\workTodo{Platzhalter: Flatmiddle}}
-	\label{img:netsimile:dauer_9}
-\end{figure}
-
-\begin{itemize}
-	\item Ausreißer werden wahrgenommen
-	\item Dauer Berechnung: 3768.19052601 seconds
-\end{itemize}
-
-\begin{figure}
-	\centering
-	\includegraphics[height=0.6\linewidth,width=\linewidth]{fig/netsimile/anomalie_10}
-	\caption{\workTodo{Platzhalter: Jumpsup}}
-	\label{img:netsimile:anomalie_10}
-\end{figure}
-
-\begin{figure}
-	\centering
-	\includegraphics[height=0.2\linewidth,width=0.5\linewidth]{fig/netsimile/dauer_10}
-	\caption{\workTodo{Platzhalter: Jumpsup}}
-	\label{img:netsimile:dauer_10}
-\end{figure}
-
-\begin{figure}
-	\centering
-	\includegraphics[height=0.6\linewidth,width=\linewidth]{fig/netsimile/anomalie_11}
-	\caption{\workTodo{Platzhalter: Amprise}}
-	\label{img:netsimile:anomalie_11}
-\end{figure}
-
-\begin{figure}
-	\centering
-	\includegraphics[height=0.2\linewidth,width=0.5\linewidth]{fig/netsimile/dauer_11}
-	\caption{\workTodo{Platzhalter: Amprise}}
-	\label{img:netsimile:dauer_11}
-\end{figure}
-
-\begin{figure}
-	\centering
-	\includegraphics[height=0.6\linewidth,width=\linewidth]{fig/netsimile/anomalie_12}
-	\caption{\workTodo{Platzhalter: drift}}
-	\label{img:netsimile:anomalie_12}
-\end{figure}
-
-\begin{figure}
-	\centering
-	\includegraphics[height=0.2\linewidth,width=0.5\linewidth]{fig/netsimile/dauer_12}
-	\caption{\workTodo{Platzhalter: drift}}
-	\label{img:netsimile:dauer_12}
-\end{figure}
-
-\begin{figure}
-	\centering
-	\includegraphics[height=0.6\linewidth,width=\linewidth]{fig/netsimile/anomalie_13}
-	\caption{\workTodo{Platzhalter: jumpsdown}}
-	\label{img:netsimile:anomalie_13}
-\end{figure}
-
-\begin{figure}
-	\centering
-	\includegraphics[height=0.2\linewidth,width=0.5\linewidth]{fig/netsimile/dauer_13}
-	\caption{\workTodo{Platzhalter: jumpsdown}}
-	\label{img:netsimile:dauer_13}
-\end{figure}
 
 \paragraph{\textbf{Mehrdimensional}}
 
@@ -342,8 +220,9 @@ Von diesen Features wurde dann auch den Median, den Mittelwert, die Standardabwe
 	\end{tabular}
 \end{table}
 
-\subsubsection{Ausreißer-Erkennung in Zeitreihen}
 
+\subsubsection{Ausreißer-Erkennung in Zeitreihen}
+\label{sec:ns-ts}
 Um zu untersuchen, wie gut der Algorithmus funktioniert, wurde er auf Zeitreihen getestet. Als Testdaten   wurden, ein und zweidimensionale Zeitreihen der Numenta Gruppe verwendet. Diese Zeitreihen enthalten verschiedene Ausreißer Typen, auf deren Erkennung der Algorithmus getestet wurde. Die Qualität der Ausreißererkennung wurde  mithilfe eines Punktesystem bewertet. Dabei bedeuteten 0 Punkte, Ausreißer nicht erkannt und 4 Punkte bedeuteten Ausreißer sehr gut erkannt. Die Parameter, welche für die Tests gewählt werden mussten, werden in \autoref{table:parmeterNeti} beschrieben.\\
 
 \begin{table}
@@ -379,3 +258,4 @@ Um zu untersuchen, wie gut der Algorithmus funktioniert, wurde er auf Zeitreihen
 \autoref{table:performanceNeti} zeigt die Ergebnisse der Tests. Es ist zu erkennen, dass die Qualität der Ausreißer-Erkennung im eindimensionalen Fall sehr gut ist. Lediglich einzelne Peaks können durch den Algorithmus nicht als Ausreißer identifiziert werden. Außerdem wird bei Signal Drifts und der kontinuierlichen Zunahme der Amplitude lediglich der Anfang des Ausreißers detektiert. Aus diesem Grund wurde eine Bewertung mit drei Sternen vergeben. Bei der Betrachtung der Graphiken in \autoref{sec:appendix_net_one} und \autoref{sec:appendix_net_two} ist zu erkennen, dass das sechste oder siebte Intervall der Zeitreihe häufig als Ausreißer markiert wird. Der Grund hierfür ist, das bei einer Fenstergröße von fünf für die ersten fünf Abschnitte kein Ausreißer Score berechnet wird. Dadurch ist die Standardabweichung zu Beginn sehr niedrig wodurch Abschnitte schnell als Ausreißer gekennzeichnet werden. Dieser Umstand wurde bei der Bewertung in \autoref{table:performanceNeti} nicht berücksichtigt. Im zweidimensionalen Fall ist die Qualität der Ausreißer-Erkennung etwas durchwachsener. Auffallend ist, dass Zyklen mit höherer und niedriger Amplitude nicht als Ausreißer erkannt werden. Insbesondere ist dies auffällig, da diese Ausreißer Typen üblicherweise zuverlässig erkannt werden (vgl. \autoref{sec:rw-gl}).  Außerdem ist der Algorithmus im zweidimensionalen Fall nicht mehr dazu in der Lage Signal Drifts zu erkennen. Andere Ausreißer Typen können durch den Algorithmus weiterhin erkannt werden, jedoch oftmals nicht mit der selben Qualität. 
 
 \FloatBarrier
+
