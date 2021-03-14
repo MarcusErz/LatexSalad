@@ -2,9 +2,11 @@
 \chapter{Statische Algorithmen zur Ausreißer Erkennung}
 In diesem Kapitel werden zunächst zwei statische Algorithmen zur Ausreißer-Erkennung auf unterschiedlichen Datentypen (z.B. Videos, Bilder, Netzwerke) vorgestellt. Hierbei handelt es sich um ein auf Percolation basierender Algorithmus und ein auf IsoMap basierender Algorithmus. Statische Algorithmen kennzeichnet, dass sie nicht mit Daten umgehen könne, welche kontinuierlich an sie übergeben werden. Damit die Algorithmen anwendbar sind, müssen die Daten vollständig und abgeschlossen vorliegen. Eines unserer Hauptziele des Forschungsprojektes war die Ausreißer Erkennung in Zeitreihen, aus diesem Grund haben wir uns in den Experimenten auf diese Art der Daten konzentriert. In \autoref{sec:IsoBased} wird der IsoMap basierte Algorithmus vorgestellt in \autoref{sec:per-intro} wird der Percolation basierte Algorithmus vorgestellt.
 
+Beide Algorithmen liefern lediglich einen Ausreißer Score zurück. Um zu bestimmen inwiefern ein Element konkret ein Ausreißer ist, wird zunächst den Mittelwert und die Standardabweichung des Outlier Scores berechnet. Falls ein Element in Abhängigkeit von der Standardabweichung sehr stark vom Mittelwert abweicht wird das Element als Ausreißer klassifiziert.
+
 \section{Umwandlung Zeitreihe in Netzwerk}
 
-Damit sowohl der auf Percolation basierende Algorithmus wie auch der auf IsoMap basierende Algorithmus angewandt werden können, müssen die Daten zunächst in ein einheitliches Format überführt werden. Dazu müssen die unterschiedlichen Daten in ein Netzwerk umgewandelt werden.  Hierzu ist erforderlich, dass eine Distanz zwischen unterschiedlichen Elementen des Datensatzes berechnet werden kann  \citep[vgl.][S.~2]{10.3389/fphy.2019.00194}. Die Algorithmen können auf allen Daten angewandt werden, welche diese Voraussetzung erfüllen. Nachfolgend wird exemplarisch beschrieben wie die Transformation für eine Zeitreihe funktionieren kann. 
+Damit sowohl der auf Perculation basierende Algorithmus wie auch der auf Iso Map basierende Algorithmus angewandt werden können, müssen die Daten zunächst in ein einheitliches Format überführt werden. Dazu müssen die unterschiedlichen Daten in ein Netzwerk umgewandelt werden.  Hierzu ist erforderlich, dass eine Distanz zwischen unterschiedlichen Elementen des Datensatzes berechnet werden kann  \citep[vgl.][S.~2]{10.3389/fphy.2019.00194}. Der Algorithmus kann auf allen Daten angewandt werden, welche diese Vorraussetzung erfüllen. Nachfolgend wird exemplarisch beschrieben wie die Transformation für eine Zeitreihe funktionieren kann. 
 
 
 \label{sec:trsnsNeti}
@@ -44,34 +46,37 @@ Für den IsoMap Algorithmus stellt scikit-learn eine sehr gute Implementierung zu
 
 \subsection{Ausreißer-Erkennung in Zeitreihen}
 \label{sec:im-results}
+
 \begin{table}
-\caption{IsoMap Performance}
-\begin{tabular}{ |p{4.5cm}||p{4.5cm}||p{3cm}|}
-	\hline
-	\textbf{Ausreißer Typ}& \textbf{Datei Name}&
-	\textbf{1D}\\
-	\hline
-	\hline
+	\centering
+	\begin{tabular}{p{0.47\linewidth}|p{0.4\linewidth}|P{0.05\linewidth}}
+		\toprule
+		\textbf{Ausreißer Typ}& \textbf{Datei Name}&
+		\textbf{1D}\\
+		\midrule
 	Einzelne Peaks (vgl. \autoref{img:dailyPeaksIso}) & anomaly-art-daily-peaks & *\\
-	\hline
+		\midrule
 	Zunahme an Rauschen (vgl. \autoref{img:increaseNoiseIso}) & anomaly-art-daily-increase-noise &**\\
-	\hline
+		\midrule
 	Signal Drift (vgl. \autoref{img:dailyDriftIso}) & anomaly-art-daily-drift &**\\
-	\hline
+		\midrule
 	Kontinuierliche Zunahme der Amplitude (vgl. \autoref{img:ampRiseIso})& art-daily-amp-rise & **\\
-	\hline
+		\midrule
 	Zyklus mit höherer Amplitude (vgl. \autoref{img:jumpsupIso})& art-daily-jumpsup &*\\
-	\hline
+		\midrule
 	Zyklus mit geringerer Amplitude (vgl. \autoref{img:jumpsdownIso})& art-daily-jumpsdown & **\\
-	\hline
+		\midrule
 	Zyklus-Aussetzer (vgl. \autoref{img:flatmiddleIso})& art-daily-flatmiddle &*\\
-	\hline
+		\midrule
 	Signal-Aussetzer (vgl. \autoref{img:nojumpIso})& art-daily-nojump & -\\
-	\hline
+		\midrule
 	Frequenzänderung (vgl. \autoref{img:sequenceChangeIso})& anomaly-art-daily-sequence-change &-\\
-	\hline
-\end{tabular}
+		\bottomrule
+	\end{tabular}
+	\caption{IsoMap Performance}
+	\label{tab:isomap:performance}
 \end{table}
+
 
 Für die durchgeführten Tests wurden die Zeitreihen aus ... verwendet. Um zu bewerten wie gut der Algorithmus funktioniert, wurde ein Punktesystem eingeführt. In dem Punktesystem konnten maximal vier Sterne erreicht werden. Das bedeutet Ausreißer sehr gut erkannt. Null Sterne hingegen bedeuten Ausreißer überhaupt nicht erkannt. Der IsoMap Algorithmus liefert eher schwache Ergebnisse bei der Erkennung von Ausreißern in Zeitreihen. Hauptproblem hierbei ist, dass starke Anstiege, bei welchen es sich nicht um Ausreißer handelt, fälschlicherweise zu einem starken Anstieg des Ausreißer Scores führen (vgl. \autoref{img:iso_trans} mit Pfeil markierte stellen). Dies kann, je nach Threshold, zu einer hohen Quote an falsch positiven Klassifizierungen führen. Aus diesem Grund können die tatsächlichen Ausreißer nicht eindeutig identifiziert werden. Eine Ähnliche Problematik trat in \citep {Uzun} bei der Verwendung des Random Walk Algorithmus auf. Das Problem konnte hierbei gelöst werden, indem vor der Anwendung des Algorithmus, eine Glättung der Zeitreihe durchgeführt wurde. Dadurch werden abrupte Übergange in der Zeitreihe abgemildert und deshalb nicht mehr als Ausreißer erkannt \citep[vgl.][S.~31,36]{Uzun}. Dies könnte ein möglicher Ansatz sein um zukünftig bessere Ergebnisse zu erzielen.\\
 Des Weiteren ist zu erkennen, dass der Algorithmus für einige Ausreißer Typen nicht geeignet ist, hierzu gehören Siganl Aussetzer und Frequenzänderungen. Bei diesen Ausreißer Typen treten keinerlei unüblichen Werte auf, sondern es kommt zu Änderungen in der Saisonalität der Zeitreihe. 
@@ -122,32 +127,33 @@ Um zu klassifizieren, ob es sich bei einem konkreten Element um einen Ausreißer 
 \label{sec:per-result}
 
 \begin{table}
-\caption{Perculation Time Series Performance}
-\begin{tabular}{ |p{6cm}||p{6cm}||p{3cm}|}
-	\hline
-	\textbf{Ausreißer Typ}& \textbf{Datei Name}&
-	\textbf{1D}\\
-	\hline
-	\hline
+	\centering
+	\begin{tabular}{p{0.47\linewidth}|p{0.4\linewidth}|P{0.05\linewidth}}
+		\toprule
+		\textbf{Ausreißer Typ}& \textbf{Datei Name}&
+		\textbf{1D}\\
+		\midrule
 	Einzelne Peaks (vgl. \autoref{img:dailyPeaksPerc}) & anomaly-art-daily-peaks & *\\
-	\hline
+		\midrule
 	Zunahme an Rauschen (vgl. \autoref{img:increaseNoisePerc}) & anomaly-art-daily-increase-noise &****\\
-	\hline
+		\midrule
 	Signal Drift (vgl. \autoref{img:dailyDriftPerc}) & anomaly-art-daily-drift &***\\
-	\hline
+		\midrule
 	Kontinuierliche Zunahme der Amplitude (vgl. \autoref{img:ampRisePerc}) & art-daily-amp-rise & ***\\
-	\hline
+		\midrule
 	Zyklus mit höherer Amplitude (vgl. \autoref{img:jumpsupPerc}) & art-daily-jumpsup &****\\
-	\hline
+		\midrule
 	Zyklus mit geringerer Amplitude (vgl. \autoref{img:jumpsdownPerc}) & art-daily-jumpsdown & ****\\
-	\hline
+		\midrule
 	Zyklus-Aussetzer (vgl. \autoref{img:flatmiddlePerc}) & art-daily-flatmiddle  &****\\
-	\hline
+		\midrule
 	Signal-Aussetzer (vgl. \autoref{img:nojumpPerc}) & art-daily-nojump & -\\
-	\hline
+		\midrule
 	Frequenzänderung (vgl. \autoref{img:sequenceChangePerc}) & anomaly-art-daily-sequence-change &-\\
-	\hline
-\end{tabular}
+		\bottomrule
+	\end{tabular}
+	\caption{Perculation Time Series Performance}
+	\label{tab:perculation:timeseriesperformance}
 \end{table}
 
 \label{sec:per-results-text}

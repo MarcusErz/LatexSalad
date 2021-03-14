@@ -27,8 +27,17 @@ Das Ziel der vorliegenden Arbeit setzt sich aus den folgenden Teilzielen zusamme
 \section{Verwandte Arbeiten}
 \label{sec:einl-va}
 
-\workTodo{related work ausformulieren und die paper in bib einpflegen}
+In diesem Abschnitt werden Ansätze zur Erkennung von Ausreißern in statischen und dynamischen Graphen vorgestellt, die im Rahmen des Forschungsprojekts zur Erreichung der Forschungsziele herangezogen werden.  
 
+Die \textbf{Ausreißer-Erkennung in statischen Graphen} kann hinsichtlich ihrer Ausreißerkategorien unterteilt werden. So ergibt sich die nachfolgende Taxonomie.
+\begin{mldescription}
+	\mlitem{Struktur-basierter Ansatz:} Mithilfe der Darstellung von Knoten und Kanten in einem Ego-Netzwerk werden bei \citep{Oddball} die zugehörigen Eigenschaften, wie die Anzahl der Knoten und Kanten extrahiert. Im Anschluss identifiziert dieser Algorithmus diejenigen Knoten und Kanten, die sich strukturell stark vom restlichen Ego-Netzwerk unterscheiden. 
+	\mlitem{Clustering-basierter Ansatz:} Bei \citep{SCAN} werden zwei Knoten und die Überschneidung ihrer Nachbarknoten gegenübergestellt. So wird die Annahme getroffen, dass Knoten, die sehr wenige Nachbarn, im Vergleich zum Rest der Knoten in Ihrer Umgebung haben, Ausreißer sind.
+	\mlitem{IsoMap-basierter Ansatz:} Durch die Dimensionsreduktion mithilfe des \citep{IsoMap} gehen Informationen über Ausreißer verloren. Bei dem Versuch der Rekonstruktion können diese Informationen nicht wiederhergestellt werden und der Ausreißer wird sichtbar. 
+	\mlitem{Kanten-basierter Ansatz:} Bei \citep{Perculation} werden aus einem Graphen schrittweise die Kanten mit den höchsten Gewichten entfernt. Dadurch werden Ausreißer vom Rest des Netzwerks separiert. Die Annahme ist, dass Ausreißer-knoten höhere Kantengewichte zu ihren Nachbarn haben. Der \citep{RandomWalk} iteriert der Algorithmus zufällig über das Netzwerk. Dabei wird festgehalten wie oft ein Knoten besucht wurde. Ausreißer-Knoten werden dabei besonders selten besucht und können somit identifiziert werden. 
+\end{mldescription}
+
+\workTodo{hier geht es weiter}
 Die \textbf{Anomalieerkennung in Edge Streams} verwendet als Eingabe einen Fluss von Kanten über die Zeit. Sie werden nach der Art der erkannten Anomalie kategorisiert:
 
 \begin{mldescription}
