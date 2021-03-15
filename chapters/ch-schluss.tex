@@ -17,7 +17,7 @@ Das dritte Teilziel ist es die verschiedenen graphen-basierten Algorithmen, die 
 		\midrule
 		Perculation-based & \textbf{\textcolor{green}{+}} & \textbf{\textcolor{red}{-}} & \textbf{\textcolor{red}{-}} & \textbf{\textcolor{green}{+}} & \textbf{\textcolor{green}{+}} \\
 		\midrule
-		Netsimile & \textbf{\textcolor{red}{-}} & \textbf{\textcolor{green}{+}} & \textbf{\textcolor{green}{+}} & \textbf{\textcolor{green}{++}} & \textbf{\textcolor{green}{+}} \\
+		NetSimile & \textbf{\textcolor{red}{-}} & \textbf{\textcolor{green}{+}} & \textbf{\textcolor{green}{+}} & \textbf{\textcolor{green}{++}} & \textbf{\textcolor{green}{+}} \\
 		\midrule
 		MIDAS & \textbf{\textcolor{red}{-}} & \textbf{\textcolor{green}{+}} & \textbf{\textcolor{green}{++}} & \textbf{\textcolor{red}{-}} & \textbf{o}  \\
 		\bottomrule
@@ -30,70 +30,64 @@ Das dritte Teilziel ist es die verschiedenen graphen-basierten Algorithmen, die 
 Aus der Tabelle \autoref{tab:bewertung} kann man die Kriterien entnehmen, die zum Vergleich der Algorithmen herangezogen wurden. So werden alle Algorithmen zunächst einmal in statisch und dynamisch entsprechend der Taxonomie des Forschungsprojekts unterteilt. Im nächsten Schritt werden die Ergebnisse aller Algorithmen hinsichtlich ihrer Fähigkeit Ausreißer in Graphen, sowie in Zeitreihen qualitativ zu erkennen gegenübergestellt. Zuletzt liegt der Fokus auf ihrer Performance im Vergleich zu den anderen Algorithmen. Nachfolgend werden die Ergebnisse ausgeführt.
 \\ \\
 \workTodo{die Vergleiche autoref einfügen.}
-Der IsoMap-based und der Perculation-based Algorithmus sind statische Algorithmen, die jeweils nur auf einem Graphen angewendet werden können. Aus diesem Grund eignen sich diese nicht für die Ausreißer-Erkennung in Netzwerken, da hier mehrere Graphen übergeben werden. Beide können jedoch erfolgreich auf Zeitreihen angewendet werden, wobei beim IsoMap-based Algorithmus die Ausreißer nur teilweise erkennbar sind, da sich die Ausreißer nur geringfügig von den anderen Werten unterscheiden. Der Perculation-based Algorithmus hingegen zeigt eindeutige Ausreißer, weshalb dieser Algorithmus geeignet ist für eine qualitative Ausreißer-Erkennung. Bei den Ausreißer Typen \dq Signal-Aussetzer\dq\space und \dq Frequenzänderung\dq\space können beide Algorithmen keine Ausreißer identifizieren.  Die Performance beider Algorithmen ist gut, da sie die Berechnungen innerhalb weniger Sekunden durchführen.
+Der IsoMap-based und der Perculation-based Algorithmus sind statische Algorithmen, die jeweils nur auf einem Graphen angewendet werden können. Aus diesem Grund eignen sich diese nicht für die Ausreißer-Erkennung in Netzwerken, da hierbei mehrere Graphen übergeben werden. Beide können jedoch erfolgreich auf Zeitreihen angewendet werden, wobei beim IsoMap-based Algorithmus die Ausreißer nur teilweise erkennbar sind, da sich die Ausreißer nur geringfügig von den anderen Werten unterscheiden. Der Perculation-based Algorithmus hingegen zeigt eindeutige Ausreißer, weshalb dieser Algorithmus geeignet ist für eine qualitative Ausreißer-Erkennung. Bei den Ausreißer Typen \dq Signal-Aussetzer\dq\space und \dq Frequenzänderung\dq\space können beide Algorithmen keine Ausreißer identifizieren.  Die Performance beider Algorithmen ist gut, da sie die Berechnungen innerhalb weniger Sekunden durchführen.
 
-Der Netsimile- und der MIDAS-Algorithmus können beide auf Netzwerkdatensätzen angewendet werden, da sie dynamisch sind. Der Unterschied hierbei liegt bei dem Ausreißer-Score. Beim Netsimile sind die erkannten Ausreißer nahezu identisch, wodurch eine Klassifizierung unzureichend ist. Beim MIDAS hingegen sind die Ausschläge weitaus größer, wodurch eine Klassifizierung erzielt wird. Bei der Anwendung auf Zeitreihen liefert der Netsimile sehr gute Ergebnisse auf den Ausreißer-Typen die wir verwendet haben (vgl. \autoref{sec:ns-ts}). Da sich bei der Transformation von Zeitreihen zu Graphen die Gewichtung nur geringfügig unterscheidet und der MIDAS-Algorithmus Ausreißer nur bei einer hohen Kantengewichtung erkennt, fallen die Ergebnisse hier schlechter aus (vgl. \autoref{sec:resultsOTs}). Dementsprechend ist MIDAS für die Erkennung von Ausreißern in Zeitreihen eher ungeeignet. Bei der Performanz hat der Netsimile-Algorithmus ursprünglich bis zu einer Stunde benötigt, da dieser  rechenintensive Bibliotheken verwendete. Durch die Verwendung anderer Bibliotheken wurde eine Optimierung erreicht. Die Visualisierung des Graphens ist hierdurch zwar nicht mehr möglich, jedoch wird die Rechenzeit auf wenige Sekunden reduziert. Der MIDAS benötigt hingegen mehrere Minuten, wodurch der Netsimile nach der Optimierung performanter geworden ist. (VGL: PERFORMANZ-TABELLE dann im Anhang)
+Der NetSimile- und der MIDAS-Algorithmus können beide auf Netzwerkdatensätzen angewendet werden, da sie dynamisch sind. Der Unterschied hierbei liegt bei dem Ausreißer-Score. Beim NetSimile sind die erkannten Ausreißer nahezu identisch, wodurch eine Klassifizierung unzureichend ist. Beim MIDAS hingegen sind die Ausschläge weitaus größer, wodurch eine Klassifizierung erzielt wird. Bei der Anwendung auf Zeitreihen liefert der NetSimile sehr gute Ergebnisse auf den Ausreißer-Typen die wir verwendet haben (vgl. \autoref{sec:ns-ts}). Da sich bei der Transformation von Zeitreihen zu Graphen die Gewichtung nur geringfügig unterscheidet und der MIDAS-Algorithmus Ausreißer nur bei einer hohen Kantengewichtung erkennt, fallen die Ergebnisse hierbei schlechter aus (vgl. \autoref{sec:resultsOTs}). Dementsprechend ist MIDAS für die Erkennung von Ausreißern in Zeitreihen eher ungeeignet. Bei der Performanz hat der NetSimile-Algorithmus ursprünglich bis zu einer Stunde benötigt, da dieser  rechenintensive Bibliotheken verwendete. Durch die Verwendung anderer Bibliotheken wurde eine Optimierung erreicht. Die Visualisierung des Graphens ist hierdurch zwar nicht mehr möglich, jedoch wird die Rechenzeit auf wenige Sekunden reduziert. Der MIDAS benötigt hingegen mehrere Minuten, wodurch der NetSimile nach der Optimierung performanter geworden ist.
 
-Der Netsimile-Algorithmus ist demnach ein Algorithmus, der, nach Optimierung, den Anforderungen des Forschungsprojekts gerecht wird. Dieser Algorithmus ist dynamisch, multidimensional, performant und die Erkennung von Ausreißern in Zeitreihen ist sehr gut. Der Schwerpunkt hierbei liegt bei der Wahl der richtigen Features. Strukturelle Merkmale sind eher ungeeignet bei vollständig verknüpften Graphen und sollten ersetzt werden durch Features, wie bspw. die Gewichtung der Kanten. 
+Der NetSimile-Algorithmus ist demnach ein Algorithmus, der, nach Optimierung, den Anforderungen des Forschungsprojekts gerecht wird. Dieser Algorithmus ist dynamisch, multidimensional, performant und die Erkennung von Ausreißern in Zeitreihen ist sehr gut. Der Schwerpunkt hierbei liegt bei der Wahl der richtigen Features. Strukturelle Merkmale sind eher ungeeignet bei vollständig verknüpften Graphen und sollten ersetzt werden durch Features, wie bspw. die Gewichtung der Kanten. 
 
-\workTodo{Tabelle in den Anhang}
-\begin{table}[h!]
-	\centering
-	\begin{tabular}{P{0.3\linewidth}|P{0.31\linewidth}|P{0.31\linewidth}}
-		\toprule
-		& \textbf{Netsimile} & \textbf{MIDAS} \\
-		\midrule
-		AmpRise & 54 min 32 sec & 05 min 26 sec \\
-		\midrule
-		Drift & 57 min 29 sec & 05 min 22 sec \\
-		\midrule
-		Flatmiddle & 62 min 50 sec & 06 min 01 sec \\
-		\midrule
-		Increase Noise & 51 min 56 sec & 05 min 40 sec \\
-		\midrule
-		Jumps Down & 51 min 30 sec & 05 min 53 sec \\
-		\midrule
-		Jumps Up & 50 min 40 sec & 05 min 12 sec \\
-		\midrule
-		No Jump & 65 min 45 sec & 06 min 01 sec \\
-		\midrule
-		Peaks & 61 min 31 sec & 05 min 55 sec \\
-		\midrule
-		Sequence Change & 49 min 53 sec & 06 min 41 sec \\
-		\midrule
-		Darpa & 185 min 49 sec & 05 min 29 sec \\
-		\midrule
-		Enron & 01 min 47 sec & 05 min 14 sec \\
-		\bottomrule
-	\end{tabular}
-	\caption{Überblick der Performanz in [min]}
-	\label{tab:performance}
-\end{table}
+%\workTodo{Tabelle in den Anhang}
+%\begin{table}[h!]
+%	\centering
+%	\begin{tabular}{P{0.3\linewidth}|P{0.31\linewidth}|P{0.31\linewidth}}
+%		\toprule
+%		& \textbf{Netsimile} & \textbf{MIDAS} \\
+%		\midrule
+%		AmpRise & 54 min 32 sec & 05 min 26 sec \\
+%		\midrule
+%		Drift & 57 min 29 sec & 05 min 22 sec \\
+%		\midrule
+%		Flatmiddle & 62 min 50 sec & 06 min 01 sec \\
+%		\midrule
+%		Increase Noise & 51 min 56 sec & 05 min 40 sec \\
+%		\midrule
+%		Jumps Down & 51 min 30 sec & 05 min 53 sec \\
+%		\midrule
+%		Jumps Up & 50 min 40 sec & 05 min 12 sec \\
+%		\midrule
+%		No Jump & 65 min 45 sec & 06 min 01 sec \\
+%		\midrule
+%		Peaks & 61 min 31 sec & 05 min 55 sec \\
+%		\midrule
+%		Sequence Change & 49 min 53 sec & 06 min 41 sec \\
+%		\midrule
+%		Darpa & 185 min 49 sec & 05 min 29 sec \\
+%		\midrule
+%		Enron & 01 min 47 sec & 05 min 14 sec \\
+%		\bottomrule
+%	\end{tabular}
+%	\caption{Überblick der Performanz in [min]}
+%	\label{tab:performance}
+%\end{table}
 
 
 
 \section{Ausblick}
 \label{sec:fua-a}
 
-\workTodo{Zudem sind beide Algorithmen für die statische Analyse ausgerichtet und könnten deswegen bspw. nur als Feature für den Netsimile verwendet werden Er erkennt Ausreißer in Zeitreihen, kann erweitert werden um neue Merkmale als auch statischen Algorithmen, die als Merkmal dienen können. Zudem ist der Algorithmus performant und dynamisch.}
+Im Rahmen des Forschungsprojekts wurden drei Thematiken behandelt. Zunächst einmal wurde eine Möglichkeit ermittelt Zeitreihendaten in einen Graphen umzuwandeln. In einem weiteren Schritt wurden graphen-basierte Algorithmen auf die transformierten Zeitreihendaten angewandt. Im Anschluss wurden diese Algorithmen hinsichtlich ihrer Eignung zur Ausreißer-Erkennung verglichen.
 
-Im Rahmen des Forschungsprojekts wurden drei Thematiken behandelt. Zunächst einmal wurde eine Möglichkeit ermittelt Zeitreihendaten in einen Graphen umzuwandeln. Im Anschluss wurden graphen-basierte Algorithmen auf die transformierten Zeitreihendaten angewendet, um diese Algorithmen im Anschluss hinsichtlich ihrer Eignung zur Ausreißer-Erkennung zu vergleichen.
+Durch die erfolgreiche Transformation von Zeitreihendaten in Graphen kann der Vorgang ebenso für andere Datenkategorien herangezogen werden, unter der Prämisse, dass Distanzen zwischen den einzelnen Elementen des Datensatzes gebildet werden können. So ist es im nächsten Schritt möglich bspw. Ausreißer in Finanzdaten oder Bilddaten zu erkennen. 
 
-\workTodo{eventuell andere Distanzmaße zur Transformierung hinzuziehen? Da wir so auf den ersten Punkt genauer eingehen würden}
+Der NetSimile-Algorithmus kann durch neue Merkmale ergänzt werden. So ist es zukünftig möglich neben den mathematischen Merkmalen auch statistische Algorithmen als Feature einzusetzen um eine erweiterte und optimierte Möglichkeit zu erhalten Aussagen hinsichtlich Ausreißer treffen zu können. Eine heutige Problematik des NetSimile ist zum einen die, dass er nur den Ausreißer-Graphen zurückgibt und zum anderen wird der Graph erst dann berechnet, wenn dieser alle Kanten eines Zeitintervalls beinhaltet. Hierbei können weitere Optimierungen folgen, die bspw. den Ausreißer-Graphen auf Knoten oder Kanten untersucht, die für den Ausreißer-Score am relevantesten sind. Zudem kann eine Methode ermittelt werden, die einen Graphen iterativ vergrößert, damit eventuell schon vor dem vollständigen Berechnen des Graphs bestimmt werden kann, ob es sich um einen Ausreißer handelt.
 
-Durch die erfolgreiche Transformation von Zeitreihendaten in Graphen kann der Vorgang ebenso für andere Datenkategorien herangezogen werden unter der Prämisse, dass Distanzen zwischen den einzelnen Elementen des Datensatzes gebildet werden können. So ist es im nächsten Schritt möglich bspw. Ausreißer in  Finanzdaten oder Bilddaten zu erkennen. 
-
-Darüber hinaus nimmt der Netsimile \workTodo{bis hierhin habe ich es ausgeführt}
-Kommen wir nun zum Ausblick:
-
-Interessant wären weitere Datensätze, auf denen die Algorithmen angewendet werden wie bspw. Finanzdaten oder auch Bilder. Die einzige Voraussetzung wäre hier die Bildung einer Distanz, die zwischen den einzelnen Elementen des Datensatzes gebildet werden müssten.
-
-Zudem bringt der Netsimile unserer Meinung nach noch nicht alles mit. Zum einen gibt der Netsimile nur den Ausreißer-Graphen zurück. Zum anderen wird momentan der Graph erst dann berechnet, wenn dieser alle Kanten eines Zeitintervalls beinhaltet. Hier könnten Optimierungen folgen, die bswp. den Ausreißer-Graphen auf Knoten oder Kanten untersucht, die für den Ausreißerscore am meisten beigetragen haben. Zudem könnten man einen Weg suchen, um den Graphen iterativ vergrößern zu können, damit eventuell schon vor dem vollständigen Erstellen des Graphens herausgefunden werden kann, ob es sich um einen Ausreißer handelt.
-
-\textit{Aufschrieb}
-Der Netsimile Algorithmus wurde bisher nur auf Zeitreihendaten und Graphen angewendet. Interessant wären jedoch noch Bilder, Biologische Daten und andere Netzwerke. Die einzige Voraussetzung ist die Berechnung einer Distanz zwischen einzelnen Elementen in diesen Daten. Zudem gibt es viele statische Algorithmen, die als Feature dem Netsimile hinzugefügt werden können. Erkennt der Perculation Algorithmus bspw. Ausreißer-Typen wie Increase-noise, Jumpsdown, Jumpsup und Flatmiddle, so kann nach weiteren Algorithmen gesucht werden, die die anderen Ausreißer Typen erkennt. Zudem wird beim Netsimile Algorithmus lediglich der Graph zurückgegeben der als Ausreißer identifiziert wurde, nicht aber der Grund dafür. Hierfür könnten weitere Untersuchungen durchgeführt werden, wie bspw. die Analyse der Features, welches sich am meisten von den anderen unterschieden hat oder einer anschließenden Analyse durch den Oddball Algorithmus, welche die Anomalien innerhalb des Graphens untersucht. 
-
-Des weiteren könnte eine allgemeine Forschung gestartet werden, welche untersucht, welche Features für spezifische Anwendungsgebiete geeignet sein könnten. 
-
-
-\workTodo{Ausblick schreiben}
+%\textit{Aufschrieb}
+%Der NetSimile Algorithmus wurde bisher nur auf Zeitreihendaten und Graphen angewendet. Interessant wären hierbei ebenso Bilddaten, biologische Daten und andere Netzwerke. Die einzige Voraussetzung ist die Berechnung einer Distanz zwischen einzelnen Elementen in diesen Daten. Zudem gibt es viele statische Algorithmen, die dem NetSimile als Feature hinzugefügt werden können. Erkennt der Perculation Algorithmus bspw. Ausreißer-Typen wie Increase-noise, Jumpsdown, Jumpsup und Flatmiddle, so kann nach weiteren Algorithmen gesucht werden, die die anderen Ausreißer Typen erkennen. Zudem wird beim NetSimile Algorithmus lediglich der Graph zurückgegeben der als Ausreißer identifiziert wurde, nicht aber der Grund dafür. Hierfür könnten weitere Untersuchungen durchgeführt werden, wie bspw. die Analyse der Features, welches sich am meisten von den anderen unterschieden hat oder einer anschließenden Analyse durch den Oddball Algorithmus, welche die Anomalien innerhalb des Graphens untersucht. 
+%
+%\workTodo{eventuell andere Distanzmaße zur Transformierung hinzuziehen? Da wir so auf den ersten Punkt genauer eingehen würden}
+%Eine weitere Optimierung, die durchgeführt werden kann, ist die Verwendung anderer Distanzmaße. Hierbei kann die Eignung verschiedener Distanzen für spezifische Anwendungsfälle analysiert werden. Die Validierung der Distanzmaße kann durch vorhandene Datensätze erfolgen. Ebenso ist es möglich synthetische Referenzdatensätze zu erstellen, die spezifische Muster bzw. Daten sowie entsprechende Labels beinhalten. Durch die Verwendung dieser Datensätze ist die Validierung des NetSimile Algorithmus für weitere Anwendungsfälle möglich.
+%
+%Des weiteren könnte eine allgemeine Forschung gestartet werden, welche untersucht, welche Features für spezifische Anwendungsgebiete geeignet sein könnten. 
+%
+%
+%\workTodo{Ausblick schreiben}

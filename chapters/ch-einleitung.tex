@@ -8,7 +8,7 @@ Im Rahmen der \workTyp werden verschiedene Algorithmen zur Ausreißer-Erkennung i
 
 Eine leistungsfähige Methode Zeitreihendaten abzubilden, um Korrelationen zwischen voneinander abhängigen Datenobjekten zu erfassen, ist die Abbildung von Zeitreihendaten als Graphen. Durch diese Datenrepräsentation können Ausreißer bzw. Anomalien, vor allem in Netzwerken, schneller erkannt werden.
 
-In der Forschung gibt es bereits viele Algorithmen zur Ausreißererkennung, die auf statische, sowie dynamische Graphen anwendbar sind. Die Erkennung der Ausreißer erfolgt mit verschiedenen Ansätzen. So gibt es Algorithmen, die die Struktur der Graphen näher betrachten, aber auch Algorithmen, die sich auf die Anzahl der Verbindungen zwischen zwei Kanten bzw. Objekten fokussieren. Nimmt man dynamische Graphen zur Untersuchung, so spielen die strukturellen Veränderungen über die Zeit, sowie die plötzlich massiv zunehmende Aktivitäten zwischen Knoten- und Kantenpaaren eine große Rolle. Darüber hinaus gibt es Ansätze zur Ausreißererkennung in sequenziellen Daten.
+In der Forschung gibt es bereits viele Algorithmen zur Ausreißererkennung, die auf statische, sowie dynamische Graphen anwendbar sind. Die Erkennung der Ausreißer erfolgt mit verschiedenen Ansätzen. So gibt es Algorithmen, die die Struktur der Graphen näher betrachten, aber ebenso Algorithmen, die sich auf die Anzahl der Verbindungen zwischen zwei Kanten bzw. Objekten fokussieren. Nimmt man dynamische Graphen zur Untersuchung, so spielen die strukturellen Veränderungen über die Zeit, sowie die plötzlich massiv zunehmende Aktivitäten zwischen Knoten- und Kantenpaaren eine große Rolle. Darüber hinaus gibt es Ansätze zur Ausreißererkennung in sequenziellen Daten.
 
 Allerdings gibt bisher keine Forschung von graphen-basierten Algorithmen auf traditionellen Zeitreihendaten, wie Sensordaten, die über die Zeit gesammelt werden, sondern nur über sich über die Zeit ändernden Netzwerkstrukturen.
 
@@ -31,39 +31,23 @@ In diesem Abschnitt werden Ansätze zur Erkennung von Ausreißern in statischen un
 
 Die \textbf{Ausreißer-Erkennung in statischen Graphen} kann hinsichtlich ihrer Ausreißerkategorien unterteilt werden. So ergibt sich die nachfolgende Taxonomie.
 \begin{mldescription}
-	\mlitem{Struktur-basierter Ansatz:} Mithilfe der Darstellung von Knoten und Kanten in einem Ego-Netzwerk werden bei \citep{Oddball} die zugehörigen Eigenschaften, wie die Anzahl der Knoten und Kanten extrahiert. Im Anschluss identifiziert dieser Algorithmus diejenigen Knoten und Kanten, die sich strukturell stark vom restlichen Ego-Netzwerk unterscheiden. 
-	\mlitem{Clustering-basierter Ansatz:} Bei \citep{SCAN} werden zwei Knoten und die Überschneidung ihrer Nachbarknoten gegenübergestellt. So wird die Annahme getroffen, dass Knoten, die sehr wenige Nachbarn, im Vergleich zum Rest der Knoten in Ihrer Umgebung haben, Ausreißer sind.
-	\mlitem{IsoMap-basierter Ansatz:} Durch die Dimensionsreduktion mithilfe des \citep{IsoMap} gehen Informationen über Ausreißer verloren. Bei dem Versuch der Rekonstruktion können diese Informationen nicht wiederhergestellt werden und der Ausreißer wird sichtbar. 
-	\mlitem{Kanten-basierter Ansatz:} Bei \citep{Perculation} werden aus einem Graphen schrittweise die Kanten mit den höchsten Gewichten entfernt. Dadurch werden Ausreißer vom Rest des Netzwerks separiert. Die Annahme ist, dass Ausreißer-knoten höhere Kantengewichte zu ihren Nachbarn haben. Der \citep{RandomWalk} iteriert der Algorithmus zufällig über das Netzwerk. Dabei wird festgehalten wie oft ein Knoten besucht wurde. Ausreißer-Knoten werden dabei besonders selten besucht und können somit identifiziert werden. 
-\end{mldescription}
-
-\workTodo{hier geht es weiter}
-Die \textbf{Anomalieerkennung in Edge Streams} verwendet als Eingabe einen Fluss von Kanten über die Zeit. Sie werden nach der Art der erkannten Anomalie kategorisiert:
-
-\begin{mldescription}
-	\mlitem{Erkennung anomaler Knoten:} Mithilfe eines Edge Streams erkennt\citep{Yu13} Knoten, deren Egonetze sich plötzlich und signifikant ändern.
-	\mlitem{Erkennung anomaler Subgraphen:} Mithilfe eines Edge Streams identifiziert \citep{Shin17} dichte Teilgraphen, die innerhalb einer kurzen Zeit entstehen.
-	\mlitem{Anomale Kantenerkennung:} \citep{Ran16} konzentriert sich auf spärlich verbundene Teile eines Graphen, während \citep{SedanSpot} Kantenanomalien basierend auf dem Auftreten von Kanten, bevorzugter Anhaftung und gegenseitigen Nachbarn identifiziert.
-\end{mldescription}
-
-\textbf{Related Work für Netsimile:}
-
-\begin{mldescription}
-	\mlitem{Graph isomorphism} M.-L. Fernandez and G. Valiente, A graph distance metric combining maximum common subgraph and minimum common supergraph \citep{N1}
-	\mlitem{Iterative Methoden} Zager et.al \citep{N2}
-	\mlitem{Feature Extraction} Li et al. -- global feature extraction \citep{N3}
+	\mlitem{Struktur-basierter Ansatz:} Mithilfe der Darstellung von Knoten und Kanten in einem Ego-Netzwerk werden in \citep{Oddball} die zugehörigen Eigenschaften, wie die Anzahl der Knoten und Kanten, extrahiert. Im Anschluss identifiziert dieser Algorithmus diejenigen Knoten und Kanten, die sich strukturell stark vom restlichen Ego-Netzwerk unterscheiden. 
+	\mlitem{Clustering-basierter Ansatz:} In \citep{SCAN} werden zwei Knoten und die Überschneidung ihrer Nachbarknoten gegenübergestellt. So wird die Annahme getroffen, dass Knoten, die sehr wenige Nachbarn, im Vergleich zum Rest der Knoten in Ihrer Umgebung haben, Ausreißer sind.
+	\mlitem{IsoMap-basierter Ansatz:} Durch die Dimensionsreduktion mithilfe des Algorithmus in \citep{IsoMap} gehen Informationen über Ausreißer verloren. Bei dem Versuch der Rekonstruktion können diese Informationen nicht wiederhergestellt werden. Durch einen anschließenden Vergleich der extrahierten Informationen werden Ausreißer sichtbar.
+	\mlitem{Kanten-basierter Ansatz:} In \citep{Perculation} werden aus einem Graphen schrittweise die Kanten mit den höchsten Gewichten entfernt. Dadurch werden Ausreißer vom Rest des Netzwerks separiert. Die Annahme ist, dass Ausreißer-knoten höhere Kantengewichte zu ihren Nachbarn haben. Der Algorithmus in \citep{RandomWalk} iteriert zufällig über das Netzwerk. Dabei wird festgehalten wie oft ein Knoten besucht wurde. Ausreißer-Knoten werden dabei besonders selten besucht und können somit identifiziert werden. 
 \end{mldescription}
 
 
-Die \textbf{Ausreißer Erkennung in Zeitreihen und Sequenziellen Daten} wurde bereits in vielen Literaturquellen diskutiert. 
-\begin{mldescription}
+Die \textbf{Ausreißer-Erkennung in dynamischen Graphen} kann hinsichtlich ihres Inputs unterteilt werden. So ergibt sich die nachfolgende Taxonomie.
 
-	\mlitem{Netzwerk basierter Ansatz zur Erkennung von Ausreißern in Sequenziellen Daten\citep{RAHMANI201489}:} Der genannte Algorithmus wandelt Sequenziellen Daten in ein Netzwerk um. Dabei wird die Euklidischen Distanz genutzt um die Kantengewichte zu berechnen. Anschließend werden die Knoten mithilfe des Minimum Spanning Tree Algorithmus geclustered. Um hierraus Ausreißer zu abzuleiten wird ein Voting Scheme verwendet. Der vorgestellte Algorithmus wurde genutzt um Ausreißer in Wetter Daten sowie Aktienkursen zu identifizieren.
-	
-	\mlitem{Ein robuster graphbasierter Algorithmus zur Erkennung und Charakterisierung von Anomalien in verrauschten multivariaten Zeitreihen:} In diesem Paper \citep{4733955} wird ein Algorithmus vorgestellt, der dazu in der Lage ist Ausreißer in Multivariaten Zeitreihen zu erkennen. Die multivariate Zeitreihe wird dabei über ein Distanzmaß in ein Netzwerk umgewandelt. Auf dem Netzwerk wird anschließend ein Random Walk Algorithmus ausgeführt. Daraufhin werden Knoten die besonders selten besucht wurden als Ausreißer markiert.
-	
-	\mlitem{Überblicksartikel über die Ausreißer Erkennung in Diskreten Sequenzen:} In \citep{5645624} werden verschiedene Methoden vorgestellt, wie Ausreißer in Sequenzen erkannt werden können. Es wird dabei, auch auf die Ausreißer Erkennung in Zeitreihen eingegangen. Die vorgestellten Algorithmen werden in drei Kategorien untergliedert. 1:Erkennung abnormaler Sequenzen in Bezug auf eine Datenbank normaler Sequenzen 2: Erkennung einer abnormalen Untersequenz innerhalb einer langen Sequenz. 3: Erkennung eines Musters in einer Sequenz deren Auftrittshäufigkeit anomal ist.
-	
-	\mlitem{Neuronale Netze zur Ausreißer Erkennung:} Die Verwendung von Neuronalen Netzen zur Erkennung von Ausreißern wird immer beliebter. Beispielsweise wurde in \citep{10.1007/3-540-46145-0_17} ein Replicator Neuronales Netz, einerseits genutzt um Störungen in einem Netzwerk zu erkennen. Des weiteren wurde das Neuronale Netz verwendet um Ausreißer in einem Brustkrebs Datensatz zu identifizieren. Neuronale Netze wurden ebenso dazu eingesetzt um Ausreißer in Zeitreihen zu finden \citep{8581424} . Ein Vorteil dieses Ansatzes ist, das Ausreißer online entdeckt werden können. Das Neuronale Netz wird hierbei dazu genutzt den nächsten Wert einer Zeitreihe zu schätzen. Die Differenz zwischen der Vorhersage und dem tatsächlich auftretenden Wert wird als Ausreißer Score verwendet. 
-	
+\begin{mldescription}
+	\mlitem{Erkennung auf Momentaufnahmen des Graphen in zeitlichen Abständen:} Der Algorithmus in \citep{Netsimile} vergleicht verschiedene strukturelle Merkmale zweier Momentaufnahmen eines Graphen miteinander, um die Ähnlichkeit zu bewerten. Der Ausreißer wird bei einer starken Veränderung des Graphen deklariert.
+	\mlitem{Erkennung mithilfe eines Datenflusses:} Der Algorithmus in \citep{MIDAS} vergleicht jede ankommende Kante, zum aktuellen Zeitpunkt, mit der Anzahl am bisherigen Vorkommen dieser Kante. Hierbei werden Mikrocluster entdeckt die anomal sind.
+\end{mldescription}
+
+
+Um die graphen-basierten Algorithmen zur Erkennung von Ausreißern in Zeitreihendaten nutzen zu können, müssen diese Daten in Graphen umgewandelt werden. Hierbei werden Distanzmaße verwendet, um die Qualität der Ausreißer-Erkennung zu verbessern. Im Rahmen des Forschungsprojekt wird somit die \textbf{Nutzung von Distanzmaßen} essenziell. 
+
+\begin{mldescription}
+	\mlitem{Überblick an existierenden Distanzmaßen:} Ein Vergleich der verschiedenen Distanzmaße ist in \citep{Distances} zu finden. Diese werden für die Anwendung auf Wahrscheinlichkeitsdichtefunktionen evaluiert und gruppiert. 
 \end{mldescription}
