@@ -85,6 +85,23 @@ Bei Verwendung der Teststatistik in \autoref{eqn:midas:chi2angepasst} und eines 
 
 Der Term $\chi^2_{1 - \frac{\epsilon}{2}}(1)$ beschreibt hierbei das $1 - \frac{\epsilon}{2}$-Quantil.
 
+\subsubsection{MIDAS-R}
+Bei dem MIDAS-R Algorithmus handelt es sich um eine Erweiterung des MIDAS Algorithmus. Das R steht hierbei für den Relationalen Ansatz des MIDAS-R Algorithmus. Dabei wird versucht die räumliche oder zeitliche Verknüpfung zwischen Kanten stärker zu berücksichtigten. Es werden hierzu zwei neue Konzepte eingeführt \citep[vgl.][S.~4]{MIDAS}.
+
+\textbf{Temporal Relations: }Durch diesen Ansatz soll der Algorithmus mehr zeitliche Flexibilität erhalten. Dabei sollen Kanten aus der jüngsten Vergangenheit auch in einem neuen Zeitabschnitt berücksichtigt werden. Allerdings reduziert um eine bestimmte Gewichtung. Anstatt die CMS Datenstruktur nach jedem Zeitabschnitt zu reseten, werden die Gewichte hierbei um einen bestimmten Prozentsatz reduziert \citep[vgl.][S.~4]{MIDAS}.
+
+\textbf{Spatial Relations: }Hierbei werden zwei neue Features eingeführt um verschiedene Ausreißer-Typen identifizieren zu können. Die neuen Features werden hierbei in einer CMS Datenstrukturen gespeichert. Der Algorithmus speichert demzufolge diese drei Features:
+
+\begin{description}
+	\item[$ $]\hfill\\ Anzahl an Kanten zwischen Knoten u un Knoten v. Dieses Feature wird auch vom MIDAS Algorithmus verwendet.
+	\item[$ $]\hfill\\ Gesamtanzahl an Nachbarknoten eines Knoten u.
+	\item[$  $]\hfill\\ Aktuelle Anzahl an Nachbarknoten eines Knoten u.
+\end{description}
+
+Aus diesen drei Features wird anschließend ein Ausreißer Score abgeleitet.
+ \citep[vgl.][S.~5]{MIDAS}
+
+
 \section{Ausreißer-Erkennung in Graphen}
 \label{sec:m-ex}
 \workTodo{ausformulieren}
