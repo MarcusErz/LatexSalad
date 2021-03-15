@@ -1,15 +1,15 @@
 \newpage
-\section{Netsimile}
+\section{NetSimile}
 \label{sec:ns}
 
 \subsection{Grundlagen}
 \label{ssec:ns-gl}
 
-Netsimile ist ein skalierbarer Algorithmus zur Erkennung von Ähnlichkeiten, sowie Anomalien in Netzwerken unterschiedlicher Größen. Hierfür wird der Datensatz in gleich große Zeitintervalle unterteilt, um die daraus resultierenden Graphen auf unterschiedliche Merkmale zu untersuchen. Die Merkmale sind hierbei strukturelle Eigenschaften der einzelnen Knoten wie bspw. die Dichte eines Knotens oder die Anzahl an Nachbarn in einem Ego-Netzwerk. Die Signatur ergibt sich aus den einzelnen Aggregationen der Knoten wie bspw. der Median aus der Dichte der jeweiligen Knoten. So entsteht bspw. aus sieben Merkmalen und fünf Aggregationen ein Signaturvektor mit 35 verschiedenen Signaturen. So ermöglicht der Signarturvektor die Beschreibung als auch den Vergleich der einzelnen Graphen. Für den Vergleich wird die Canberra Distanz aus den beiden Signaturvektoren zweier zeitlich nebeneinander liegenden Graphen berechnet. \citep[vgl.][S.~1]{Netsimile}
+NetSimile ist ein skalierbarer Algorithmus zur Erkennung von Ähnlichkeiten, sowie Anomalien in Netzwerken unterschiedlicher Größen. Hierfür wird der Datensatz in gleich große Zeitintervalle unterteilt, um die daraus resultierenden Graphen auf unterschiedliche Merkmale zu untersuchen. Die Merkmale sind hierbei strukturelle Eigenschaften der einzelnen Knoten wie bspw. die Dichte eines Knotens oder die Anzahl an Nachbarn in einem Ego-Netzwerk. Die Signatur ergibt sich aus den einzelnen Aggregationen der Knoten wie bspw. der Median aus der Dichte der jeweiligen Knoten. So entsteht bspw. aus sieben Merkmalen und fünf Aggregationen ein Signaturvektor mit 35 verschiedenen Signaturen. So ermöglicht der Signaturvektor die Beschreibung sowie den Vergleich der einzelnen Graphen. Für den Vergleich wird die Canberra Distanz aus den beiden Signaturvektoren zweier zeitlich nebeneinander liegenden Graphen berechnet. \citep[vgl.][S.~1]{Netsimile}
 
 Als Input für diesen Algorithmus wird eine Menge von $k$-anonymisierten Netzwerken mit beliebig unterschiedlichen Größen, die keine überlappenden Knoten oder Kanten besitzen sollten, herangezogen werden. Das Resultat sind Werte für die strukturelle Ähnlichkeit oder Abstands eines jeden Paares der gegebenen Netzwerke bzw. ein Merkmalsvektor für jedes Netzwerk. \citep[vgl.][S.~1]{Netsimile}
 
-Netsimile durchläuft drei Schritte, die im Folgenden erläutert werden.
+NetSimile durchläuft drei Schritte, die im Folgenden erläutert werden.
 
 \subsubsection{Extrahierung von Merkmalen}
 Für jeden Knoten $i$ werden, basierend auf ihren Ego-Netzwerken, die folgenden Merkmale generiert:
@@ -51,7 +51,7 @@ for i in range(len(e_list)):
 
 Dadurch kann der Datensatz zum einen vollständig analysiert werde und zum anderen konnte dadurch ein weiteres Feature hinzugefügt werden, dass durch die fünf verschiedenen Aggregationen den Signaturvektor um diese fünf Werte erweitert.
 
-Dadurch das der Datensatz zuerst eingelesen und in einen Graphen transformiert wird und anschließend aus dem Graphen die jeweiligen Features extrahiert werden, verliert der Algorithmus extrem an Performanz. Des weiteren wird im ersten Schritt der maximale Knoten-Wert als Größe des Graphens übergeben. Wird bspw. für jeden Mitarbeiter eine eigene ID übergeben und die inkrementell erhöht, so kann es sein, dass aus einem Netzwerk mit 20 verschiedenen Knoten ein Graph erzeugt wird, der 1000 Knoten erzeugt, weil eine ID mit dem Wert 1000 vorhanden ist. Dadurch büßt die Performanz an Geschwindigkeit ein, da Iterationen nicht über die 20 Knoten durchgeführt werden, sondern über 1000. Hier muss entweder der Datensatz vorab angepasst werden, indem die IDs neu vergeben werden oder der Algorithmus muss grundlegend neu aufgebaut werden.
+Dadurch das der Datensatz zuerst eingelesen und in einen Graphen transformiert wird und anschließend aus dem Graphen die jeweiligen Features extrahiert werden, verliert der Algorithmus extrem an Performanz. Des weiteren wird im ersten Schritt der maximale Knoten-Wert als Größe des Graphens übergeben. Wird bspw. für jeden Mitarbeiter eine eigene ID übergeben und die inkrementell erhöht, so kann es sein, dass aus einem Netzwerk mit 20 verschiedenen Knoten ein Graph erzeugt wird, der 1000 Knoten erzeugt, weil eine ID mit dem Wert 1000 vorhanden ist. Dadurch büßt die Performanz an Geschwindigkeit ein, da Iterationen nicht über die 20 Knoten durchgeführt werden, sondern über 1000. Hierbei muss entweder der Datensatz vorab angepasst werden, indem die IDs neu vergeben werden oder der Algorithmus muss grundlegend neu aufgebaut werden.
 
 Da der Fokus auf der Anwendung von Zeitreihen liegt, wird die Optimierung erst in diesem Abschnitt erläutert.
 
@@ -63,7 +63,7 @@ Das Problem hierbei ist, dass jeder Knoten eines Graphens die gleichen Features 
 \label{sec:ns-enron}
 
 Da der Enron Datensatz ebenfalls von einem anderen Paper analysiert und veröffentlicht wurde, können die dort erkannten Ausreißer zum Vergleich in Form eines gelabelten Datensatz verwendet werden.
-Betrachtet man in diesem Kontext den Aureißerscore, ist gut zu erkennen, dass der Ausreißer Ende 2001 als alleiniger herausstechender Ausreißer auch im Ergebnis wiederzufinden ist. Grundlegend ist aber auch zu erkennen, dass die Ausreißer sich nur sehr wenig voneinander unterscheiden, wodurch eine Klassifizierung innerhalb des Ausreißerscores sich als schwierig erweist. Die Extrahierung weiterer Features könnte hier eventuell aushelfen, wobei dies nicht im Rahmen dieses Forschungsprojektes behandelt werden soll, da der Fokus auf Zeitreihen liegt. Zwecks Performanz konnte der Datensatz innerhalb von zwei Minuten analysiert werden.
+Betrachtet man in diesem Kontext den Ausreißerscore, ist gut zu erkennen, dass der Ausreißer Ende 2001 als alleiniger herausstechender Ausreißer ebenso im Ergebnis wiederzufinden ist. Grundlegend ist ebenso zu erkennen, dass die Ausreißer sich nur sehr wenig voneinander unterscheiden, wodurch sich eine Klassifizierung innerhalb des Ausreißerscores als schwierig erweist. Die Extrahierung weiterer Features könnte hierbei eventuell aushelfen, wobei dies nicht im Rahmen dieses Forschungsprojektes behandelt werden soll, da der Fokus auf Zeitreihen liegt. Zwecks Performanz konnte der Datensatz innerhalb von zwei Minuten analysiert werden.
 
 \begin{figure}[H]
 	\centering
@@ -126,9 +126,9 @@ So hat bspw. das Feature $|E^{\circ}_{ego(i)}|$ keine Aussagekraft in einem voll
 	\label{img:netsimile:heatmap_1}
 \end{figure}
 
-Somit müssen hier für diese Art von Graphen andere Features extrahiert werden. Außerdem ist die Laufzeit in großen Datensätzen, wie bspw. dem Darpa-Datensatz mit 3h Berechnungszeit nicht gerade performant.
+Somit müssen hierbei, für diese Art von Graphen, andere Features extrahiert werden. Außerdem ist die Laufzeit in großen Datensätzen, wie bspw. dem Darpa-Datensatz mit 3h Berechnungszeit nicht gerade performant.
 
-Aus diesem Grund werden aus dem Netsimile lediglich die Ansätze der Feature Extrahierung übernommen, die Distanzbildung zweier Signaturvektoren, sowie der Threshold für die Ausreißeridentifizierung.
+Aus diesem Grund werden aus dem NetSimile lediglich die Ansätze der Feature Extrahierung übernommen, die Distanzbildung zweier Signaturvektoren, sowie der Threshold für die Ausreißeridentifizierung.
 
 Das heißt die Netzwerke der Zeitreihe werden nicht in ein Graphen Objekt umgewandelt, sondern als Adjazenzmatrix gespeichert. Dadurch können die Features deutlich effizienter berechnet werden. Zudem werden lediglich Features verwendet, die für vollständige Graphen geeignet sind. Dabei werden folgende Features neu eingeführt:
 
@@ -142,7 +142,7 @@ Das heißt die Netzwerke der Zeitreihe werden nicht in ein Graphen Objekt umgewan
 	\item[$|E^{\circ}_{ego(i)}|$]\hfill\\ Geometrischer Mittel 20 Prozent der höchsten Kantengewichte in $ego(i)$. 
 \end{description}
 
-Von diesen Features wurde dann auch den Median, den Mittelwert, die Standardabweichung, die Schiefe, sowie die Kurtosis berechnet. \workTodo{Bin mir nicht sicher zu welchen Elementen die Canbarra Distanz berechnet wird.}. Des Weiteren wurde ein neuer Parameter eingeführt. Über diesen kann gesteuert werden zu wie vielen vorgänger Abschnitten die Distanz berechnet werden soll. Dadurch kann gesteuert werden wie schnell ein Algorithmus vergisst. Eine Auflistung der Parameter des Algorithmus ist in \autoref{table:parmeterNeti} zu sehen.
+Von diesen Features wurde folgend ebenso der Median, der Mittelwert, die Standardabweichung, die Schiefe, sowie die Kurtosis berechnet. \workTodo{Bin mir nicht sicher zu welchen Elementen die Canbarra Distanz berechnet wird.}. Des Weiteren wurde ein neuer Parameter eingeführt. Über diesen kann gesteuert werden zu wie vielen vorgänger Abschnitten die Distanz berechnet werden soll. Dadurch kann gesteuert werden wie schnell ein Algorithmus vergisst. Eine Auflistung der Parameter des Algorithmus ist in \autoref{table:parmeterNeti} zu sehen.
 
 
 Um zu untersuchen, wie gut der Algorithmus funktioniert, wurde er auf Zeitreihen getestet. Als Testdaten   wurden, ein und zweidimensionale Zeitreihen der Numenta Gruppe verwendet. Diese Zeitreihen enthalten verschiedene Ausreißer Typen, auf deren Erkennung der Algorithmus getestet wurde. Die Qualität der Ausreißererkennung wurde  mithilfe eines Punktesystem bewertet. Dabei bedeuteten 0 Punkte, Ausreißer nicht erkannt und 4 Punkte bedeuteten Ausreißer sehr gut erkannt. Die Parameter, welche für die Tests gewählt werden mussten, werden in \autoref{table:parmeterNeti} beschrieben.\\
@@ -164,7 +164,7 @@ Um zu untersuchen, wie gut der Algorithmus funktioniert, wurde er auf Zeitreihen
 		Abweichung & Legt fest ab wann es sich bei einem Abschnitt um einen Ausreißer handelt. Der Parameter wurde für die Tests auf 3 gesetzt. Bedeutet wenn der Ausreißer Score um das dreifache der Standardabweichung vom Durchschnitt abweicht, wird der Abschnitt als Ausreißer gekennzeichnet.\\
 		\bottomrule
 	\end{tabular}
-	\caption{Parameter Netsimile Zeitreihen}
+	\caption{Parameter NetSimile Zeitreihen}
 	\label{table:parmeterNeti}
 \end{table}
 
@@ -205,7 +205,7 @@ Um zu untersuchen, wie gut der Algorithmus funktioniert, wurde er auf Zeitreihen
 		&49min\\
 		\bottomrule
 	\end{tabular}
-	\caption{Ursprünglicher Netsimile Performance}
+	\caption{Ursprünglicher NetSimile Performance}
 	\label{table:performanceNeti}
 \end{table}
 
@@ -235,7 +235,7 @@ Um zu untersuchen, wie gut der Algorithmus funktioniert, wurde er auf Zeitreihen
 		Frequenzänderung & anomaly-art-daily-sequence-change &****& ***\\
 		\bottomrule
 	\end{tabular}
-	\caption{Netsimile Time Series Perfomance}
+	\caption{NetSimile Time Series Perfomance}
 	\label{table:performanceNeti}
 \end{table}
 
@@ -250,7 +250,7 @@ Um zu untersuchen, wie gut der Algorithmus funktioniert, wurde er auf Zeitreihen
 	\label{img:netsimile:anomalie_1}
 \end{figure}
 
-Dadurch ist die Ausreißererkennung von Zeitreihen in Graphen nicht möglich. Fügt man die Gewichtung als weiteres Feature hinzu, wird hier eine erste Betrachtung der Ausreißer möglich. Der Graph 10 wird hier wie erhofft als Ausreißer identifiziert.
+Dadurch ist die Ausreißererkennung von Zeitreihen in Graphen nicht möglich. Fügt man die Gewichtung als weiteres Feature hinzu, wird hierbei eine erste Betrachtung der Ausreißer möglich. Der Graph 10 wird hierbei wie erhofft als Ausreißer identifiziert.
 
 \begin{figure}[H]
 	\centering
