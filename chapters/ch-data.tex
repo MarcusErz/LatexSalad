@@ -23,11 +23,10 @@ Im Rahmen des Forschungsprojekts konnten zwei Datensätze verwendet werden deren 
 
 Der Enron Datensatz enthält die intern versendeten E-Mail Daten von rund 150 Mitarbeitern der Firma Enron. Die Daten wurden von der Federal Energy Regulatory Commission offengelegt. Enthalten sind ca. 50.000 E-Mail-Nachrichten. Für den Algorithmus wird lediglich der Zeitpunkt, an dem eine E-Mail versendet wird, sowie die Sender und Empfänger festgehalten.
 
-Die Messung der Ausreißer erfolgt in zwei Schritten. Zum einen werden Erkenntnisse aus dem Schaubild des SEDANSPOT-Algorithmus gewonnen \workTodo{Quelle eingeben}. 
-Im nächsten Schritt wird die selbe Vorgehensweise wie aus dem SEDANSPOT-Paper gewählt und die ENRON Timeline \workTodo{Quelle einfügen} zur Erhebung von möglichen Auswirkungen für die Ausreißer hinzugezogen.
+Die Messung der Ausreißer erfolgt in zwei Schritten. Zum einen werden Erkenntnisse aus dem Schaubild des SEDANSPOT-Algorithmus \citep{SedanSpot} gewonnen, das in \autoref{chap:ap-data} zu finden ist.  
+Im nächsten Schritt wird die selbe Vorgehensweise wie aus dem SEDANSPOT-Paper gewählt und die Enron-Timeline \workTodo{Quelle einfügen} zur Erhebung von möglichen Auswirkungen für die Ausreißer hinzugezogen.
 
 
 \subsubsection{DARPA}
 
-Der DARPA-Datensatz \citep{DARPA} beinhaltet 4.5 Millionen IP zu IP Kommunikationen zwischen 9.4 Tausend Quell-IP's und 23.3 Tausend Ziel-IP's über einen Zeitraum von 87.7 Tausend Minuten. Jede Kommunikation ist eine gerichtete Kante von der Quell-IP zur Ziel-IP in einem Zeitpunkt. Eine vierte Spalte des Datensatzes ist verfügbar, in der ein \textit{label} enthalten bzw. ein Angriff gekennzeichnet ist. Der DARPA-Datensatz besteht zu über 60\% aus Ausreißern. 
-\workTodo{Quelle zum Datensatz einfügen} 
+Der DARPA-Datensatz \citep{DARPA} beinhaltet 4.5 Millionen IP zu IP Kommunikationen zwischen 9.4 Tausend Quell-IP's und 23.3 Tausend Ziel-IP's über einen Zeitraum von 87.7 Tausend Minuten. Jede Kommunikation ist eine gerichtete Kante von der Quell-IP zur Ziel-IP in einem Zeitpunkt. Eine vierte Spalte des Datensatzes ist verfügbar, in der ein \textit{label} enthalten bzw. ein Angriff gekennzeichnet ist. Der DARPA-Datensatz besteht zu über 60\% aus Ausreißern. \cite{DARPA}

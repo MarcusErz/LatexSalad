@@ -49,9 +49,9 @@ for i in range(len(e_list)):
 	g.add_edge(e_list[i][0], e_list[i][1], weight=e_list[i][2])
 \end{lstlisting}
 
-Dadurch kann der Datensatz zum einen vollständig analysiert werde und zum anderen konnte dadurch ein weiteres Feature hinzugefügt werden, dass durch die fünf verschiedenen Aggregationen den Signaturvektor um diese fünf Werte erweitert.
+Dadurch kann der Datensatz zum einen vollständig analysiert werden und zum anderen konnte dadurch ein weiteres Feature hinzugefügt werden, dass durch die fünf verschiedenen Aggregationen den Signaturvektor um diese fünf Werte erweitert.
 
-Dadurch das der Datensatz zuerst eingelesen und in einen Graphen transformiert wird und anschließend aus dem Graphen die jeweiligen Features extrahiert werden, verliert der Algorithmus extrem an Performanz. Des weiteren wird im ersten Schritt der maximale Knoten-Wert als Größe des Graphens übergeben. Wird bspw. für jeden Mitarbeiter eine eigene ID übergeben und diese ID inkrementell erhöht, so kann es sein, dass aus einem Netzwerk mit 20 verschiedenen Knoten ein Graph erzeugt wird, der 1000 Knoten erzeugt, weil eine ID mit dem Wert 1000 vorhanden ist. Dadurch büßt die Performanz an Geschwindigkeit ein, da Iterationen nicht über die 20 Knoten durchgeführt werden, sondern über 1000. Hierbei muss entweder der Datensatz vorab angepasst werden, indem die IDs neu vergeben werden oder der Algorithmus muss grundlegend neu aufgebaut werden. \workTodo{Jeremy zwecks Kommentar fragen}
+Dadurch das der Datensatz zuerst eingelesen und in einen Graphen transformiert wird und anschließend aus dem Graphen die jeweiligen Features extrahiert werden, verliert der Algorithmus extrem an Performanz. Des weiteren wird im ersten Schritt der maximale Knoten-Wert als Größe des Graphens übergeben. Wird bspw. für jeden Mitarbeiter eine eigene ID übergeben und diese ID inkrementell erhöht, so kann es sein, dass aus einem Netzwerk mit 20 verschiedenen Knoten ein Graph erzeugt wird, der 1000 Knoten erzeugt, weil eine ID mit dem Wert 1000 vorhanden ist. Dadurch büßt die Performanz an Geschwindigkeit ein, da Iterationen nicht über die 20 Knoten durchgeführt werden, sondern über 1000. Hierbei muss entweder der Datensatz vorab angepasst werden, indem die IDs neu vergeben werden oder der Algorithmus muss grundlegend neu aufgebaut werden. Dies wäre grundlegend möglich, da der Algorithmus Graphen als Ausreißer zurück gibt und keine Knoten. 
 
 Da der Fokus auf der Anwendung von Zeitreihen liegt, werden Optimierungen erst im Abschnitt \autoref{sec:ns-ts-1} in Betracht gezogen. 
 
@@ -61,24 +61,18 @@ Da der Fokus auf der Anwendung von Zeitreihen liegt, werden Optimierungen erst i
 \subsubsection{Anwendung auf ENRON-Datensatz}
 \label{sec:ns-enron}
 
-Da der Enron Datensatz ebenfalls von einem anderen Paper analysiert und veröffentlicht wurde, können die dort erkannten Ausreißer zum Vergleich in Form eines gelabelten Datensatz herangezogen werden.
+Da der Enron Datensatz ebenfalls von einem anderen Paper analysiert und veröffentlicht wurde (vgl. \autoref{chap:ap-data}), können die dort erkannten Ausreißer zum Vergleich in Form eines gelabelten Datensatz herangezogen werden.
 Betrachtet man in diesem Kontext den Ausreißerscore, ist gut zu erkennen, dass der Ausreißer Ende 2001 als alleiniger herausstechender Ausreißer ebenso im NetSimile wiederzufinden ist. Grundlegend ist ebenso zu erkennen, dass die Ausreißer sich nur sehr wenig voneinander unterscheiden, wodurch sich eine Klassifizierung innerhalb des Ausreißerscores als schwierig erweist. Die Extrahierung weiterer Features könnte hierbei eventuell aushelfen, wobei dies nicht im Rahmen dieses Forschungsprojektes behandelt werden soll, da der Fokus auf Zeitreihen liegt. Zwecks Performanz konnte der Datensatz innerhalb von zwei Minuten analysiert werden.
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[height=0.6\linewidth,width=\linewidth]{fig/netsimile/anomalie_3}
-	\caption{Ausreißer Score Enron Datensatz}
+	\caption{Ausreißer Score Enron-Datensatz}
 	\label{img:netsimile:anomalie_3}
 \end{figure}
 
-\begin{figure}[H]
-	\centering
-	\includegraphics[height=0.6\linewidth,width=\linewidth]{fig/sedanspot}
-	\caption{\workTodo{Sedanspot Caption}}
-	\label{img:sedanspot}
-\end{figure}
 
-Betrachtet man die Differenz aus dem Durchschnitt der Signaturvektoren und den der Ausreißergraphen in einer Headmap kann man erkennen, dass die Ausreißer vorwiegend durch besonders große Ego-Netzwerke und einer hohen Anzahl an E-Mails verschuldet ist. \workTodo{Betrachtung der Timeline}
+Betrachtet man die Differenz aus dem Durchschnitt der Signaturvektoren und den der Ausreißergraphen in einer Headmap kann man erkennen, dass die Ausreißer vorwiegend durch besonders große Ego-Netzwerke und einer hohen Anzahl an E-Mails verschuldet ist. Vergleicht man die Timeline mit den Ausreißern Daten, erkennt man einen starken Anstieg des Email-Verkehrs im Oktober 2001. Hier wurde von Enron ein Report veröffentlicht über einen Quartals-Verlust von 618 Millionen US-Dollar und einer Reduzierung des Eigenkapitals um 1.2 Milliarde. Im Dezember 2001 erkennt man einen verhältnismäßig geringen Email-Verkehr. Betrachtet man hier die Timeline, so wurden 4000 Mitarbeiter in dieser Zeitspanne entlassen. \workTodo{Quelle die Webseite}
 
 
 
