@@ -177,24 +177,24 @@ Der MIDAS Algorithmus ist lediglich bei einer Zeitreihe dazu in der Lage den Aus
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=0.5\textwidth]{fig/resultsMidasTS/art_daily_jumpsup_MIDAS_hdrei_labeled_result.png}
-	\caption{MIDAS Algorithmus angewandt auf Zeitreihe mit einer erhöten Amplitude.}
+	\caption{MIDAS Algorithmus angewandt auf Zeitreihe mit einer erhöhten Amplitude.}
 	\label{img:midasTSresultJumpsup}
 \end{figure}
 
-Teilweise führen die Ausreißer ebenso zu besonders wenigen Kanten (vgl. \autoref{img:midasTSresultsFlatSeqChange}). Bei diesem Ausreißer Typ sind alle Werte auf der selben Ebene. Dadurch gehen die Kantengewichte gegen Null. Dies führt zu einem sehr kurzen Abschnitt in der Abbildung (Der Abschnitt wurde mit einem Pfeil markiert). \workTodo{Noch Pfeil in Graphik einfügen} Des weiteren ergibt sich durch die Ausreißer eine leicht veränderte Anzahl an Kanten in dem Abschnitt mit dem Ausreißer (vgl. \autoref{img:midasTSresultsFlatSeqChange}). Die Abweichungen sind jedoch so gering, dass es nicht zu einem starken Anstieg des Ausreißer Scores führt.
+Teilweise führen die Ausreißer ebenso zu besonders wenigen Kanten (vgl. \autoref{img:midasTSresultsZykAus}). Bei diesem Ausreißer Typ sind alle Werte auf der selben Ebene. Dadurch gehen die Kantengewichte gegen Null. Dies führt zu einem sehr kurzen Abschnitt in der Abbildung (Der Abschnitt wurde mit einem Pfeil markiert). Des weiteren ergibt sich durch die Ausreißer eine leicht veränderte Anzahl an Kanten in dem Abschnitt mit dem Ausreißer (vgl. \autoref{img:midasTSresultsFreqChange}). Die Abweichungen sind jedoch so gering, dass es nicht zu einem starken Anstieg des Ausreißer Score führt.
 \label{sec:resultTSwithoutMidas}
 
 \begin{figure}[h]
 	\centering
-	\subfloat[Zeitreihe mit Zyklus Aussetzter]{
-		\includegraphics[width=0.5\textwidth]{fig/resultsMidasTS/art_daily_flatmiddle_MIDAS_hdrei_labeled_result.png}}
-	\subfloat[Zeitreihe mit Frequenzänderung]{
+	\subfloat[Zeitreihe mit Zyklus Aussetzter \label{img:midasTSresultsZykAus}]{
+		\includegraphics[width=0.5\textwidth]{fig/resultsMidasTS/flattmiddle_arrows.PNG}}
+	\subfloat[Zeitreihe mit Frequenzänderung \label{img:midasTSresultsFreqChange}]{
 		\includegraphics[width=0.5\textwidth]{fig/resultsMidasTS/anomaly_art_daily_sequence_change_MIDAS_hdrei_labeled_result.png}}
 	\caption{Ausreißer Erkennung in Zeitreihen MIDAS Algorithmus}
-	\label{img:midasTSresultsFlatSeqChange}
+	\label{img:midasTSresultsDontWork}
 \end{figure}
 
-Es wurden außerdem Tests durchgeführt um zu Untersuchen, wie sich der Algorithmus bei veränderter Fenstergröße verhält (vgl. \autoref{img:midasTSresults110}). Bei den Untersuchungen in \autoref{img:midasTSresultJumpsup} und \autoref{img:midasTSresultsFlatSeqChange} wurde einer Fenstergröße von 288 genutzt, was der Saisonalität der Zeitreihe entspricht. Für dieses Experiment wurde einer Fenstergröße von 110 verwendet. Es konnte festgestellt werden, das diese Veränderung keinen zusätzlichen Nutzen erbringt. Allerdings ist der Ausschlag nach oben im Ausreißer Score für die Zeitreihe mit erhöhter Amplitude noch deutlicher zu erkennen. Die anderen Ausreißer Typen werden weiterhin nicht erkannt.
+Es wurden außerdem Tests durchgeführt um zu Untersuchen, wie sich der Algorithmus bei veränderter Fenstergröße verhält (vgl. \autoref{img:midasTSresults110}). Bei den Untersuchungen in \autoref{img:midasTSresultJumpsup} und \autoref{img:midasTSresultsDontWork} wurde einer Fenstergröße von 288 genutzt, was der Saisonalität der Zeitreihe entspricht. Für dieses Experiment wurde einer Fenstergröße von 110 verwendet. Es konnte festgestellt werden, das diese Veränderung keinen zusätzlichen Nutzen erbringt. Allerdings ist der Ausschlag nach oben im Ausreißer Score für die Zeitreihe mit erhöhter Amplitude noch deutlicher zu erkennen. Die anderen Ausreißer Typen werden weiterhin nicht erkannt.
 
 \begin{figure}[h]
 	\centering
@@ -207,8 +207,6 @@ Es wurden außerdem Tests durchgeführt um zu Untersuchen, wie sich der Algorithmu
 \end{figure}
 
 In einem nächsten Schritt wurde untersucht inwiefern der MIDAS-R Algorithmus zu einer Verbesserung bei der Ausreißer Erkennung beitragen kann (vgl. \autoref{img:midasRTSresults}). Der MIDAS-R Algorithmus berücksichtigt bei der Berechnung des Ausreißer Scores für den aktuellen Abschnitt ebenso die Daten aus der jüngsten Vergangenheit(vorangegangene Abschnitte). Aus diesem Grund erhofften wir uns durch den Einsatz des MIDAS-R Algorithmus, dass die Ausschläge zu beginn eines jeden Abschnitts aus bleiben, sodass Ausreißer deutlicher hervortreten. Es konnte festgestellt werden, dass der Ausschlag des Ausreißer Scores zu Beginn der Abschnitte deutlich kleiner ist. Jedoch steigt der Ausreißer Score zum Ende eines jeden Abschnitts wieder an. Es konnte somit keine Signifikante Verbesserung bei der Erkennung von Ausreißern erreicht werden. Insbesondere da der MIDAS-R Algorithmus ebenfalls nur den Ausreißer in der Zeitreihe mit erhöhter Amplitude anzeigt. Somit konnte festgestellt werden, dass die durch den MIDAS-R Algorithmus eingeführten Features ebenso zu keiner Verbesserung der Ergebnisse geführt haben. 
-\workTodo{Vielleicht könnte eine Verbesserung erreicht werden wenn andere Features eingeführt werden würden.}
-
 
 \begin{figure}[h]
 	\centering
