@@ -27,11 +27,13 @@ Das Ziel der vorliegenden Arbeit setzt sich aus den folgenden Teilzielen zusamme
 In diesem Abschnitt werden Ansätze zur Erkennung von Ausreißern in statischen und dynamischen Graphen vorgestellt, die im Rahmen des Forschungsprojekts zur Erreichung der Forschungsziele herangezogen werden.  
 
 Die \textbf{Ausreißererkennung in statischen Graphen} kann hinsichtlich deren Ausreißerkategorien unterteilt werden. So ergibt sich die nachfolgende Taxonomie.
+\workTodo{In Paper von Iso und Percolation sind zwei Algorithmen. Es wird aber so geschrieben wenn nur ein Algorithmus in dem Paper vorgestellt wird.}
+\workTodo{Vorherige Related work auch einfügen. Macht auf jeden Fall Sinn}
 \begin{mldescription}
 	\mlitem{Struktur-basierter Ansatz:} Mithilfe der Darstellung von Knoten und Kanten in einem Ego-Netzwerk werden in \citep{Oddball} die zugehörigen Eigenschaften, wie die Anzahl der Knoten und Kanten, extrahiert. Im Anschluss identifiziert dieser Algorithmus diejenigen Knoten und Kanten, die sich strukturell stark von den restlichen Ego-Netzwerken unterscheidet. 
 	\mlitem{Clustering-basierter Ansatz:} In \citep{SCAN} werden zwei Knoten und die Überschneidung ihrer Nachbarknoten gegenübergestellt. So wird die Annahme getroffen, dass Knoten, die sehr wenige Nachbarn, im Vergleich zum Rest der Knoten in Ihrer Umgebung haben, Ausreißer sind.
-	\mlitem{IsoMap-basierter Ansatz:} Durch die Dimensionsreduktion mithilfe des Algorithmus in \citep{IsoMap} gehen Informationen über Ausreißer verloren. Bei dem Versuch der Rekonstruktion können diese Informationen nicht wiederhergestellt werden. Durch einen anschließenden Vergleich der extrahierten Informationen werden Ausreißer sichtbar.
-	\mlitem{Kanten-basierter Ansatz:} In \citep{Perculation} werden aus einem Graphen schrittweise die Kanten mit den höchsten Gewichten entfernt. Dadurch werden Ausreißer vom Rest des Netzwerks separiert. Die Annahme ist, dass Ausreißer-knoten höhere Kantengewichte zu ihren Nachbarn haben. Der Algorithmus in \citep{RandomWalk} iteriert zufällig über das Netzwerk. Dabei wird festgehalten wie oft ein Knoten besucht wurde. Ausreißer-Knoten werden dabei besonders selten besucht und können somit identifiziert werden. 
+	\mlitem{IsoMap-basierter Ansatz:} Durch die Dimensionsreduktion mithilfe des Algorithmus in \citep{10.3389/fphy.2019.00194} gehen Informationen über Ausreißer verloren. Bei dem Versuch der Rekonstruktion können diese Informationen nicht wiederhergestellt werden. Durch einen anschließenden Vergleich der extrahierten Informationen werden Ausreißer sichtbar.
+	\mlitem{Kanten-basierter Ansatz:} In \citep{10.3389/fphy.2019.00194} werden aus einem Graphen schrittweise die Kanten mit den höchsten Gewichten entfernt. Dadurch werden Ausreißer vom Rest des Netzwerks separiert. Die Annahme ist, dass Ausreißer-knoten höhere Kantengewichte zu ihren Nachbarn haben. Der Algorithmus in \citep{RandomWalk} iteriert zufällig über das Netzwerk. Dabei wird festgehalten wie oft ein Knoten besucht wurde. Ausreißer-Knoten werden dabei besonders selten besucht und können somit identifiziert werden. 
 \end{mldescription}
 
 
@@ -46,5 +48,5 @@ Die \textbf{Ausreißererkennung in dynamischen Graphen} kann hinsichtlich ihres I
 Um die graphen-basierten Algorithmen zur Erkennung von Ausreißern in Zeitreihendaten nutzen zu können, müssen diese Daten in Graphen umgewandelt werden. Hierbei werden Distanzmaße verwendet, um die Qualität der Ausreißererkennung zu verbessern. Im Rahmen des Forschungsprojekt wird somit die \textbf{Nutzung von Distanzmaßen} essenziell. 
 
 \begin{mldescription}
-	\mlitem{Überblick an existierenden Distanzmaßen:} Ein Vergleich der verschiedenen Distanzmaße ist in \citep{Distances} zu finden. Diese werden für die Anwendung auf Wahrscheinlichkeitsdichtefunktionen evaluiert und gruppiert. 
+	\mlitem{Überblick an existierenden Distanzmaßen:} Ein Vergleich der verschiedenen Distanzmaße ist in \citep{DistanceMeasures} zu finden. Diese werden für die Anwendung auf Wahrscheinlichkeitsdichtefunktionen evaluiert und gruppiert. 
 \end{mldescription}
