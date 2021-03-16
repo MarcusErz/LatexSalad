@@ -1,7 +1,7 @@
 \newpage
 \section{MIDAS}
 \label{sec:midas}
-\workTodo{In diesem Kapitel werden grundlegende Themen behandelt, die im Rahmen des Forschungsprojekts zum Verständnis der Ausreißer-Erkennung in Graphen gedient haben.}
+\workTodo{In diesem Kapitel werden grundlegende Themen behandelt, die im Rahmen des Forschungsprojekts zum Verständnis der Ausreißererkennung in Graphen gedient haben.}
 
 
 Erst erklären wie der MIDAS funktioniert. Und zum Laufen gebracht mit Graphen über die Zeit ENRON \& DARPA. Im Anschluss auf Zeitreihendaten angewendet.
@@ -91,6 +91,7 @@ Bei dem MIDAS-R Algorithmus handelt es sich um eine Erweiterung des MIDAS Algori
 \textbf{Temporal Relations: }Durch diesen Ansatz soll der Algorithmus mehr zeitliche Flexibilität erhalten. Dabei sollen Kanten aus der jüngsten Vergangenheit auch in einem neuen Zeitabschnitt berücksichtigt werden. Allerdings reduziert um eine bestimmte Gewichtung. Anstatt die CMS Datenstruktur nach jedem Zeitabschnitt zu reseten, werden die Gewichte hierbei um einen bestimmten Prozentsatz reduziert \citep[vgl.][S.~4]{MIDAS}.
 
 \textbf{Spatial Relations: }Hierbei werden zwei neue Features eingeführt um verschiedene Ausreißer-Typen identifizieren zu können. Die neuen Features werden hierbei in einer CMS Datenstrukturen gespeichert. Der Algorithmus speichert demzufolge diese drei Features:
+\workTodo{Aufzählung vervollständigen}
 
 \begin{description}
 	\item[$ $]\hfill\\ Anzahl an Kanten zwischen Knoten u un Knoten v. Dieses Feature wird auch vom MIDAS Algorithmus verwendet.
@@ -102,9 +103,9 @@ Aus diesen drei Features wird anschließend ein Ausreißer Score abgeleitet.
  \citep[vgl.][S.~5]{MIDAS}
 
 
-\section{Ausreißer-Erkennung in Graphen}
+\section{Ausreißererkennung in Graphen}
 \label{sec:m-ex}
-\workTodo{ausformulieren}
+\workTodo{ausformulieren \& Text vor dem Bild}
 
 \begin{figure}[H]
 	\centering
@@ -122,10 +123,10 @@ Aus diesen drei Features wird anschließend ein Ausreißer Score abgeleitet.
 	\label{img:midas:enron_label}
 \end{figure}
 
-Die Herausforderung geeignete \textit{labels} für die Datensätze zu finden wird in zwei Schritten eingedämmt. 
-
-Zum einen werden Erkenntnisse aus dem Schaubild des SEDANSPOT-Algorithmus gewonnen \workTodo{Quelle eingeben}. Hierbei kann man sehen, dass beide Algorithmen einen ähnlichen Verlauf vorweisen. 
+Vergleicht man die Ergebnisse aus \autoref{img:midas:enron_anomaly} mit den Ergebnissen aus \workTodo{Anhang SEDANSPOT} so kan man sehen, dass beide Algorithmen einen ähnlichen Verlauf vorweisen. 
 Im nächsten Schritt wird die selbe Vorgehensweise wie aus dem SEDANSPOT-Paper gewählt und die ENRON Timeline \workTodo{Quelle einfügen wie bei Datensatz-Kapitel} zur Erhebung von möglichen Auswirkungen für die Ausreißer hinzugezogen.
+
+\workTodo{SEDANSPOT in den Anhang und referenzieren}
 
 Die \autoref{tab:enrontime} bietet eine Übersicht der historischen Ereignisse, die die Ausreißer des MIDAS-Algorithmus erklären. Im Vergleich zum SEDANSPOT-Algorithmus werden mehr Ausreißer erkannt.
   
@@ -158,20 +159,20 @@ Die \autoref{tab:enrontime} bietet eine Übersicht der historischen Ereignisse, d
 
 Bei der Anwendung des MIDAS auf dem DARPA-Datensatz sieht man sehr schön einzelne Ausreißer, die entdeckt wurden. Für diesen Datensatz gibt es, speziell für MIDAS entwickelt, einen \textit{ground truth}, der die \textit{labels} für diesen Datensatz zur Verfügung stellt.
 
-Bei der Berechnung der \dq Area under the Curve \dq\space für die ermittelten Ausreißer-Scores wird ein Wert von $0.9172724836793507$ berechnet. Das bedeutet, dass der MIDAS-Algorithmus mit einer Wahrscheinlichkeit von ca. 91,73\% die Kanten des Datensatzes richtig klassifiziert.  
+Bei der Berechnung der \dq Area under the Curve\dq\space für die ermittelten Ausreißer-Scores wird ein Wert von $0.9172724836793507$ berechnet. Das bedeutet, dass der MIDAS-Algorithmus mit einer Wahrscheinlichkeit von ca. 91,73\% die Kanten des Datensatzes richtig klassifiziert.  
 
 Somit kann festgehalten werden, dass MIDAS ein sehr guter Algorithmus ist bei der Erkennung von Ausreißern in Graphen und eine sehr hohe Genauigkeit erreicht.
 
 \workTodo{Schwierigkeit geeignete Datensätze zu finden, dazu gibt es ein Paper. Wenn man die Anomalyscores als gewichte nimmt, kommen Graphen in Networkx raus in denen man die anomalous nodes identifizieren kann dabei sollten es Edges sein}
 
 
-\section{Ausreißer-Erkennung in Zeitreihen}
+\section{Ausreißererkennung in Zeitreihen}
 \label{sec:resultsOTs}
 \workTodo{Tabelle wie für NetSimile einfügen bzgl. den verschiedenen Numenta-Datensätzen. Bisher nicht dringlich gewesen, da MIDAS schlecht ist und wir das für den abstract nicht benötigen}
 
-Um den MIDAS Algorithmus auf Zeitreihen anwenden zu können muss die Zeitreihe, wie in \autoref{chap:trsnsMidas} beschrieben, zunächst in verschiedene Netzwerke umgewandelt werden. Bei den Tests konnte festgestellt werden, dass der MIDAS Algorithmus nicht dazu in der Lage ist Ausreißer in Zeitreihen zu erkennen. Die vollständigen Ergebnisse der Tests können in \autoref{chap:appendix_midas_ts} eingesehen werden. Hierbei ist jedoch der Verlauf des Ausreißer Scores schwierig zu interpretieren. Es ist zu erkennen, das der Ausreißer-Score zu Beginn eines jeden Abschnitts sehr hoch ist, am Ende des Abschnitts ist der Ausreißer Score hingegen relativ niedrig. Grund hierfür ist, das die Anzahl an Kanten zu Beginn eines Abschnittes im Verhältnis zu der Anzahl an Kanten aus den vorangegangenen Abschnitten deutlich niedriger ist. Im weiteren Verlauf werden weitere Kanten innerhalb des Abschnitts hinzugefügt. Dadurch gleicht sich die Anzahl an Kanten innerhalb der Abschnitte an und der Ausreißer Score sinkt.
+Um den MIDAS-Algorithmus auf Zeitreihen anwenden zu können muss die Zeitreihe, wie in \autoref{chap:trsnsMidas} beschrieben, zunächst in verschiedene Netzwerke umgewandelt werden. Bei den Tests konnte festgestellt werden, dass der MIDAS Algorithmus nicht dazu in der Lage ist Ausreißer in Zeitreihen zu erkennen. Die vollständigen Ergebnisse der Tests können in \autoref{chap:appendix_midas_ts} eingesehen werden. Hierbei ist jedoch der Verlauf des Ausreißer Scores schwierig zu interpretieren. Es ist zu erkennen, das der Ausreißer-Score zu Beginn eines jeden Abschnitts sehr hoch ist, am Ende des Abschnitts ist der Ausreißer Score hingegen relativ niedrig. Grund hierfür ist, das die Anzahl an Kanten zu Beginn eines Abschnittes im Verhältnis zu der Anzahl an Kanten aus den vorangegangenen Abschnitten deutlich niedriger ist. Im weiteren Verlauf werden weitere Kanten innerhalb des Abschnitts hinzugefügt. Dadurch gleicht sich die Anzahl an Kanten innerhalb der Abschnitte an und der Ausreißer Score sinkt.
 
-Der MIDAS Algorithmus ist lediglich bei einer Zeitreihe dazu in der Lage den Ausreißer zu identifizieren. Hierbei handelt es sich um die Zeitreihe mit erhöhter Amplitude (vgl. \autoref{img:midasTSresultJumpsup}). Durch den Ausschlag nach oben in der Zeitreihe entsteht ein Netzwerk, mit sehr hohen Gewichten. Die hohen Gewichte führen zu einer erhöhten Anzahl an Kanten, was schlussendlich zu einem Ausschlag des Ausreißer Scores führt. Die erhöhte Anzahl an Kanten führt ebenfalls dazu das der Abschnitt mit dem Ausreißer in der Abbildung deutlich breiter ist als die anderen. Bei anderen Ausreißer Typen sind die Differenzen zwischen den verschiedenen Elementen der Zeitreihe nicht so groß. Dadurch ergeben sich keinerlei hohe Kantengewichte und der Ausreißer kann nicht erkannt werden.
+Der MIDAS-Algorithmus ist lediglich bei einer Zeitreihe mit erhöhter Amplitude (vgl. \autoref{img:midasTSresultJumpsup}) in der Lage den Ausreißer zu identifizieren. Durch den Ausschlag nach oben in der Zeitreihe entsteht ein Netzwerk, mit sehr hohen Gewichten. Die hohen Gewichte führen zu einer erhöhten Anzahl an Kanten, was schlussendlich zu einem Ausschlag des Ausreißer Scores führt. Die erhöhte Anzahl an Kanten führt ebenfalls dazu das der Abschnitt mit dem Ausreißer in der Abbildung deutlich breiter ist als die anderen. Bei anderen Ausreißer Typen sind die Differenzen zwischen den verschiedenen Elementen der Zeitreihe nicht so groß. Dadurch ergeben sich keinerlei hohe Kantengewichte und der Ausreißer kann nicht erkannt werden.
 
 
 \begin{figure}[h]
@@ -181,6 +182,7 @@ Der MIDAS Algorithmus ist lediglich bei einer Zeitreihe dazu in der Lage den Aus
 	\label{img:midasTSresultJumpsup}
 \end{figure}
 
+\workTodo{versteht Jeremy nicht :D}
 Teilweise führen die Ausreißer ebenso zu besonders wenigen Kanten (vgl. \autoref{img:midasTSresultsFlatSeqChange}). Bei diesem Ausreißer Typ sind alle Werte auf der selben Ebene. Dadurch gehen die Kantengewichte gegen Null. Dies führt zu einem sehr kurzen Abschnitt in der Abbildung (Der Abschnitt wurde mit einem Pfeil markiert). \workTodo{Noch Pfeil in Graphik einfügen} Des weiteren ergibt sich durch die Ausreißer eine leicht veränderte Anzahl an Kanten in dem Abschnitt mit dem Ausreißer (vgl. \autoref{img:midasTSresultsFlatSeqChange}). Die Abweichungen sind jedoch so gering, dass es nicht zu einem starken Anstieg des Ausreißer Scores führt.
 \label{sec:resultTSwithoutMidas}
 

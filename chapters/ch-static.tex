@@ -1,6 +1,7 @@
 \newpage
 \chapter{Statische Algorithmen zur Ausreißer Erkennung}
-In diesem Kapitel werden zunächst zwei statische Algorithmen zur Ausreißer-Erkennung auf unterschiedlichen Datentypen (z.B. Videos, Bilder, Netzwerke) vorgestellt. Hierbei handelt es sich um ein auf Percolation basierender Algorithmus und ein auf IsoMap basierender Algorithmus. Statische Algorithmen kennzeichnet, dass sie nicht mit Daten umgehen könne, welche kontinuierlich an sie übergeben werden. Damit die Algorithmen anwendbar sind, müssen die Daten vollständig und abgeschlossen vorliegen. Eines unserer Hauptziele des Forschungsprojektes war die Ausreißer Erkennung in Zeitreihen, aus diesem Grund haben wir uns in den Experimenten auf diese Art der Daten konzentriert. In \autoref{sec:IsoBased} wird der IsoMap basierte Algorithmus vorgestellt in \autoref{sec:per-intro} wird der Percolation basierte Algorithmus vorgestellt.
+\label{chap:static}
+In diesem Kapitel werden zunächst zwei statische Algorithmen zur Ausreißererkennung auf unterschiedlichen Datentypen (z.B. Videos, Bilder, Netzwerke) vorgestellt. Hierbei handelt es sich um ein auf Percolation basierender Algorithmus und ein auf IsoMap basierender Algorithmus. Statische Algorithmen kennzeichnet, dass sie nicht mit Daten umgehen könne, welche kontinuierlich an sie übergeben werden. Damit die Algorithmen anwendbar sind, müssen die Daten vollständig und abgeschlossen vorliegen. Eines unserer Hauptziele des Forschungsprojektes war die Ausreißer Erkennung in Zeitreihen, aus diesem Grund haben wir uns in den Experimenten auf diese Art der Daten konzentriert. In \autoref{sec:IsoBased} wird der IsoMap basierte Algorithmus vorgestellt in \autoref{sec:per-intro} wird der Percolation basierte Algorithmus vorgestellt.
 
 Beide Algorithmen liefern lediglich einen Ausreißer Score zurück. Um zu bestimmen inwiefern ein Element konkret ein Ausreißer ist, wird zunächst den Mittelwert und die Standardabweichung des Outlier Scores berechnet. Falls ein Element in Abhängigkeit von der Standardabweichung sehr stark vom Mittelwert abweicht wird das Element als Ausreißer klassifiziert.
 
@@ -44,7 +45,7 @@ Mithilfe des IsoMap Algorithmus wurden für jedes Element neue Features ($V^{i} =
 \label{sec:im-implement}
 Für den IsoMap Algorithmus stellt scikit-learn eine sehr gute Implementierung zur Verfügung \citep{sklearnIso}. Diese Implementierung konnten wir gut in unseren Algorithmus integrieren. Es musste lediglich geändert werden, dass auf die Matrix $D_{G}$ zugegriffen werden kann. Dies ist standardmäßig nicht der Fall. Für die Implementierung der weiteren Funktionalität wurde auf Python/NumPy zurückgegriffen. 
 
-\subsection{Ausreißer-Erkennung in Zeitreihen}
+\subsection{Ausreißererkennung in Zeitreihen}
 \label{sec:im-results}
 
 \begin{table}
