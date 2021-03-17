@@ -1,32 +1,36 @@
 \newpage
 \chapter{Datensätze}
 
-In dieser Ausarbeitung wurden mehrere Datensätze genutzt, um verschiedene Algorithmen auf ihre Leistungsfähigkeit zu testen. Nachfolgend werden, in diesem Kapitel, die dabei verwendeten Datensätze vorgestellt. In \autoref{sec:numTS} werden Zeitreihen-Datensätze und in \autoref{sec:netData} werden Netzwerk-Datensätze erläutert. 
+In dieser Ausarbeitung wurden mehrere Datensätze genutzt, um verschiedene Algorithmen auf ihre Leistungsfähigkeit zu testen. Nachfolgend werden in diesem Kapitel die dabei verwendeten Datensätze vorgestellt. In \autoref{sec:numTS} werden Zeitreihen-Datensätze und in \autoref{sec:netData} werden Netzwerk-Datensätze erläutert. 
 
-\section{Numenta Zeitreihen Daten \label{sec:numTS}}
-Der Numenta Datensatz besteht aus einer Reihe an künstlich erzeugten Zeitreihen, die unterschiedliche Arten von Ausreißern simulieren. Durch die Daten wird es möglich eine qualitative Aussage über die Fähigkeiten der Algorithmen zu treffen. Für die Tests auf multivariaten Zeitreihen wurden neue Zeitreihen erzeugt. Dabei wurde für die erste Dimension eine Zeitreihe der Numenta Gruppe verwendet. Für höhere Dimensionen wurde auf eine Zeitreihe ohne Ausreißer zurück gegriffen \cite{AHMAD2017134}.
+\section{Numenta-Zeitreihendaten}
+\label{sec:numTS}
+
+Der Numenta-Datensatz besteht aus einer Reihe an künstlich erzeugten Zeitreihen, die unterschiedliche Arten von Ausreißern simulieren. Durch die Daten wird es möglich eine qualitative Aussage über die Fähigkeiten der Algorithmen zu treffen. Für die Tests auf multivariaten Zeitreihen wurden neue Zeitreihen erzeugt. Dabei wurde für die erste Dimension eine Zeitreihe der Numenta-Gruppe verwendet. Für höhere Dimensionen wurde auf eine Zeitreihe ohne Ausreißer zurückgegriffen \citep{AHMAD2017134}.
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=10cm]{fig/numentaExample.PNG}
-	\caption{Beispielzeitreihe Numenta \cite{AHMAD2017134}}
+	\caption{Illustration einer Numenta-Zeitreihe\cite{AHMAD2017134}}
 	\label{img:numentaTS}
 \end{figure}
 
 
-\section{Netzwerk-Datensätze \label{sec:netData}}
-Zwischen den Forschungsgruppen, welche sich mit der Ausreißer-Erkennung in Netzwerken beschäftigen, herrscht große Konkurrenz. Aus diesem Grund werden gelabelte Datensätze häufig zurück gehalten. Dadurch wollen die Forscher verhindern, dass sie ihren Wettbewerbsvorteil gegenüber anderen verlieren \cite{Problematik}. \workTodo{Paper finden und Quelle einfügen zu dieser Problematik} Aus diesem Grund ist es schwer geeignete Datensätze zu finden. Mit dem Enron und Darpa Datensatz konnten dennoch zwei passende Datensätze identifiziert werden. Diese Datensätze werden im Folgenden vorgestellt.
+\section{Netzwerk-Datensätze}
+\label{sec:netData}
+
+Zwischen den Forschungsgruppen, welche sich mit der Ausreißererkennung in Netzwerken beschäftigen, herrscht große Konkurrenz. Aus diesem Grund werden gelabelte Datensätze häufig zurückgehalten. Dadurch wollen die Forscher verhindern, dass sie ihren Wettbewerbsvorteil gegenüber anderen verlieren \cite{Problematik}. \workTodo{Paper finden und Quelle einfügen zu dieser Problematik} Aus diesem Grund ist es schwer geeignete Datensätze zu finden. Mit dem Enron- und Darpa-Datensatz konnten dennoch zwei passende Datensätze identifiziert werden. Diese Datensätze werden im Folgenden vorgestellt.
  
 \subsubsection{Enron}
 
 \workTodo{Quelle einfügen?}
-\workTodo{Durchgelesen ob ich das sinngemäß wieder gegeben habe.}
+
 Der Enron Datensatz enthält die intern versendeten E-Mail Daten von rund 150 Mitarbeitern der Firma Enron. Die Daten wurden von der Federal Energy Regulatory Commission offengelegt. Enthalten sind ca. 50.000 E-Mail-Nachrichten. Für den Algorithmus wird lediglich der Zeitpunkt, an dem eine E-Mail versendet wird, sowie die Sender und Empfänger festgehalten.
 
-Für den Enron Datensatz stehen keine Labels zur Verfügung. Jedoch war es Möglich Informationen über potenzielle Ausreißer aus einer anderen Quellen zu entnehmen. Dazu kann einerseits auf die Ausreißer zurück gegriffen werden, welche der SEDANSPOT-Algorithmus erkannt hat. Diese wurden in einem Schaubild dargestellt \cite{SEDANSPOT} \workTodo{Quelle eingeben}. Außerdem wird im SEDANSPOT-Paper eine ENRON Timeline dargestellt, diese enthält ebenfalls Informationen über mögliche Ausreißer \cite{SEDANSPOT} \workTodo{Quelle einfügen}.
+Für den Enron Datensatz stehen keine Labels zur Verfügung. Jedoch war es möglich Informationen über potenzielle Ausreißer aus einer anderen Quellen zu entnehmen. Dazu kann einerseits auf die Ausreißer zurück gegriffen werden, die der SedanSpot-Algorithmus erkannt hat. Diese wurden in einem Schaubild dargestellt \cite{SedanSpot}. Außerdem vergleichen die Autoren des SedanSpot-Algorithmus ihre Ausreißer mit der offiziellen Enron-Zeitleiste. Diese enthält ebenfalls Informationen über mögliche historische Gründe für die Ausreißer \cite{EnronTimeline}.
 
 
 \subsubsection{DARPA}
 
-Der DARPA-Datensatz \citep{DARPA} beinhaltet 4.5 Millionen IP zu IP Kommunikationen zwischen 9.4 Tausend Quell-IP's und 23.3 Tausend Ziel-IP's über einen Zeitraum von 87.7 Tausend Minuten. Jede Kommunikation ist eine gerichtete Kante von der Quell-IP zur Ziel-IP in einem Zeitpunkt. Eine vierte Spalte des Datensatzes ist verfügbar, in der ein \textit{label} enthalten bzw. ein Angriff gekennzeichnet ist. Der DARPA-Datensatz besteht zu über 60\% aus Ausreißern. 
+Der DARPA-Datensatz \citep{DARPA} beinhaltet 4.5 Millionen IP-zu-IP-Kommunikationen zwischen 9.400 Quell-IP's und 23.300 Ziel-IP's über einen Zeitraum von 87.700 Minuten. Jede Kommunikation ist eine gerichtete Kante von der Quell-IP zur Ziel-IP in einem Zeitpunkt. Eine vierte Spalte des Datensatzes ist verfügbar, in der ein \textit{label} enthalten bzw. ein Angriff gekennzeichnet ist. Der DARPA-Datensatz besteht zu über 60\% aus Ausreißern. 
 \workTodo{Quelle zum Datensatz einfügen} 
