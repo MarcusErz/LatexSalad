@@ -49,37 +49,30 @@ for i in range(len(e_list)):
 	g.add_edge(e_list[i][0], e_list[i][1], weight=e_list[i][2])
 \end{lstlisting}
 
-Dadurch kann der Datensatz zum einen vollständig analysiert werde und zum anderen konnte dadurch ein weiteres Feature hinzugefügt werden, dass durch die fünf verschiedenen Aggregationen den Signaturvektor um diese fünf Werte erweitert.
+Dadurch kann der Datensatz zum einen vollständig analysiert werden und zum anderen konnte dadurch ein weiteres Feature hinzugefügt werden, dass durch die fünf verschiedenen Aggregationen den Signaturvektor um diese fünf Werte erweitert.
 
-Dadurch das der Datensatz zuerst eingelesen und in einen Graphen transformiert wird und anschließend aus dem Graphen die jeweiligen Features extrahiert werden, verliert der Algorithmus extrem an Performanz. Des weiteren wird im ersten Schritt der maximale Knoten-Wert als Größe des Graphens übergeben. Wird bspw. für jeden Mitarbeiter eine eigene ID übergeben und die inkrementell erhöht, so kann es sein, dass aus einem Netzwerk mit 20 verschiedenen Knoten ein Graph erzeugt wird, der 1000 Knoten erzeugt, weil eine ID mit dem Wert 1000 vorhanden ist. Dadurch büßt die Performanz an Geschwindigkeit ein, da Iterationen nicht über die 20 Knoten durchgeführt werden, sondern über 1000. Hierbei muss entweder der Datensatz vorab angepasst werden, indem die IDs neu vergeben werden oder der Algorithmus muss grundlegend neu aufgebaut werden.
+Dadurch das der Datensatz zuerst eingelesen und in einen Graphen transformiert wird und anschließend aus dem Graphen die jeweiligen Features extrahiert werden, verliert der Algorithmus extrem an Performanz. Des weiteren wird im ersten Schritt der maximale Knoten-Wert als Größe des Graphens übergeben. Wird bspw. für jeden Mitarbeiter eine eigene ID übergeben und diese ID inkrementell erhöht, so kann es sein, dass aus einem Netzwerk mit 20 verschiedenen Knoten ein Graph erzeugt wird, der 1000 Knoten erzeugt, weil eine ID mit dem Wert 1000 vorhanden ist. Dadurch büßt die Performanz an Geschwindigkeit ein, da Iterationen nicht über die 20 Knoten durchgeführt werden, sondern über 1000. Hierbei muss entweder der Datensatz vorab angepasst werden, indem die IDs neu vergeben werden oder der Algorithmus muss grundlegend neu aufgebaut werden. Dies wäre grundlegend möglich, da der Algorithmus Graphen als Ausreißer zurück gibt und keine Knoten. 
 
-Da der Fokus auf der Anwendung von Zeitreihen liegt, wird die Optimierung erst in diesem Abschnitt erläutert.
+Da der Fokus auf der Anwendung von Zeitreihen liegt, werden Optimierungen erst im Abschnitt \autoref{sec:ns-ts-1} in Betracht gezogen. 
 
 
 
-Das Problem hierbei ist, dass jeder Knoten eines Graphens die gleichen Features beinhalten würde. Dadurch würden die Aggregationen überflüssig werden und der Signaturvektor auf sieben Features schrumpfen. Die Bildung von Cluster-Features wäre demnach nur noch bedingt möglich und die Betrachtung an Nachbarn, unabhängig ob im Ego-Netzwerk oder im gesamten Netzwerk würde sich die Gesamtanzahl an Knoten annähern. Im Folgenden wird das Verhältnis der Features zum Durchschnitt dargestellt.
 
 \subsubsection{Anwendung auf ENRON-Datensatz}
 \label{sec:ns-enron}
 
-Da der Enron Datensatz ebenfalls von einem anderen Paper analysiert und veröffentlicht wurde, können die dort erkannten Ausreißer zum Vergleich in Form eines gelabelten Datensatz verwendet werden.
-Betrachtet man in diesem Kontext den Ausreißerscore, ist gut zu erkennen, dass der Ausreißer Ende 2001 als alleiniger herausstechender Ausreißer ebenso im Ergebnis wiederzufinden ist. Grundlegend ist ebenso zu erkennen, dass die Ausreißer sich nur sehr wenig voneinander unterscheiden, wodurch sich eine Klassifizierung innerhalb des Ausreißerscores als schwierig erweist. Die Extrahierung weiterer Features könnte hierbei eventuell aushelfen, wobei dies nicht im Rahmen dieses Forschungsprojektes behandelt werden soll, da der Fokus auf Zeitreihen liegt. Zwecks Performanz konnte der Datensatz innerhalb von zwei Minuten analysiert werden.
+Da der Enron Datensatz ebenfalls von einem anderen Paper analysiert und veröffentlicht wurde (vgl. \autoref{chap:ap-data}), können die dort erkannten Ausreißer zum Vergleich in Form eines gelabelten Datensatz herangezogen werden.
+Betrachtet man in diesem Kontext den Ausreißerscore, ist gut zu erkennen, dass der Ausreißer Ende 2001 als alleiniger herausstechender Ausreißer ebenso im NetSimile wiederzufinden ist. Grundlegend ist ebenso zu erkennen, dass die Ausreißer sich nur sehr wenig voneinander unterscheiden, wodurch sich eine Klassifizierung innerhalb des Ausreißerscores als schwierig erweist. Die Extrahierung weiterer Features könnte hierbei eventuell aushelfen, wobei dies nicht im Rahmen dieses Forschungsprojektes behandelt werden soll, da der Fokus auf Zeitreihen liegt. Zwecks Performanz konnte der Datensatz innerhalb von zwei Minuten analysiert werden.
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[height=0.6\linewidth,width=\linewidth]{fig/netsimile/anomalie_3}
-	\caption{Ausreißer Score Enron Datensatz}
+	\caption{Ausreißer Score Enron-Datensatz}
 	\label{img:netsimile:anomalie_3}
 \end{figure}
 
-\begin{figure}[H]
-	\centering
-	\includegraphics[height=0.6\linewidth,width=\linewidth]{fig/sedanspot}
-	\caption{\workTodo{Sedanspot Caption}}
-	\label{img:sedanspot}
-\end{figure}
 
-Betrachtet man die Differenz aus dem Durchschnitt der Signaturvektoren und den der Ausreißergraphen in einer Headmap kann man erkennen, dass die Ausreißer vorwiegend durch besonders große Ego-Netzwerke und einer hohen Anzahl an E-Mails verschuldet ist.
+Betrachtet man die Differenz aus dem Durchschnitt der Signaturvektoren und den der Ausreißergraphen in einer Headmap kann man erkennen, dass die Ausreißer vorwiegend durch besonders große Ego-Netzwerke und einer hohen Anzahl an E-Mails verschuldet ist. Vergleicht man die Timeline mit den Ausreißern Daten, erkennt man einen starken Anstieg des Email-Verkehrs im Oktober 2001. Hier wurde von Enron ein Report veröffentlicht über einen Quartals-Verlust von 618 Millionen US-Dollar und einer Reduzierung des Eigenkapitals um 1.2 Milliarde. Im Dezember 2001 erkennt man einen verhältnismäßig geringen Email-Verkehr. Betrachtet man hier die Timeline, so wurden 4000 Mitarbeiter in dieser Zeitspanne entlassen. \workTodo{Quelle die Webseite}
 
 
 
@@ -119,9 +112,9 @@ Wird der Algorithmus auf Zeitreihen anwendet, entsteht folgendes Problem. Bei de
 
 So hat bspw. das Feature $|E^{\circ}_{ego(i)}|$ keine Aussagekraft in einem vollständigen Graphen, da jeder Knoten die gleiche Anzahl Kanten in seinem Ego-Netzwerk aufweist. Subtrahiert man also vom durchschnittlichen Signaturvektor aller Graphen die einzelnen Signaturvektoren, so erkennt man den Wert 0 in allen Headmaps.
 
-Somit müssen hierbei für diese Art von Graphen andere Features extrahiert werden. Außerdem ist die Laufzeit in großen Datensätzen, wie bspw. dem Darpa-Datensatz mit 3h Berechnungszeit nicht gerade performant.
+Somit müssen hierbei für vollständige Graphen andere Features extrahiert werden. Außerdem ist die Laufzeit in großen Datensätzen, wie bspw. dem Darpa-Datensatz mit 3h Berechnungszeit nicht gerade performant.
 
-Aus diesem Grund werden aus dem NetSimile lediglich die Ansätze der Feature Extrahierung übernommen, die Distanzbildung zweier Signaturvektoren, sowie der Threshold für die Ausreißeridentifizierung.
+Aus diesem Grund werden aus dem NetSimile lediglich die Ansätze der Feature-Extrahierung, die Distanzbildung zweier Signaturvektoren, sowie der Threshold für die Ausreißeridentifizierung übernommen
 
 Das heißt die Netzwerke der Zeitreihe werden nicht in ein Graphen Objekt umgewandelt, sondern als Adjazenzmatrix gespeichert. Dadurch können die Features deutlich effizienter berechnet werden. Zudem werden lediglich Features verwendet, die für vollständige Graphen geeignet sind. Dabei werden folgende Features neu eingeführt:
 
@@ -142,7 +135,7 @@ Das heißt die Netzwerke der Zeitreihe werden nicht in ein Graphen Objekt umgewan
 	\item[$\frac{1}{n}\sum_{i=1}^{n} x_i$]\hfill\\ Geometrisches Mittel der Kanten mit den 20\% höchsten Kantengewichten. 
 \end{description}
 
-Von diesen Features wurde dann auch den Median, den Mittelwert, die Standardabweichung, die Schiefe, sowie die Kurtosis berechnet. Dadurch konnten erste Ausreißer in der Zeitreihe gefunden werden (vgl. \autoref{img:netsimile:anomalie_2}).
+Auf diesen Features wurden anschließend die bisherigen Aggregation durchgeführt. Dadurch konnten erste Ausreißer in der Zeitreihe gefunden werden (vgl. \autoref{img:netsimile:anomalie_2}).
 
 \begin{figure}[H]
 	\centering
@@ -186,7 +179,7 @@ Um zu untersuchen, wie gut der Algorithmus funktioniert, wurde er auf Zeitreihen
 	\label{table:performanceNeti}
 \end{table}
 
-\autoref{table:performanceNeti} zeigt die Ergebnisse der Tests. Es ist zu erkennen, dass die Qualität der Ausreißer-Erkennung im eindimensionalen Fall sehr gut ist. Lediglich einzelne Peaks können durch den Algorithmus nicht als Ausreißer identifiziert werden. Außerdem wird bei Signal Drifts und der kontinuierlichen Zunahme der Amplitude lediglich der Anfang des Ausreißers detektiert. Aus diesem Grund wurde eine Bewertung mit drei Sternen vergeben. Bei der Betrachtung der Graphiken in \autoref{sec:appendix_net_one} und \autoref{sec:appendix_net_two} ist zu erkennen, dass das sechste oder siebte Intervall der Zeitreihe häufig als Ausreißer markiert wird. Der Grund hierfür ist, das bei einer Fenstergröße von fünf für die ersten fünf Abschnitte kein Ausreißer Score berechnet wird. Dadurch ist die Standardabweichung zu Beginn sehr niedrig wodurch Abschnitte schnell als Ausreißer gekennzeichnet werden. Dieser Umstand wurde bei der Bewertung in \autoref{table:performanceNeti} nicht berücksichtigt. Im zweidimensionalen Fall ist die Qualität der Ausreißer-Erkennung etwas durchwachsener. Auffallend ist, dass Zyklen mit höherer und niedriger Amplitude nicht als Ausreißer erkannt werden. Insbesondere ist dies auffällig, da diese Ausreißer Typen üblicherweise zuverlässig erkannt werden (vgl. \autoref{sec:rw-gl}).  Außerdem ist der Algorithmus im zweidimensionalen Fall nicht mehr dazu in der Lage Signal Drifts zu erkennen. Andere Ausreißer Typen können durch den Algorithmus weiterhin erkannt werden, jedoch oftmals nicht mit der selben Qualität. 
+\autoref{table:performanceNeti} zeigt die Ergebnisse der Tests. Es ist zu erkennen, dass die Qualität der Ausreißererkennung im eindimensionalen Fall sehr gut ist. Lediglich einzelne Peaks können durch den Algorithmus nicht als Ausreißer identifiziert werden. Außerdem wird bei Signal Drifts und der kontinuierlichen Zunahme der Amplitude lediglich der Anfang des Ausreißers detektiert. Aus diesem Grund wurde eine Bewertung mit drei Sternen vergeben. Bei der Betrachtung der Graphiken in \autoref{sec:appendix_net_one} \workTodo{richtige Referenz einfügen} und \autoref{sec:appendix_net_two} ist zu erkennen, dass das sechste oder siebte Intervall der Zeitreihe häufig als Ausreißer markiert wird. Der Grund hierfür ist, das bei einer Fenstergröße von fünf für die ersten fünf Abschnitte kein Ausreißer Score berechnet wird. Dadurch ist die Standardabweichung zu Beginn sehr niedrig wodurch Abschnitte schnell als Ausreißer gekennzeichnet werden. Dieser Umstand wurde bei der Bewertung in \autoref{table:performanceNeti} nicht berücksichtigt. Im zweidimensionalen Fall ist die Qualität der Ausreißererkennung etwas durchwachsener. Auffallend ist, dass Zyklen mit höherer und niedriger Amplitude nicht als Ausreißer erkannt werden. Insbesondere ist dies auffällig, da diese Ausreißer Typen üblicherweise zuverlässig erkannt werden (vgl. \autoref{sec:rw-gl}).  Außerdem ist der Algorithmus im zweidimensionalen Fall nicht mehr dazu in der Lage Signal Drifts zu erkennen. Andere Ausreißer Typen können durch den Algorithmus weiterhin erkannt werden, jedoch oftmals nicht mit der selben Qualität. 
 
 \begin{table}[H]
 	\centering
@@ -206,7 +199,6 @@ Um zu untersuchen, wie gut der Algorithmus funktioniert, wurde er auf Zeitreihen
 \end{table}
 
 
-\workTodo{Die beiden Tabellen zusammenführen}
 %\begin{table}[H]
 %	\centering
 %	\begin{tabular}{p{0.18\linewidth}|p{0.19\linewidth}|P{0.05\linewidth}|p{0.35\linewidth}|p{0.09\linewidth}}
@@ -246,10 +238,8 @@ Um zu untersuchen, wie gut der Algorithmus funktioniert, wurde er auf Zeitreihen
 %	\label{table:performanceNeti}
 %\end{table}
 
-\workTodo{Die Bilder noch einordnen bspw. im Anhang. Im Text darauf verweisen. }
-
-Dadurch ist die Ausreißererkennung von Zeitreihen in Graphen nicht möglich. Fügt man die Gewichtung als weiteres Feature hinzu, wird hier eine erste Betrachtung der Ausreißer möglich. Der Graph 10 wird hier wie erhofft als Ausreißer identifiziert.
 
 
-\workTodo{bis hierhin gilt der letzte Kommentar}
+
+
 
