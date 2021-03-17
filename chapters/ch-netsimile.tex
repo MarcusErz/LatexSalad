@@ -1,29 +1,45 @@
 \newpage
 \section{NetSimile}
 \label{sec:ns}
-
+In \autoref{ssec:ns-gl} werden die Grundlagen des NetSimile-Algorithmus näher erläutert und in den Abschnitten \autoref{sec:ns-ext} und \autoref{sec:ns-ts-1} die Testergebnisse vorgestellt.
 \subsection{Grundlagen}
 \label{ssec:ns-gl}
 
-NetSimile ist ein skalierbarer Algorithmus zur Erkennung von Ähnlichkeiten, sowie Anomalien in Netzwerken unterschiedlicher Größen. Hierfür wird der Datensatz in gleich große Zeitintervalle unterteilt, um die daraus resultierenden Graphen auf unterschiedliche Merkmale zu untersuchen. Die Merkmale sind hierbei strukturelle Eigenschaften der einzelnen Knoten wie bspw. die Dichte eines Knotens oder die Anzahl an Nachbarn in einem Ego-Netzwerk. Die Signatur ergibt sich aus den einzelnen Aggregationen der Knoten wie bspw. der Median aus der Dichte der jeweiligen Knoten. So entsteht bspw. aus sieben Merkmalen und fünf Aggregationen ein Signaturvektor mit 35 verschiedenen Signaturen. So ermöglicht der Signaturvektor die Beschreibung sowie den Vergleich der einzelnen Graphen. Für den Vergleich wird die Canberra Distanz aus den beiden Signaturvektoren zweier zeitlich nebeneinander liegenden Graphen berechnet. \citep[vgl.][S.~1]{Netsimile}
-
-Als Input für diesen Algorithmus wird eine Menge von $k$-anonymisierten Netzwerken mit beliebig unterschiedlichen Größen, die keine überlappenden Knoten oder Kanten besitzen sollten, herangezogen werden. Das Resultat sind Werte für die strukturelle Ähnlichkeit oder Abstands eines jeden Paares der gegebenen Netzwerke bzw. ein Merkmalsvektor für jedes Netzwerk. \citep[vgl.][S.~1]{Netsimile}
-
-NetSimile durchläuft drei Schritte, die im Folgenden erläutert werden.
-
+NetSimile ist ein skalierbarer Algorithmus zur Erkennung von Ähnlichkeiten, sowie Anomalien, in Netzwerken unterschiedlicher Größen. Hierfür wird der Datensatz in gleich große Zeitintervalle unterteilt, um die daraus resultierenden Graphen auf unterschiedliche Merkmale zu untersuchen. Die Merkmale sind hierbei strukturelle Eigenschaften der einzelnen Knoten wie bspw. die Dichte eines Knotens oder die Anzahl an Nachbarn in einem Ego-Netzwerk. Die Signatur ergibt sich aus den einzelnen Aggregationen der Knoten wie bspw. dem Median aus der Dichte der jeweiligen Knoten. So entsteht bspw. aus sieben Merkmalen und fünf Aggregationen ein Signaturvektor mit 35 verschiedenen Signaturen. So ermöglicht der Signaturvektor die Beschreibung sowie den Vergleich der einzelnen Graphen. Für den Vergleich wird die Canberra-Distanz aus den beiden Signaturvektoren zweier zeitlich nebeneinander liegenden Graphen berechnet. \citep[vgl.][S.~1]{Netsimile} Als Input für diesen Algorithmus wird eine Menge von $k$-anonymisierten Netzwerken mit beliebig unterschiedlichen Größen, die keine überlappenden Knoten oder Kanten besitzen, herangezogen. Das Resultat sind Werte für die strukturelle Ähnlichkeit oder Abstands eines jeden Paares der gegebenen Netzwerke bzw. ein Merkmalsvektor für jedes Netzwerk. \citep[vgl.][S.~1]{Netsimile} NetSimile durchläuft drei Schritte, die im Folgenden erläutert werden.
 \subsubsection{Extrahierung von Merkmalen}
 Für jeden Knoten $i$ werden, basierend auf ihren Ego-Netzwerken, die folgenden Merkmale generiert:
+\begin{table}[H]
+	\centering
+	\begin{tabular}{p{0.13\linewidth}|p{0.8\linewidth}}
+		\toprule
+		$\overline{d}_i = |N(i)|$ & Die Anzahl der Nachbarn (\dah Grad) von Knoten $i$, wobei $N(i)$ die Nachbarn von Knoten $i$ beschreibt.\\
+		\midrule
+		$\overline{c}_i$ & Der Clustering-Koeffizient von Knoten $i$, der als die Anzahl von Dreiecken, die mit Knoten $i$ verbunden sind, über die Anzahl von verbundenen Dreiecken, die auf Knoten $i$ zentriert sind, definiert ist. \\
+		\midrule
+		$d_{N(i)}$ & Die durchschnittliche Anzahl der Nachbarn von Knoten $i$, die zwei Schritte entfernt sind. Dieser wird berechnet als \workTodo{Paper Seite 2 unten Formel einfügen} \\
+		\midrule
+		$c_{N(i)}$ & Der durchschnittliche Clustering-Koeffizient von $N(i)$, der als \workTodo{Paper Seite 2 unten Formel einfügen} berechnet wird. \\
+		\midrule
+		$|E_{ego(i)}|$ &  Die Anzahl der Kanten im Ego-Netzwerk vom Knoten $i$, wobei $ego(i)$ das Ego-Netzwerk von $i$ zurückgibt. \\
+		\midrule
+		$|E^{\circ}_{ego(i)}|$ & Die Anzahl der von $ego(i)$ ausgehenden Kanten. \\
+		\midrule
+		$|N(ego(i))|$ & Die Anzahl von Nachbarn von $ego(i)$. \\
+		\bottomrule
+	\end{tabular}
+	\caption{Inhalte des Merkmalsvektors}
+	\label{tab:netfeat}
+\end{table}
 
-
-\begin{description}
-	\item[$\overline{d}_i = |N(i)|$]\hfill\\ Die Anzahl der Nachbarn (d.h. Grad) von Knoten $i$, wobei $N(i)$ die Nachbarn von Knoten $i$ beschreibt.
-	\item[$\overline{c}_i$]\hfill\\ Der Clustering-Koeffizient von Knoten $i$, der als die Anzahl von Dreiecken, die mit Knoten $i$ verbunden sind, über die Anzahl von verbundenen Dreiecken, die auf Knoten $i$ zentriert sind, definiert ist.
-	\item[$d_{N(i)}$]\hfill\\ Die durchschnittliche Anzahl der Nachbarn von Knoten $i$, die zwei Schritte entfernt sind. Dieser wird berechnet als \workTodo{Paper Seite 2 unten Formel einfügen}
-	\item[$c_{N(i)}$]\hfill\\ Der durchschnittliche Clustering-Koeffizient von $N(i)$, der als \workTodo{Paper Seite 2 unten Formel einfügen} berechnet wird.
-	\item[$|E_{ego(i)}|$]\hfill\\ Die Anzahl der Kanten im Ego-Netzwerk vom Knoten $i$, wobei $ego(i)$ das Ego-Netzwerk von $i$ zurückgibt.
-	\item[$|E^{\circ}_{ego(i)}|$]\hfill\\ Die Anzahl der von $ego(i)$ ausgehenden Kanten. 
-	\item[$|N(ego(i))|$]\hfill\\ Die Anzahl von Nachbarn von $ego(i)$. 
-\end{description}
+%\begin{mldescription}
+%	\mlitem{$\overline{d}_i = |N(i)|$} Die Anzahl der Nachbarn (d.h. Grad) von Knoten $i$, wobei $N(i)$ die Nachbarn von Knoten $i$ beschreibt.
+%	\mlitem{$\overline{c}_i$} Der Clustering-Koeffizient von Knoten $i$, der als die Anzahl von Dreiecken, die mit Knoten $i$ verbunden sind, über die Anzahl von verbundenen Dreiecken, die auf Knoten $i$ zentriert sind, definiert ist.
+%	\mlitem{$d_{N(i)}$} Die durchschnittliche Anzahl der Nachbarn von Knoten $i$, die zwei Schritte entfernt sind. Dieser wird berechnet als \workTodo{Paper Seite 2 unten Formel einfügen}
+%	\mlitem{$c_{N(i)}$} Der durchschnittliche Clustering-Koeffizient von $N(i)$, der als \workTodo{Paper Seite 2 unten Formel einfügen} berechnet wird.
+%	\mlitem{$|E_{ego(i)}|$} Die Anzahl der Kanten im Ego-Netzwerk vom Knoten $i$, wobei $ego(i)$ das Ego-Netzwerk von $i$ zurückgibt.
+%	\mlitem{$|E^{\circ}_{ego(i)}|$} Die Anzahl der von $ego(i)$ ausgehenden Kanten. 
+%	\mlitem{$|N(ego(i))|$}  Die Anzahl von Nachbarn von $ego(i)$. 
+%\end{mldescription}
 
 \subsubsection{Aggregierung von Merkmalen}
 Im nächsten Schritt wird für jeden Graphen \textit{$G_j$} eine $Knoten \times Merkmal$-Matrix $F_{G_j}$ zusammengefasst. Dieser besteht aus den Merkmalsvektoren aus Schritt 1.
@@ -32,47 +48,44 @@ Da der Vergleich von $k$-ten $F_{G_j}$ sehr aufwändig ist, wird für jede $F_{G_j
 \subsubsection{Vergleich der Signaturvektoren}
 \label{sec:ns-gl-cd}
 
-Für die Ausreißererkennung werden die letzten drei Graphen anhand der Canberra-Distanz-Funktion, die als Ähnlichkeitsmaß dient, herangezogen. Steigt die Canberra Distanz zwischen zwei Graphen oberhalb des Thresholds so wird dies im Algorithmus festgehalten. Falls der darauf folgende Graph ebenfalls oberhalb des Thresholds liegt, so wird dieser als Ausreißer definiert. Dadurch wird die Anzahl der Ausreißer reduziert, damit nur diejenigen identifiziert werden, bei denen ein Trend hin zu einem abnormalen Verhalten erkennbar ist.
+Für die Ausreißererkennung werden die letzten drei Graphen anhand der Canberra-Distanz-Funktion, die als Ähnlichkeitsmaß dient, herangezogen. Steigt die Canberra-Distanz zwischen zwei Graphen oberhalb des Schwellwerts so wird dies im Algorithmus festgehalten. Falls der darauf folgende Graph ebenfalls oberhalb des Schwellwerts liegt, so wird dieser als Ausreißer definiert. Dadurch wird die Anzahl der Ausreißer reduziert, damit nur diejenigen identifiziert werden, bei denen ein Trend hin zu einem abnormalen Verhalten erkennbar ist.
 
-Der Algorithmus arbeitet dabei dynamisch, da die Signaturen der Graphen in einzelne Teil-Berechnungen aufgesplittet und zwischengespeichert werden können, ohne das eine Neuberechnung notwendig ist. Der Threshold wird aus dem Median und dem Mean berechnet, welche ebenfalls Zwischengespeichert werden können und nach Bedarf um weitere Graphen ergänzt werden können.
+Der Algorithmus arbeitet dabei dynamisch, da die Signaturen der Graphen in einzelne Teilberechnungen aufgeteilt und zwischengespeichert werden können, ohne das eine Neuberechnung notwendig ist. Der Schwellwert wird aus dem Median und dem Mittelwert berechnet, die ebenfalls zwischengespeichert und nach Bedarf um weitere Graphen ergänzt werden können.
 
 \FloatBarrier
 
-\subsection{Anwendung des Algorithmus auf Netzwerkdaten}
+\subsection{Anwendung auf Netzwerkdaten}
 \label{sec:ns-ext}
-Beim ersten Versuch den Algorithmus auf Netzwerkdaten anzuwenden, wurde folgende Probleme festgestellt:
+Beim ersten Versuch den Algorithmus auf Netzwerkdaten anzuwenden, wurde die nachfolgende Problematik festgestellt.
 
-Der Algorithmus verwendet eine Bibliothek \textit{igraph}, welche Kanten zwischen zwei Knoten nur einmalig hinzufügen kann. Beim Eliminieren der Duplikate würde aber ein Drittel des Datensatzes nicht berücksichtigt werden, wodurch wertvolle Informationen bei der Ausreißererkennung verloren gehen würden. Aus diesem Grund wurden die Netzwerkdaten soweit angepasst, dass Mehrfachverbindungen zwischen zwei Kanten aufsummiert werden und als Gewichtung dieser Kante hinzugefügt wird. 
+Der Algorithmus verwendet eine Bibliothek \textit{igraph}, welche Kanten zwischen zwei Knoten nur einmalig hinzufügen kann. Beim Eliminieren der Duplikate wird aber ein Drittel des Datensatzes nicht berücksichtigt, wodurch wertvolle Informationen bei der Ausreißererkennung verloren gehen. Aus diesem Grund wurden die Netzwerkdaten soweit angepasst, dass Mehrfachverbindungen zwischen zwei Kanten aufsummiert werden und als Gewichtung dieser Kante hinzugefügt wird. 
 
 \begin{lstlisting}[language=Python, caption=Gewichtung als neues Feature, label=lst:netsimile:code1]
 for i in range(len(e_list)): 
 	g.add_edge(e_list[i][0], e_list[i][1], weight=e_list[i][2])
 \end{lstlisting}
 
-Dadurch kann der Datensatz zum einen vollständig analysiert werden und zum anderen konnte dadurch ein weiteres Feature hinzugefügt werden, dass durch die fünf verschiedenen Aggregationen den Signaturvektor um diese fünf Werte erweitert.
+Dadurch kann der Datensatz zum einen vollständig analysiert werden und zum anderen kann dadurch ein weiteres Feature hinzugefügt werden, dass durch die fünf verschiedenen Aggregationen den Signaturvektor um diese fünf Werte erweitert.
 
-Dadurch das der Datensatz zuerst eingelesen und in einen Graphen transformiert wird und anschließend aus dem Graphen die jeweiligen Features extrahiert werden, verliert der Algorithmus extrem an Performanz. Des weiteren wird im ersten Schritt der maximale Knoten-Wert als Größe des Graphens übergeben. Wird bspw. für jeden Mitarbeiter eine eigene ID übergeben und diese ID inkrementell erhöht, so kann es sein, dass aus einem Netzwerk mit 20 verschiedenen Knoten ein Graph erzeugt wird, der 1000 Knoten erzeugt, weil eine ID mit dem Wert 1000 vorhanden ist. Dadurch büßt die Performanz an Geschwindigkeit ein, da Iterationen nicht über die 20 Knoten durchgeführt werden, sondern über 1000. Hierbei muss entweder der Datensatz vorab angepasst werden, indem die IDs neu vergeben werden oder der Algorithmus muss grundlegend neu aufgebaut werden. Dies wäre grundlegend möglich, da der Algorithmus Graphen als Ausreißer zurück gibt und keine Knoten. 
+Dadurch dass der Datensatz zuerst eingelesen und in einen Graphen transformiert wird und anschließend aus dem Graphen die jeweiligen Features extrahiert werden, verliert der Algorithmus außerordentlich an Performanz. Des Weiteren wird im ersten Schritt der maximale Knoten-Wert als Größe des Graphens übergeben. Wird bspw. für jeden Mitarbeiter eine eigene ID übergeben und diese ID inkrementell erhöht, so kann es sein, dass aus einem Netzwerk mit 20 verschiedenen Knoten ein Graph erzeugt wird, der 1000 Knoten erzeugt, weil eine ID mit dem Wert 1000 vorhanden ist. Dadurch büßt die Performanz an Geschwindigkeit ein, da Iterationen nicht über die 20 Knoten durchgeführt werden, sondern über 1000. Hierbei muss entweder der Datensatz vorab angepasst werden, indem die IDs neu vergeben werden oder der Algorithmus muss grundlegend neu aufgebaut werden. Dies wäre grundlegend möglich, da der Algorithmus Graphen als Ausreißer zurück gibt und keine Knoten. 
 
 Da der Fokus auf der Anwendung von Zeitreihen liegt, werden Optimierungen erst im Abschnitt \autoref{sec:ns-ts-1} in Betracht gezogen. 
-
-
-
 
 \subsubsection{Anwendung auf ENRON-Datensatz}
 \label{sec:ns-enron}
 
 Da der Enron Datensatz ebenfalls von einem anderen Paper analysiert und veröffentlicht wurde (vgl. \autoref{chap:ap-data}), können die dort erkannten Ausreißer zum Vergleich in Form eines gelabelten Datensatz herangezogen werden.
-Betrachtet man in diesem Kontext den Ausreißerscore, ist gut zu erkennen, dass der Ausreißer Ende 2001 als alleiniger herausstechender Ausreißer ebenso im NetSimile wiederzufinden ist. Grundlegend ist ebenso zu erkennen, dass die Ausreißer sich nur sehr wenig voneinander unterscheiden, wodurch sich eine Klassifizierung innerhalb des Ausreißerscores als schwierig erweist. Die Extrahierung weiterer Features könnte hierbei eventuell aushelfen, wobei dies nicht im Rahmen dieses Forschungsprojektes behandelt werden soll, da der Fokus auf Zeitreihen liegt. Zwecks Performanz konnte der Datensatz innerhalb von zwei Minuten analysiert werden.
+Betrachtet man in diesem Kontext den Ausreißerscore, ist gut zu erkennen, dass der Ausreißer Ende 2001 als alleiniger herausstechender Ausreißer ebenso im NetSimile wiederzufinden ist. Grundlegend ist ebenso zu erkennen, dass die Ausreißer sich nur sehr wenig voneinander unterscheiden, wodurch sich eine Klassifizierung innerhalb des Ausreißerscores als schwierig erweist. Die Extrahierung weiterer Features könnte dieses Problem lösen, wobei dies nicht im Rahmen dieses Forschungsprojektes behandelt werden soll, da der Fokus auf Zeitreihen liegt. Der Datensatz innerhalb von zwei Minuten analysiert werden, womit der NetSimile-Algorithmus performant zu sein scheint.
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[height=0.6\linewidth,width=\linewidth]{fig/netsimile/anomalie_3}
-	\caption{Ausreißer Score Enron-Datensatz}
+	\caption{Ausreißer-Score im Enron-Datensatz mit dem NetSimile-Algorithmus}
 	\label{img:netsimile:anomalie_3}
 \end{figure}
 
 
-Betrachtet man die Differenz aus dem Durchschnitt der Signaturvektoren und den der Ausreißergraphen in einer Headmap kann man erkennen, dass die Ausreißer vorwiegend durch besonders große Ego-Netzwerke und einer hohen Anzahl an E-Mails verschuldet ist. Vergleicht man die Timeline mit den Ausreißern Daten, erkennt man einen starken Anstieg des Email-Verkehrs im Oktober 2001. Hier wurde von Enron ein Report veröffentlicht über einen Quartals-Verlust von 618 Millionen US-Dollar und einer Reduzierung des Eigenkapitals um 1.2 Milliarde. Im Dezember 2001 erkennt man einen verhältnismäßig geringen Email-Verkehr. Betrachtet man hier die Timeline, so wurden 4000 Mitarbeiter in dieser Zeitspanne entlassen. \workTodo{Quelle die Webseite}
+Betrachtet man die Differenz aus dem Durchschnitt der Signaturvektoren und den der Ausreißergraphen in einer \textit{Headmap} kann man erkennen, dass die Ausreißer vorwiegend den besonders großen Ego-Netzwerken und einer hohen Anzahl an E-Mails verschuldet sind. Vergleicht man die Zeitleiste (\citep{EnronTimeline}) mit den Ausreißerdaten, erkennt man einen starken Anstieg des Email-Verkehrs im Oktober 2001. Hier wurde von Enron ein Report veröffentlicht über einen Quartals-Verlust von 618 Millionen US-Dollar und einer Reduzierung des Eigenkapitals um 1.2 Milliarde. Im Dezember 2001 erkennt man einen verhältnismäßig geringen Email-Verkehr. Betrachtet man hier die Zeitleiste, so wurden 4000 Mitarbeiter in dieser Zeitspanne entlassen. \workTodo{Quelle die Webseite}
 
 
 
@@ -83,22 +96,22 @@ Betrachtet man die Differenz aus dem Durchschnitt der Signaturvektoren und den d
 	\label{img:netsimile:heatmap_3}
 \end{figure}
 
-\subsubsection{Anwendung auf DARPA-Datensatz}
+\subsubsection{Anwendung auf Darpa-Datensatz}
 \label{sec:ns-darpa}
 
-Beim Darpa Datensatz können die Aureißer besser klassifiziert werden. Die Gründe können hierbei auf die Größe und Vielfalt des Datensatzes zurückgeführt werden. Der Enron Datensatz hat eine Größe von 1MB und rund 50.000 Kanten. Der Darpa Datensatz hingegen hat eine Größe von 50 MB mit 4.5 Mio Kanten. Die Berechnung hat dabei eine Länge von 3h. Haben wir bei der Dateigröße den Faktor 50 und bei der Kantenanzahl den Faktor 90, so ist bei der Berechnungszeit der Faktor 90 wiederzufinden. Betrachtet man die Laufzeit, so kann eine lineare Abhängigkeit zwischen Kantenanzahl und der benötigten Berechnungszeit festgestellt werden.
+Beim Darpa-Datensatz können die Aureißer besser klassifiziert werden. Die Gründe hierfür liegen auf der Größe und Vielfalt des Datensatzes. Der Enron.Datensatz hat eine Größe von 1MB und rund 50.000 Kanten. Der Darpa-Datensatz hingegen hat eine Größe von 50 MB mit 4.5 Mio Kanten. Die Berechnung hat dabei eine Länge von drei Stunden. Haben wir bei der Dateigröße den Faktor 50 und bei der Kantenanzahl den Faktor 90, so ist bei der Berechnungszeit der Faktor 90 wiederzufinden. Betrachtet man die Laufzeit, so kann eine lineare Abhängigkeit zwischen Kantenanzahl und der benötigten Berechnungszeit festgestellt werden.
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[height=0.6\linewidth,width=\linewidth]{fig/netsimile/anomalie_4}
-	\caption{Ausreißer Score DARPA}
+	\caption{Ausreißer-Score im Darpa-Datensatz mit dem NetSimile-Algorithmus}
 	\label{img:netsimile:anomalie_4}
 \end{figure}
 
-\subsection{Anwendung des Algorithmus auf Zeitreihen}
+\subsection{Anwendung auf Zeitreihen}
 \label{sec:ns-ts-1}
 
-Wird der Algorithmus auf Zeitreihen anwendet, entsteht folgendes Problem. Bei der Transformation der Daten entstehen vollständige Graphen, wodurch die strukturellen Eigenschaften identisch werden, sowie die daraus resultierenden Merkmale, wie in der Abbildung verdeutlicht werden soll. 
+Wird der Algorithmus auf Zeitreihen anwendet, entsteht folgendes Problem. Bei der Transformation der Daten entstehen vollständige Graphen, wodurch die strukturellen Eigenschaften sowie die daraus resultierenden Merkmale identisch werden, wie in \autoref{img:netsimile:graph_11} deutlich wird. 
 
 \usetikzlibrary{graphs,graphs.standard}
 \begin{figure}[H]
@@ -110,15 +123,11 @@ Wird der Algorithmus auf Zeitreihen anwendet, entsteht folgendes Problem. Bei de
 	\label{img:netsimile:graph_11}
 \end{figure}
 
-So hat bspw. das Feature $|E^{\circ}_{ego(i)}|$ keine Aussagekraft in einem vollständigen Graphen, da jeder Knoten die gleiche Anzahl Kanten in seinem Ego-Netzwerk aufweist. Subtrahiert man also vom durchschnittlichen Signaturvektor aller Graphen die einzelnen Signaturvektoren, so erkennt man den Wert 0 in allen Headmaps.
+So hat bspw. das Feature $|E^{\circ}_{ego(i)}|$ keine Aussagekraft in einem vollständigen Graphen, da jeder Knoten die gleiche Anzahl an Kanten in seinem Ego-Netzwerk aufweist. Subtrahiert man also vom durchschnittlichen Signaturvektor aller Graphen die einzelnen Signaturvektoren, so erkennt man den Wert 0 in allen Headmaps.
 
-Somit müssen hierbei für vollständige Graphen andere Features extrahiert werden. Außerdem ist die Laufzeit in großen Datensätzen, wie bspw. dem Darpa-Datensatz mit 3h Berechnungszeit nicht gerade performant.
+Somit müssen hierbei für vollständige Graphen andere Features extrahiert werden. Außerdem ist die Laufzeit in großen Datensätzen, wie bspw. dem Darpa-Datensatz mit 3 Stunden Berechnungszeit nicht performant.
 
-Aus diesem Grund werden aus dem NetSimile lediglich die Ansätze der Feature-Extrahierung, die Distanzbildung zweier Signaturvektoren, sowie der Threshold für die Ausreißeridentifizierung übernommen
-
-Das heißt die Netzwerke der Zeitreihe werden nicht in ein Graphen Objekt umgewandelt, sondern als Adjazenzmatrix gespeichert. Dadurch können die Features deutlich effizienter berechnet werden. Zudem werden lediglich Features verwendet, die für vollständige Graphen geeignet sind. Dabei werden folgende Features neu eingeführt:
-
-
+Aus diesem Grund werden aus dem NetSimile lediglich die Ansätze der Merkmals-Extrahierung, die Distanzbildung zweier Signaturvektoren, sowie der Schwellwert für die Ausreißeridentifizierung übernommen. Das heißt die Netzwerke der Zeitreihe werden nicht in ein Graphenobjekt umgewandelt, sondern als Adjazenzmatrix gespeichert. Dadurch können die Features deutlich effizienter berechnet werden. Zudem werden lediglich Merkmale verwendet, die für vollständige Graphen geeignet sind. Dabei werden die nachfolgenden Merkmale neu eingeführt.
 
 \workTodo{n-te Wurzel bei Formel für Geometrischen Mittelwert}
 \begin{description}
@@ -135,19 +144,18 @@ Das heißt die Netzwerke der Zeitreihe werden nicht in ein Graphen Objekt umgewan
 	\item[$\frac{1}{n}\sum_{i=1}^{n} x_i$]\hfill\\ Geometrisches Mittel der Kanten mit den 20\% höchsten Kantengewichten. 
 \end{description}
 
-Auf diesen Features wurden anschließend die bisherigen Aggregation durchgeführt. Dadurch konnten erste Ausreißer in der Zeitreihe gefunden werden (vgl. \autoref{img:netsimile:anomalie_2}).
+Auf diesen Merkmalen wurden anschließend die bisherigen Aggregation durchgeführt. Dadurch konnten erste Ausreißer in der Zeitreihe gefunden werden (vgl. \autoref{img:netsimile:anomalie_2}).
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[height=0.6\linewidth,width=\linewidth]{fig/netsimile/anomalie_2}
-	\caption{Ausreißer Score der vollständigen Graphen mit gewichteten Kanten}
+	\caption{Ausreißer-Score der vollständigen Graphen mit gewichteten Kanten}
 	\label{img:netsimile:anomalie_2}
 \end{figure}
 
-\workTodo{Bin mir nicht sicher zu welchen Elementen die Canbarra Distanz berechnet wird.}. Des Weiteren wurde ein neuer Parameter eingeführt. Über diesen kann gesteuert werden zu wie vielen vorgänger Abschnitten die Distanz berechnet werden soll. Dadurch kann gesteuert werden wie schnell ein Algorithmus vergisst. Eine Auflistung der Parameter des Algorithmus ist in \autoref{table:parmeterNeti} zu sehen.
+Des Weiteren wurde ein neuer Parameter eingeführt. Über diesen kann gesteuert werden zu wie vielen vorherigen Abschnitten die Distanz berechnet werden soll. Dadurch kann gesteuert werden wie schnell ein Algorithmus \workTodo{bitte umformulieren: vergisst}. Eine Auflistung der Parameter des Algorithmus ist in \autoref{table:parmeterNeti} zu sehen.
 
-
-Um zu untersuchen, wie gut der Algorithmus funktioniert, wurde er auf Zeitreihen getestet. Als Testdaten   wurden, ein und zweidimensionale Zeitreihen der Numenta Gruppe verwendet. Diese Zeitreihen enthalten verschiedene Ausreißer Typen, auf deren Erkennung der Algorithmus getestet wurde. Die Qualität der Ausreißererkennung wurde  mithilfe eines Punktesystem bewertet. Dabei bedeuteten 0 Punkte, Ausreißer nicht erkannt und 4 Punkte bedeuteten Ausreißer sehr gut erkannt. Die Parameter, welche für die Tests gewählt werden mussten, werden in \autoref{table:parmeterNeti} beschrieben.\\
+Um zu untersuchen, wie gut der Algorithmus funktioniert, wurde er auf Zeitreihen getestet. Als Testdaten   wurden, ein- und zweidimensionale Zeitreihen der Numenta-Gruppe verwendet. Diese Zeitreihen enthalten verschiedene Ausreißertypen, auf denen die Erkennung der Algorithmus getestet wurde. Die Qualität der Ausreißererkennung wurde mithilfe eines Punktesystem bewertet. In diesem können maximal vier Sterne erreicht werden, die dafür stehen, dass Ausreißer sehr gut erkannt werden. Null Sterne hingegen bedeuten, dass Ausreißer überhaupt nicht erkannt wurden. Die Parameter, welche für die Tests gewählt werden mussten, werden in \autoref{table:parmeterNeti} beschrieben.\\
 
 \begin{table}[H]
 	\centering
@@ -175,11 +183,11 @@ Um zu untersuchen, wie gut der Algorithmus funktioniert, wurde er auf Zeitreihen
 		Frequenzänderung & anomaly-art-daily-sequence-change &****& ***\\
 		\bottomrule
 	\end{tabular}
-	\caption{Netsimile Time Series Perfomance}
+	\caption{NetSimile-Performance auf Zeitreihen}
 	\label{table:performanceNeti}
 \end{table}
 
-\autoref{table:performanceNeti} zeigt die Ergebnisse der Tests. Es ist zu erkennen, dass die Qualität der Ausreißererkennung im eindimensionalen Fall sehr gut ist. Lediglich einzelne Peaks können durch den Algorithmus nicht als Ausreißer identifiziert werden. Außerdem wird bei Signal Drifts und der kontinuierlichen Zunahme der Amplitude lediglich der Anfang des Ausreißers detektiert. Aus diesem Grund wurde eine Bewertung mit drei Sternen vergeben. Bei der Betrachtung der Graphiken in \autoref{sec:appendix_net_one} \workTodo{richtige Referenz einfügen} und \autoref{sec:appendix_net_two} ist zu erkennen, dass das sechste oder siebte Intervall der Zeitreihe häufig als Ausreißer markiert wird. Der Grund hierfür ist, das bei einer Fenstergröße von fünf für die ersten fünf Abschnitte kein Ausreißer Score berechnet wird. Dadurch ist die Standardabweichung zu Beginn sehr niedrig wodurch Abschnitte schnell als Ausreißer gekennzeichnet werden. Dieser Umstand wurde bei der Bewertung in \autoref{table:performanceNeti} nicht berücksichtigt. Im zweidimensionalen Fall ist die Qualität der Ausreißererkennung etwas durchwachsener. Auffallend ist, dass Zyklen mit höherer und niedriger Amplitude nicht als Ausreißer erkannt werden. Insbesondere ist dies auffällig, da diese Ausreißer Typen üblicherweise zuverlässig erkannt werden (vgl. \autoref{sec:rw-gl}).  Außerdem ist der Algorithmus im zweidimensionalen Fall nicht mehr dazu in der Lage Signal Drifts zu erkennen. Andere Ausreißer Typen können durch den Algorithmus weiterhin erkannt werden, jedoch oftmals nicht mit der selben Qualität. 
+\autoref{table:performanceNeti} zeigt die Ergebnisse der Tests. Es ist zu erkennen, dass die Qualität der Ausreißererkennung im eindimensionalen Fall sehr gut ist. Lediglich einzelne Peaks können durch den Algorithmus nicht als Ausreißer identifiziert werden. Außerdem wird bei \textit{Signal Drifts} und der kontinuierlichen Zunahme der Amplitude lediglich der Anfang des Ausreißers detektiert. Aus diesem Grund wurde eine Bewertung mit drei Sternen vergeben. Bei der Betrachtung der Graphiken in \autoref{sec:appendix_net_one} \workTodo{richtige Referenz einfügen} und \autoref{sec:appendix_net_two} ist zu erkennen, dass das sechste oder siebte Intervall der Zeitreihe häufig als Ausreißer markiert wird. Der Grund hierfür ist, das bei einer Fenstergröße von fünf für die ersten fünf Abschnitte kein Ausreißer-Score berechnet wird. Dadurch ist die Standardabweichung zu Beginn sehr niedrig wodurch Abschnitte schnell als Ausreißer gekennzeichnet werden. Dieser Umstand wurde bei der Bewertung in \autoref{table:performanceNeti} nicht berücksichtigt. Im zweidimensionalen Fall ist die Qualität der Ausreißererkennung etwas durchwachsener. Auffallend ist, dass Zyklen mit höherer und niedriger Amplitude nicht als Ausreißer erkannt werden. Insbesondere ist dies auffällig, da diese Ausreißertypen üblicherweise zuverlässig erkannt werden (vgl. \autoref{sec:rw-gl}).  Außerdem ist der Algorithmus im zweidimensionalen Fall nicht mehr dazu in der Lage \textit{Signal Drifts } zu erkennen. Andere Ausreißertypen können durch den Algorithmus weiterhin erkannt werden, jedoch oftmals nicht mit der selben Qualität. 
 
 \begin{table}[H]
 	\centering
@@ -189,12 +197,12 @@ Um zu untersuchen, wie gut der Algorithmus funktioniert, wurde er auf Zeitreihen
 		\midrule
 		Periodizität & Wie in \autoref{sec:trsnsNeti} \workTodo{Referenz sollte glaube ich autoref -> sec:trsnsNeti sein} erläutert muss die Zeitreihe in kleinere Intervalle aufgegliedert werden. Über diesen Parameter wird die Größe der Intervalle gesteuert. Für die Tests wurde der Parameter auf 288 gesetzt, da es sich hierbei um die Saisonalität der Zeitreihen handelt.\\
 		\midrule
-		Fenstergröße & Wie in \autoref{sec:optiNeti} erklärt, bestimmt dieser Parameter die Anzahl der vorangegangenen Abschnitte zu welchen die Canberra Distanz berechnet wird. Dieser Parameter wurde für die Tests auf 5 gesetzt.\\
+		Fenstergröße & Wie in \autoref{sec:optiNeti} erklärt, bestimmt dieser Parameter die Anzahl der vorangegangenen Abschnitte zu welchen die Canberra-Distanz berechnet wird. Dieser Parameter wurde für die Tests auf 5 gesetzt.\\
 		\midrule
 		Abweichung & Legt fest ab wann es sich bei einem Abschnitt um einen Ausreißer handelt. Der Parameter wurde für die Tests auf 3 gesetzt. Bedeutet wenn der Ausreißer Score um das dreifache der Standardabweichung vom Durchschnitt abweicht, wird der Abschnitt als Ausreißer gekennzeichnet.\\
 		\bottomrule
 	\end{tabular}
-	\caption{Parameter NetSimile Zeitreihen}
+	\caption{Parameter des NetSimile für die Anwendung auf Zeitreihen}
 	\label{table:parmeterNeti}
 \end{table}
 
