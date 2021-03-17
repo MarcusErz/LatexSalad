@@ -4,11 +4,11 @@
 Im Rahmen der \workTyp wird zum einen erforscht, wie Zeitreihendaten in Graphen umgewandelt werden können und zum anderen welche Algorithmen diese Graphen am besten auf Ausreißer untersuchen können. 
 \section{Problemstellung}
 \label{sec:einl-ps}
-Die Transformation von Zeitreihendaten in Graphen, ermöglicht die Generierung von Korrelationen zwischen zwei Zeitelementen. Durch diese Datenrepräsentation können die Datenobjekte, die nun in Abhängigkeit zueinander stehen, untersucht werden.  Die Annahme in der Erforschung von graphen-basierten Algorithmen zur Ausreißererkennung ist die, dass dadurch, gerade in Netzwerken, Ausreißer bzw. Anomalien effizienter erkannt werden.
+Die Transformation von Zeitreihendaten in Graphen, ermöglicht die Generierung von Korrelationen zwischen zwei Zeitelementen. Durch diese Datenrepräsentation können die Datenobjekte, die in Abhängigkeit zueinander stehen, untersucht werden.  Die Annahme in der Erforschung von graphen-basierten Algorithmen zur Ausreißererkennung ist die, dass dadurch, gerade in Netzwerken, Ausreißer bzw. Anomalien effizienter erkannt werden.
 
-In der Forschung gibt es bereits viele Algorithmen zur Ausreißererkennung, die auf statische, sowie dynamische Graphen anwendbar sind. Die Erkennung der Ausreißer erfolgt mit verschiedenen Ansätzen. So gibt es Algorithmen, die die Struktur der Graphen näher betrachten, sowie Algorithmen, die sich auf die  die dichte-basierten Merkmale eines Graphens fokussieren. Nimmt man dynamische Graphen zur Untersuchung, so spielen die strukturellen Veränderungen über die Zeit, sowie die plötzlich massiv zunehmende Aktivitäten zwischen Knoten- und Kantenpaaren eine große Rolle. Darüber hinaus gibt es Ansätze zur Ausreißererkennung in sequenziellen Daten.
+In der Forschung gibt es bereits viele Algorithmen zur Ausreißererkennung, die auf statische, sowie dynamische Graphen anwendbar sind. Die Erkennung der Ausreißer erfolgt mit verschiedenen Ansätzen. So gibt es Algorithmen, die die Struktur der Graphen näher betrachten, sowie Algorithmen, die sich auf die dichte-basierten Merkmale eines Graphens fokussieren. Nimmt man dynamische Graphen zur Untersuchung, so spielen die strukturellen Veränderungen über die Zeit ebenso wie plötzlich massiv zunehmende Aktivitäten zwischen Knoten- und Kantenpaaren eine große Rolle. Darüber hinaus gibt es Ansätze zur Ausreißererkennung in sequenziellen Daten.
 
-Bisher gibt es wenig Forschung zu graphen-basierten Algorithmen auf traditionellen Zeitreihendaten, wie Sensordaten, die über die Zeit gesammelt werden, sondern nur über sich über die Zeit ändernden Netzwerkstrukturen.
+Bisher gibt es wenig Forschung zu graphen-basierten Algorithmen auf traditionellen Zeitreihendaten, wie Sensordaten, die über die Zeit gesammelt werden. Vielmehr liegt der Fokus auf sich über die Zeit ändernden Netzwerkstrukturen.
 
 Im Rahmen des Forschungsprojekts werden daher, die graphen-basierten Algorithmen zur Erkennung von Ausreißern in Zeitreihendaten herangezogen, um erste Erkenntnisse über die Aussagefähigkeit der Ergebnisse treffen zu können. Bei einem erfolgreichen Einsatz der Algorithmen können die Anwendungsfälle auf die Bereiche Internet of Things, Autonomes Fahren, sowie die Erkennung von Krankheiten, wie Krebs erweitert werden. Dies macht das Thema der Ausreißererkennung mittels graphen-basierter Algorithmen zu einem außerordentlich aktuellen und wichtigen Forschungsgebiet, in dem die Vorteile einer graphen-basierten Struktur auf die Zeitreihen übertragen werden. 
 
@@ -26,14 +26,13 @@ Das Ziel der vorliegenden Arbeit setzt sich aus den folgenden Teilzielen zusamme
 
 In diesem Abschnitt werden Ansätze zur Erkennung von Ausreißern in statischen und dynamischen Graphen vorgestellt, die im Rahmen des Forschungsprojekts zur Erreichung der Forschungsziele herangezogen werden.  
 
-Die \textbf{Ausreißererkennung in statischen Graphen} kann hinsichtlich deren Ausreißerkategorien unterteilt werden. So ergibt sich die nachfolgende Taxonomie.
-\workTodo{In Paper von Iso und Percolation sind zwei Algorithmen. Es wird aber so geschrieben wenn nur ein Algorithmus in dem Paper vorgestellt wird.}
-\workTodo{Vorherige Related work auch einfügen. Macht auf jeden Fall Sinn}
+
+Die \textbf{Ausreißererkennung in statischen Graphen} kann nach den unterschiedlichen Ausreißerkategorien unterteilt werden. So ergibt sich die nachfolgende Taxonomie.
 \begin{mldescription}
 	\mlitem{Struktur-basierter Ansatz:} Mithilfe der Darstellung von Knoten und Kanten in einem Ego-Netzwerk werden in \citep{Oddball} die zugehörigen Eigenschaften, wie die Anzahl der Knoten und Kanten, extrahiert. Im Anschluss identifiziert dieser Algorithmus diejenigen Knoten und Kanten, die sich strukturell stark von den restlichen Ego-Netzwerken unterscheidet. 
 	\mlitem{Clustering-basierter Ansatz:} In \citep{SCAN} werden zwei Knoten und die Überschneidung ihrer Nachbarknoten gegenübergestellt. So wird die Annahme getroffen, dass Knoten, die sehr wenige Nachbarn, im Vergleich zum Rest der Knoten in Ihrer Umgebung haben, Ausreißer sind.
-	\mlitem{IsoMap-basierter Ansatz:} Durch die Dimensionsreduktion mithilfe des Algorithmus in \citep{10.3389/fphy.2019.00194} gehen Informationen über Ausreißer verloren. Bei dem Versuch der Rekonstruktion können diese Informationen nicht wiederhergestellt werden. Durch einen anschließenden Vergleich der extrahierten Informationen werden Ausreißer sichtbar.
-	\mlitem{Kanten-basierter Ansatz:} In \citep{10.3389/fphy.2019.00194} werden aus einem Graphen schrittweise die Kanten mit den höchsten Gewichten entfernt. Dadurch werden Ausreißer vom Rest des Netzwerks separiert. Die Annahme ist, dass Ausreißer-knoten höhere Kantengewichte zu ihren Nachbarn haben. Der Algorithmus in \citep{RandomWalk} iteriert zufällig über das Netzwerk. Dabei wird festgehalten wie oft ein Knoten besucht wurde. Ausreißer-Knoten werden dabei besonders selten besucht und können somit identifiziert werden. 
+	\mlitem{IsoMap-basierter Ansatz:} Durch die Dimensionsreduktion mithilfe des IsoMap-basierten Algorithmus in \citep{10.3389/fphy.2019.00194} gehen Informationen über Ausreißer verloren. Bei dem Versuch der Rekonstruktion können diese Informationen nicht wiederhergestellt werden. Durch einen anschließenden Vergleich der extrahierten Informationen werden Ausreißer sichtbar.
+	\mlitem{Perculation-basierter Ansatz:} In \citep{10.3389/fphy.2019.00194} wird der Perculation-basierte Algorithmus vorgestellt. Bei diesem werden aus einem Graphen schrittweise die Kanten mit den höchsten Gewichten entfernt. Dadurch werden Ausreißer vom Rest des Netzwerks separiert. Die Annahme ist, dass Ausreißer-knoten höhere Kantengewichte zu ihren Nachbarn haben.
 \end{mldescription}
 
 
@@ -41,7 +40,7 @@ Die \textbf{Ausreißererkennung in dynamischen Graphen} kann hinsichtlich ihres I
 
 \begin{mldescription}
 	\mlitem{Erkennung auf Momentaufnahmen des Graphen in zeitlichen Abständen:} Der Algorithmus in \citep{Netsimile} vergleicht verschiedene strukturelle Merkmale zweier Momentaufnahmen eines Graphen miteinander, um die Ähnlichkeit zu bewerten. Der Ausreißer wird bei einer starken Veränderung des Graphen deklariert.
-	\mlitem{Erkennung mithilfe eines Datenflusses:} Der Algorithmus in \citep{MIDAS} vergleicht jede ankommende Kante, zum aktuellen Zeitpunkt, mit der Anzahl am bisherigen Vorkommen dieser Kante. Hierbei werden Mikrocluster entdeckt die anomal sind.
+	\mlitem{Erkennung mithilfe eines Datenstroms:} Der Algorithmus in \citep{MIDAS} vergleicht jede ankommende Kante, zum aktuellen Zeitpunkt, mit der Anzahl am bisherigen Vorkommen dieser Kante. Hierbei werden Mikrocluster entdeckt die anomal sind.
 \end{mldescription}
 
 
@@ -49,4 +48,17 @@ Um die graphen-basierten Algorithmen zur Erkennung von Ausreißern in Zeitreihend
 
 \begin{mldescription}
 	\mlitem{Überblick an existierenden Distanzmaßen:} Ein Vergleich der verschiedenen Distanzmaße ist in \citep{DistanceMeasures} zu finden. Diese werden für die Anwendung auf Wahrscheinlichkeitsdichtefunktionen evaluiert und gruppiert. 
+\end{mldescription}
+
+Die \textbf{Ausreißer Erkennung in Zeitreihen und Sequenziellen Daten} wurde bereits in vielen Literaturquellen diskutiert. 
+\begin{mldescription}
+	
+	\mlitem{Netzwerk basierter Ansatz zur Erkennung von Ausreißern in Sequenziellen Daten:} Der in \citep{RAHMANI201489} genannte Algorithmus wandelt sequenziellen Daten in ein Netzwerk um. Dabei wird die euklidischen Distanz genutzt, um die Kantengewichte zu berechnen. Anschließend werden die Knoten mithilfe des Minimum Spanning Tree Algorithmus geclustered. Um daraus Ausreißer abzuleiten, wird ein \textit{Voting Scheme} verwendet. Der vorgestellte Algorithmus wurde genutzt um Ausreißer in Wetterdaten sowie Aktienkursen zu identifizieren.
+	
+	\mlitem{Ein robuster graphbasierter Algorithmus zur Erkennung und Charakterisierung von Anomalien in verrauschten multivariaten Zeitreihen:} In \citep{RandomWalk} wird ein Algorithmus vorgestellt, der dazu in der Lage ist Ausreißer in multivariaten Zeitreihen zu erkennen. Die multivariate Zeitreihe wird dabei über ein Distanzmaß in ein Netzwerk umgewandelt. Auf dem Netzwerk wird anschließend ein Random Walk Algorithmus ausgeführt. Daraufhin werden Knoten die besonders selten besucht wurden als Ausreißer markiert.
+	
+	\mlitem{Überblicksartikel über die Ausreißer Erkennung in diskreten Sequenzen:} In \citep{5645624} werden verschiedene Methoden vorgestellt, wie Ausreißer in Sequenzen erkannt werden können. Es wird dabei, auch auf die Ausreißer Erkennung in Zeitreihen eingegangen. Die vorgestellten Algorithmen werden in drei Kategorien untergliedert. 1:Erkennung abnormaler Sequenzen in Bezug auf eine Datenbank normaler Sequenzen 2: Erkennung einer abnormalen Untersequenz innerhalb einer langen Sequenz. 3: Erkennung eines Musters in einer Sequenz deren Auftrittshäufigkeit anomal ist.
+	
+	\mlitem{Neuronale Netze zur Ausreißer Erkennung:} Die Verwendung von Neuronalen Netzen zur Erkennung von Ausreißern wird immer beliebter. Beispielsweise wurde in \citep{10.1007/3-540-46145-0_17} ein Replicator Neuronales Netz, einerseits genutzt um Störungen in einem Netzwerk zu erkennen. Des weiteren wurde das Neuronale Netz verwendet um Ausreißer in einem Brustkrebs Datensatz zu identifizieren. Neuronale Netze wurden ebenso dazu eingesetzt um Ausreißer in Zeitreihen zu finden \citep{8581424} . Ein Vorteil dieses Ansatzes ist, das Ausreißer online entdeckt werden können. Das Neuronale Netz wird hierbei dazu genutzt den nächsten Wert einer Zeitreihe zu schätzen. Die Differenz zwischen der Vorhersage und dem tatsächlich auftretenden Wert wird als Ausreißer Score verwendet. 
+	
 \end{mldescription}

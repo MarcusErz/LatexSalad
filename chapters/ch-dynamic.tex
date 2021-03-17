@@ -1,35 +1,35 @@
 \newpage
-\chapter{Dynamische Algorithmen zur Ausreißer Erkennung}
+\chapter{Dynamische Algorithmen zur Ausreißererkennung}
 \label{chap:dynamic}
 
-In diesem Kapitel werden zwei Algorithmen zur dynamischen Erkennung von Ausreißern vorgestellt. Hierbei handelt es sich um den NetSimile (vgl. \autoref{sec:ns}) und den MIDAS (vgl. \autoref{sec:midas}) Algorithmus. Dynamische Algorithmen können im Gegensatz zu statischen Algorithmen, Ausreißer in Echtzeitdaten finden. Dies kann in der Praxis sehr wichtig sein, da Ausreißer möglichst schnell gefunden werden müssen um die daraus resultierenden finanzielle Schäden abzuwenden.  Im Zuge des Forschungsprojekts werden die dynamischen Algorithmen ebenfalls auf den unterschiedlichen Input, je nach Anwendungsfall, angepasst. Dadurch wird gewährleistet, dass diese Algorithmen ebenso wie die statischen Algorithmen aus \autoref{chap:static} mit unterschiedlichen Datentypen umgehen können. In den Tests des Forschungsprojekts werden die Algorithmen auf Netzwerk- und Zeitreihendaten angewandt.
+In diesem Kapitel werden zwei Algorithmen zur dynamischen Erkennung von Ausreißern vorgestellt. Hierbei handelt es sich um den NetSimile- (vgl. \autoref{sec:ns}) und den MIDAS- (vgl. \autoref{sec:midas}) Algorithmus. Dynamische Algorithmen können im Gegensatz zu statischen Algorithmen, Ausreißer in Echtzeitdaten finden. Dies kann in der Praxis sehr wichtig sein, da Ausreißer möglichst schnell gefunden werden müssen, um die daraus resultierenden finanzielle Schäden abzuwenden.  Im Zuge des Forschungsprojekts werden die dynamischen Algorithmen ebenfalls auf den unterschiedlichen Input, der sich aus den verschiedenen Anwendungsfälle ergibt, angepasst. Dadurch wird gewährleistet, dass diese Algorithmen, ebenso wie die statischen Algorithmen aus \autoref{chap:static}, mit unterschiedlichen Datentypen umgehen können. In den Tests des Forschungsprojekts werden die Algorithmen auf Netzwerk- und Zeitreihendaten angewendet.
 
-\section{Umwandlung der Daten in ein Netzwerk}
-\workTodo{Ich dachte in einen Graphen?????}
-Bevor die dynamischen Algorithmen auf die Zeitreihendaten angewendet werden können, müssen diese in Graphen transformiert werden. Dabei funktioniert die Umwandlung der Daten ähnlich wie bei statischen Algorithmen (vgl. \autoref{sec:trsnsNeti}). Der einzige Unterschied hierbei ist, dass jeweils schrittweise kleine Abschnitte der Daten in Netzwerke umgewandelt werden. Nachfolgend wird dies an einem Beispiel näher veranschaulicht. Ein Temperatursensor liefert jede Sekunde einen Wert. Sobald 100 Werte des Sensors eingegangen sind, erfolgt die Umwandlung dieser Daten in ein Netzwerk unter Verwendung von \autoref{eq:euklidianDist}. Dieser Vorgang wiederholt sich anschließend immer wieder. Der Wert für die Länge der Abschnitte ist hierbei frei wählbar und kann als Parameter übergeben werden. Insofern die Zeitreihe eine Saisonalität besitzt, bietet es sich an diese für die Länge der Abschnitte zu verwenden. In einem letzten Schritt werden anschließend die Netzwerkdaten in eine Datei geschrieben. Dieser Schritt ist aufgrund der Art und Weiße, wie die Algorithmen implementiert sind notwendig. In \autoref{sec:trsnsNeti} ist graphisch dargestellt wie die Umwandlung der Daten in ein Netzwerk funktioniert. 
+\section{Umwandlung der Daten in einen Graphen}
+
+Bevor die dynamischen Algorithmen auf die Zeitreihendaten angewendet werden können, müssen diese in Graphen transformiert werden. Dabei funktioniert die Umwandlung der Daten ähnlich wie bei statischen Algorithmen (vgl. \autoref{sec:trsnsStatic}). Der einzige Unterschied ist der, dass jeweils schrittweise kleine Abschnitte der Daten in Graphen umgewandelt werden. Nachfolgend wird dies an einem Beispiel näher veranschaulicht. Ein Temperatursensor liefert jede Sekunde einen Wert. Sobald 100 Werte des Sensors eingegangen sind, erfolgt die Umwandlung dieser Daten in einen Graphen unter Verwendung von \autoref{eq:euklidianDist}. Dieser Vorgang wiederholt sich anschließend immer wieder. Der Wert für die Länge der Abschnitte ist hierbei frei wählbar und kann als Parameter übergeben werden. Insofern die Zeitreihe eine Saisonalität besitzt, bietet es sich an diese für die Länge der Abschnitte zu verwenden. In einem letzten Schritt werden anschließend die Netzwerkdaten in eine Datei geschrieben. Dieser Schritt ist aufgrund der Art und Weise, wie die Algorithmen implementiert sind notwendig. In \autoref{img:tsToNet} ist graphisch dargestellt wie die Umwandlung der Daten in ein Netzwerk funktioniert. 
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=13cm]{fig/tsToNet/tsToCsv}
-	\caption{Umwandlung einer Zeitreihe in ein Netzwerk. Bei dem Netzwerk handelt es sich hierbei um ein Symbolbild.}
+	\caption{Umwandlung einer Zeitreihe in einen Beispielgraphen.}
 	\label{img:tsToNet}
 \end{figure}
 
 \label{ssec:trsnsCSV}
 Die verschiedenen Algorithmen erfordern unterschiedliche Übergabeformate. Aus diesem Grund werden anschließend kurz die Besonderheiten erklärt, auf welche dabei geachtet werden muss. \\
-\textbf{NetSimile: } Das Übergabeformat für den NetSimile Algorithmus ist in \autoref{img:tsToNet} ganz rechts dargestellt. Jede Zeile stellt hierbei eine Kante des Netzwerks dar. Bei der ersten Spalte handelt es sich um den Ursprungsknoten der Kante, bei der zweiten Spalte um den Zielknoten und bei der letzten Spalte um die Gewichtung.\\
-\textbf{MIDAS: } Beim MIDAS Algorithmus ist es nicht möglich die Gewichtung der Kanten direkt an den Algorithmus zu übergeben. Es ist jedoch möglich die Gewichtung der Kanten indirekt an den Algorithmus zu übergeben. Dazu wird die gleiche Kante mehrmals in Abhängigkeit der Gewichtung an den Algorithmus übergeben. In \autoref{img:tsToNetMiData} ist ein  kleiner Ausschnitt einer Datei für den MIDAS dargestellt.
+
+\begin{mldescription}
+	\mlitem{NetSimile:} Das Übergabeformat für den NetSimile-Algorithmus ist in \autoref{img:tsToNet} ganz rechts dargestellt. Jede Zeile stellt hierbei eine Kante des Netzwerks dar. Bei der ersten Spalte handelt es sich um den Ursprungsknoten der Kante, bei der zweiten Spalte um den Zielknoten und bei der letzten Spalte um die Gewichtung.
+	\mlitem{MIDAS:}  Beim MIDAS-Algorithmus ist es nicht möglich die Gewichtung der Kanten direkt an den Algorithmus zu übergeben. Es ist jedoch möglich die Gewichtung der Kanten indirekt an den Algorithmus zu übergeben, indem gleiche Kanten mehrmals in Abhängigkeit der Gewichtung an den Algorithmus übergeben. In \autoref{img:tsToNetMiData} ist ein kleiner Ausschnitt einer Datei für den MIDAS dargestellt.
+	\mlitem{MIDAS-R:} Die Berechnungen für den MIDAS-R Algorithmus sind im Verhältnis zum MIDAS Algorithmus umfangreicher. Insofern für den MIDAS-R Algorithmus die gleichen Daten verwendet werden wie für den MIDAS Algorithmus, benötigen die Berechnungen sehr lange. Aus diesem Grund wurde eine Hauptkomponenten Zerlegung durchgeführt, um die Größe der Adjazenzmatrix zu verringert. Es entsteht ein kleineres Netzwerk, welches an den MIDAS-R Algorithmus übergeben werden kann. \label{ssec:trsnsMidasR}
+\end{mldescription}
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=2cm]{fig/tsToNet/midasData}
-	\caption{Datensatz Midas. 1Spalte: Ursprungsknoten, 2Spalte: Zielknoten, 3Spalte: Abschnitt}
+	\caption{Datensatz für MIDAS bestehend aus Ursprungsknoten, Zielknoten und Zeitabschnitt}
 	\label{img:tsToNetMiData}
 \end{figure}
-\textbf{MIDAS-R: }. Die Berechnungen für den MIDAS-R Algorithmus sind im Verhältnis zum MIDAS Algorithmus umfangreicher. Insofern für den MIDAS-R Algorithmus die gleichen Daten verwendet werden wie für den MIDAS Algorithmus, benötigen die Berechnungen sehr lange. Aus diesem Grund wurde eine Hauptkomponenten Zerlegung durchgeführt, um die Größe der Adjazenzmatrix zu verringert. Es entsteht ein kleineres Netzwerk, welches an den MIDAS-R Algorithmus übergeben werden kann. 
-\label{ssec:trsnsMidasR}
-
-\workTodo{Midas R liefert eigentlich mehrere Ausreißer Scores es wäre vielleicht interessant diese einzeln zu betrachten und nicht zusammenaddiert.}
 
 \input{chapters/ch-netsimile}
 \input{chapters/ch-midas}
