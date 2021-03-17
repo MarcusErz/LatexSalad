@@ -120,20 +120,21 @@ Das heißt die Netzwerke der Zeitreihe werden nicht in ein Graphen Objekt umgewan
 
 
 
-\workTodo{n-te Wurzel bei Formel für Geometrischen Mittelwert}
-\begin{description}
-	\item[$\sum_{i=1}^{n} x_i $]\hfill\\ Summe der Kantengewichte eines Knoten.
-	\item[$\frac{1}{n}\sum_{i=1}^{n} x_i $]\hfill\\ Arithmetisches Mittel der Kantengewichte eines Knoten.
-	\item[$ \sqrt{\prod\limits_{i = 1}^{n} x_i} $]\hfill\\ Geometrisches Mittel der Kantengewichte eines Knoten.
-	\item[$
-	x(p) =
-	\begin{cases}
-		\frac{1}{2}x_(np) +       & \quad \text{if } n \text{ is even}\\
-		-(n+1)/2  & \quad \text{if } n \text{ is odd}
-	\end{cases}
-	$]\hfill\\ Geometrisches Mittel der Kanten mit den 10\% höchsten Kantengewichten. 
-	\item[$\frac{1}{n}\sum_{i=1}^{n} x_i$]\hfill\\ Geometrisches Mittel der Kanten mit den 20\% höchsten Kantengewichten. 
-\end{description}
+\workTodo{Wie kann das mit den 10 Prozent richtig dargestellt werden.}
+\begin{itemize}
+	\item $\sum_{i=1}^{n} x_i $ \hfill\\ Summe der Kantengewichte eines Knoten.
+	\item $\frac{1}{n}\sum_{i=1}^{n} x_i $ \hfill\\ Arithmetisches Mittel der Kantengewichte eines Knoten.
+	\item $ \sqrt[n]{\prod\limits_{i = 1}^{n} x_i} $ \hfill\\ Geometrisches Mittel der Kantengewichte eines Knoten.
+%	\item $
+%	x(p) =
+%	\begin{cases}
+%		\frac{1}{2}x_(np) +       & \quad \text{if } n \text{ is even}\\
+%		-(n+1)/2  & \quad \text{if } n \text{ is odd}
+%	\end{cases}
+%	$ \hfill\\ Geometrisches Mittel der Kanten mit den 10\% höchsten Kantengewichten. 
+	\item $ \sqrt[n]{\prod\limits_{i = 1}^{n} x_i} $ \hfill\\ Geometrisches Mittel der Kanten mit den 10\% höchsten Kantengewichten.
+	\item $ \sqrt[n]{\prod\limits_{i = 1}^{n} x_i} $ \hfill\\ Geometrisches Mittel der Kanten mit den 20\% höchsten Kantengewichten. 
+\end{itemize}
 
 Auf diesen Features wurden anschließend die bisherigen Aggregation durchgeführt. Dadurch konnten erste Ausreißer in der Zeitreihe gefunden werden (vgl. \autoref{img:netsimile:anomalie_2}).
 
@@ -143,9 +144,6 @@ Auf diesen Features wurden anschließend die bisherigen Aggregation durchgeführt.
 	\caption{Ausreißer Score der vollständigen Graphen mit gewichteten Kanten}
 	\label{img:netsimile:anomalie_2}
 \end{figure}
-
-\workTodo{Bin mir nicht sicher zu welchen Elementen die Canbarra Distanz berechnet wird.}. Des Weiteren wurde ein neuer Parameter eingeführt. Über diesen kann gesteuert werden zu wie vielen vorgänger Abschnitten die Distanz berechnet werden soll. Dadurch kann gesteuert werden wie schnell ein Algorithmus vergisst. Eine Auflistung der Parameter des Algorithmus ist in \autoref{table:parmeterNeti} zu sehen.
-
 
 Um zu untersuchen, wie gut der Algorithmus funktioniert, wurde er auf Zeitreihen getestet. Als Testdaten   wurden, ein und zweidimensionale Zeitreihen der Numenta Gruppe verwendet. Diese Zeitreihen enthalten verschiedene Ausreißer Typen, auf deren Erkennung der Algorithmus getestet wurde. Die Qualität der Ausreißererkennung wurde  mithilfe eines Punktesystem bewertet. Dabei bedeuteten 0 Punkte, Ausreißer nicht erkannt und 4 Punkte bedeuteten Ausreißer sehr gut erkannt. Die Parameter, welche für die Tests gewählt werden mussten, werden in \autoref{table:parmeterNeti} beschrieben.\\
 
@@ -188,8 +186,6 @@ Um zu untersuchen, wie gut der Algorithmus funktioniert, wurde er auf Zeitreihen
 		\textbf{Parameter}& \textbf{Beschreibung}\\
 		\midrule
 		Periodizität & Wie in \autoref{sec:trsnsNeti} \workTodo{Referenz sollte glaube ich autoref -> sec:trsnsNeti sein} erläutert muss die Zeitreihe in kleinere Intervalle aufgegliedert werden. Über diesen Parameter wird die Größe der Intervalle gesteuert. Für die Tests wurde der Parameter auf 288 gesetzt, da es sich hierbei um die Saisonalität der Zeitreihen handelt.\\
-		\midrule
-		Fenstergröße & Wie in \autoref{sec:optiNeti} erklärt, bestimmt dieser Parameter die Anzahl der vorangegangenen Abschnitte zu welchen die Canberra Distanz berechnet wird. Dieser Parameter wurde für die Tests auf 5 gesetzt.\\
 		\midrule
 		Abweichung & Legt fest ab wann es sich bei einem Abschnitt um einen Ausreißer handelt. Der Parameter wurde für die Tests auf 3 gesetzt. Bedeutet wenn der Ausreißer Score um das dreifache der Standardabweichung vom Durchschnitt abweicht, wird der Abschnitt als Ausreißer gekennzeichnet.\\
 		\bottomrule
