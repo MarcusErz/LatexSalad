@@ -88,9 +88,9 @@ Bei dem MIDAS-R-Algorithmus handelt es sich um eine Erweiterung des MIDAS-Algori
 
 \textbf{Spatial Relations:} Hierbei werden zwei neue Merkmale eingeführt, um verschiedene Ausreißer-Typen identifizieren zu können. Die neuen Merkmale werden hierbei in einer CMS-Datenstrukturen gespeichert. Der Algorithmus speichert demzufolge diese drei Merkmale:
 \begin{description}
-	\item[$ $]\hfill\\ Anzahl an Kanten zwischen Knoten u un Knoten v. Dieses Feature wird auch vom MIDAS Algorithmus verwendet.
-	\item[$ $]\hfill\\ Gesamtanzahl an Nachbarknoten eines Knoten u.
-	\item[$  $]\hfill\\ Aktuelle Anzahl an Nachbarknoten eines Knoten u.
+	\item[$ \hat{s}_{uv}$]\hfill\\ Anzahl an Kanten zwischen Knoten u und Knoten v. Dieses Feature wird auch vom MIDAS Algorithmus verwendet.
+	\item[$ \hat{s}_{u}$]\hfill\\ Gesamtanzahl an Nachbarknoten eines Knoten u.
+	\item[$ \hat{a}_{u}$]\hfill\\ Aktuelle Anzahl an Nachbarknoten eines Knoten u.
 \end{description}
 
 Aus diesen drei Features wird anschließend ein Ausreißer-Score abgeleitet.

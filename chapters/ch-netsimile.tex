@@ -129,20 +129,21 @@ Somit müssen hierbei für vollständige Graphen andere Features extrahiert werden.
 
 Aus diesem Grund werden aus dem NetSimile lediglich die Ansätze der Merkmals-Extrahierung, die Distanzbildung zweier Signaturvektoren, sowie der Schwellwert für die Ausreißeridentifizierung übernommen. Das heißt die Netzwerke der Zeitreihe werden nicht in ein Graphenobjekt umgewandelt, sondern als Adjazenzmatrix gespeichert. Dadurch können die Features deutlich effizienter berechnet werden. Zudem werden lediglich Merkmale verwendet, die für vollständige Graphen geeignet sind. Dabei werden die nachfolgenden Merkmale neu eingeführt.
 
-\workTodo{n-te Wurzel bei Formel für Geometrischen Mittelwert}
-\begin{description}
-	\item[$\sum_{i=1}^{n} x_i $]\hfill\\ Summe der Kantengewichte eines Knoten.
-	\item[$\frac{1}{n}\sum_{i=1}^{n} x_i $]\hfill\\ Arithmetisches Mittel der Kantengewichte eines Knoten.
-	\item[$ \sqrt{\prod\limits_{i = 1}^{n} x_i} $]\hfill\\ Geometrisches Mittel der Kantengewichte eines Knoten.
-	\item[$
-	x(p) =
-	\begin{cases}
-		\frac{1}{2}x_(np) +       & \quad \text{if } n \text{ is even}\\
-		-(n+1)/2  & \quad \text{if } n \text{ is odd}
-	\end{cases}
-	$]\hfill\\ Geometrisches Mittel der Kanten mit den 10\% höchsten Kantengewichten. 
-	\item[$\frac{1}{n}\sum_{i=1}^{n} x_i$]\hfill\\ Geometrisches Mittel der Kanten mit den 20\% höchsten Kantengewichten. 
-\end{description}
+\workTodo{Wie kann das mit den 10 Prozent richtig dargestellt werden.}
+\begin{itemize}
+	\item $\sum_{i=1}^{n} x_i $ \hfill\\ Summe der Kantengewichte eines Knoten.
+	\item $\frac{1}{n}\sum_{i=1}^{n} x_i $ \hfill\\ Arithmetisches Mittel der Kantengewichte eines Knoten.
+	\item $ \sqrt[n]{\prod\limits_{i = 1}^{n} x_i} $ \hfill\\ Geometrisches Mittel der Kantengewichte eines Knoten.
+%	\item $
+%	x(p) =
+%	\begin{cases}
+%		\frac{1}{2}x_(np) +       & \quad \text{if } n \text{ is even}\\
+%		-(n+1)/2  & \quad \text{if } n \text{ is odd}
+%	\end{cases}
+%	$ \hfill\\ Geometrisches Mittel der Kanten mit den 10\% höchsten Kantengewichten. 
+	\item $ \sqrt[n]{\prod\limits_{i = 1}^{n} x_i} $ \hfill\\ Geometrisches Mittel der Kanten mit den 10\% höchsten Kantengewichten.
+	\item $ \sqrt[n]{\prod\limits_{i = 1}^{n} x_i} $ \hfill\\ Geometrisches Mittel der Kanten mit den 20\% höchsten Kantengewichten. 
+\end{itemize}
 
 Auf diesen Merkmalen wurden anschließend die bisherigen Aggregation durchgeführt. Dadurch konnten erste Ausreißer in der Zeitreihe gefunden werden (vgl. \autoref{img:netsimile:anomalie_2}).
 
