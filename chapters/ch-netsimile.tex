@@ -5,7 +5,7 @@
 \subsection{Grundlagen}
 \label{ssec:ns-gl}
 
-NetSimile ist ein skalierbarer Algorithmus zur Erkennung von Ähnlichkeiten sowie Anomalien, in Netzwerken unterschiedlicher Größen. Hierfür wird der Datensatz in gleich große Zeitintervalle unterteilt, um die daraus resultierenden Graphen auf unterschiedliche Merkmale zu untersuchen. Diese Merkmale sind strukturelle Eigenschaften der einzelnen Knoten wie bspw. die Dichte eines Knotens oder die Anzahl an Nachbarn in einem Ego-Netzwerk. Die Signatur ergibt sich aus den einzelnen Aggregationen der Knoten wie  dem Median aus der Dichte der jeweiligen Knoten. So entsteht aus sieben Merkmalen und fünf Aggregationen ein Signaturvektor mit 35 verschiedenen Signaturen. So ermöglicht dieser Vektor die Beschreibung sowie den Vergleich der einzelnen Graphen. Für den Vergleich wird die Canberra-Distanz aus den Signaturvektoren zweier zeitlich nebeneinander liegenden Graphen berechnet \citep[vgl.][S.~1]{Netsimile} Als Input für diesen Algorithmus wird eine Menge von $k$-anonymisierten Netzwerken mit beliebig unterschiedlichen Größen, die keine überlappenden Knoten oder Kanten besitzen, herangezogen. Das Resultat sind Werte für die strukturelle Ähnlichkeit oder den Abstand eines jeden Paares der gegebenen Netzwerke bzw. ein Merkmalsvektor für jedes Netzwerk \citep[vgl.][S.~1]{Netsimile}. NetSimile durchläuft drei Schritte, die im Folgenden beschrieben werden.
+NetSimile ist ein skalierbarer Algorithmus zur Erkennung von Ähnlichkeiten sowie Anomalien, in Netzwerken unterschiedlicher Größen. Hierfür wird der Datensatz in gleich große Zeitintervalle unterteilt, um die daraus resultierenden Graphen auf unterschiedliche Merkmale zu untersuchen. Diese Merkmale sind strukturelle Eigenschaften der einzelnen Knoten wie bspw. die Dichte eines Knotens oder die Anzahl an Nachbarn in einem Ego-Netzwerk. Die Signatur ergibt sich aus den einzelnen Aggregationen der Knoten wie  dem Median aus der Dichte der jeweiligen Knoten. So entsteht aus sieben Merkmalen und fünf Aggregationen ein Signaturvektor mit 35 verschiedenen Signaturen. So ermöglicht dieser Vektor die Beschreibung sowie den Vergleich der einzelnen Graphen. Für den Vergleich wird die Canberra-Distanz aus den Signaturvektoren zweier zeitlich nebeneinander liegenden Graphen berechnet \citep[vgl.][S.~1]{Netsimile}. Als Input für diesen Algorithmus wird eine Menge von $k$-anonymisierten Netzwerken mit beliebig unterschiedlichen Größen, die keine überlappenden Knoten oder Kanten besitzen, herangezogen. Das Resultat sind Werte für die strukturelle Ähnlichkeit oder den Abstand eines jeden Paares der gegebenen Netzwerke bzw. ein Merkmalsvektor für jedes Netzwerk \citep[vgl.][S.~1]{Netsimile}. NetSimile durchläuft drei Schritte, die im Folgenden beschrieben werden.
 \subsubsection{Extrahierung von Merkmalen}
 Für jeden Knoten $i$ werden, basierend auf ihren Ego-Netzwerken, die folgenden Merkmale generiert:
 \begin{table}[H]
@@ -42,7 +42,7 @@ Für jeden Knoten $i$ werden, basierend auf ihren Ego-Netzwerken, die folgenden M
 %\end{mldescription}
 
 \subsubsection{Aggregierung von Merkmalen}
-Im nächsten Schritt wird für jeden Graphen \textit{$G_j$} eine $Knoten \times Merkmal$-Matrix $F_{G_j}$ zusammengefasst. Dieser besteht aus den Merkmalsvektoren aus Schritt 1.
+Im nächsten Schritt wird für jeden Graphen \textit{$G_j$} eine $Knoten \times Merkmal$-Matrix $F_{G_j}$ zusammengefasst. Diese besteht aus den Merkmalsvektoren aus Schritt 1.
 Da der Vergleich von $k$-ten $F_{G_j}$ sehr aufwändig ist, wird für jede $F_{G_j}$ ein Signaturvektor $\vec{s}_{G_j}$ ausgegeben. Dieser aggregiert den Median, den Mittelwert, die Standardabweichung, die Schiefe sowie die Kurtosis der Merkmale aus der Matrix.  \citep[vgl.][S.~3]{Netsimile}
 
 \subsubsection{Vergleich der Signaturvektoren}
@@ -87,7 +87,7 @@ Betrachtet man in diesem Kontext den Ausreißer-Score, ist gut zu erkennen, dass 
 \end{figure}
 
 
-Betrachtet man die Differenz aus dem Durchschnitt der Signaturvektoren und dem der Ausreißergraphen in einer \textit{Heatmap}, dann ist zu erkennen, dass die Ausreißer vorwiegend von besonders großen Ego-Netzwerken und einer hohen Anzahl an E-Mails verursacht werden. Vergleicht man die Zeitleiste (\citep{EnronTimeline}) mit den Ausreißerdaten, ist ein starker Anstieg des Email-Verkehrs im Oktober 2001 zu erkennen. Hierbei wurde von Enron ein Report, über einen Quartals-Verlust von 618 Millionen US-Dollar und eine Reduzierung des Eigenkapitals um 1.2 Milliarden, veröffentlicht. Im Dezember 2001 ist ein verhältnismäßig geringer Email-Verkehr festzustellen. Betrachtet man hierbei die Zeitleiste, so wurden in dieser Zeitspanne 4000 Mitarbeiter entlassen. \citep{EnronTimeline}
+Betrachtet man die Differenz aus dem Durchschnitt der Signaturvektoren und dem der Ausreißergraphen in einer \textit{Heatmap}, dann ist zu erkennen, dass die Ausreißer vorwiegend von besonders großen Ego-Netzwerken und einer hohen Anzahl an E-Mails verursacht werden. Vergleicht man die Zeitleiste \citep{EnronTimeline} mit den Ausreißerdaten, ist ein starker Anstieg des Email-Verkehrs im Oktober 2001 zu erkennen. Hierbei wurde von Enron ein Report, über einen Quartals-Verlust von 618 Millionen US-Dollar und eine Reduzierung des Eigenkapitals um 1.2 Milliarden, veröffentlicht. Im Dezember 2001 ist ein verhältnismäßig geringer Email-Verkehr festzustellen. Betrachtet man hierbei die Zeitleiste, so wurden in dieser Zeitspanne 4000 Mitarbeiter entlassen. \citep{EnronTimeline}
 
 
 
@@ -101,7 +101,7 @@ Betrachtet man die Differenz aus dem Durchschnitt der Signaturvektoren und dem d
 \subsubsection{Anwendung auf Darpa-Datensatz}
 \label{sec:ns-Darpa}
 
-Beim Darpa-Datensatz können die Aureißer besser klassifiziert werden. Die Gründe hierfür liegen auf der Größe und Vielfalt des Datensatzes. Der Enron-Datensatz hat eine Größe von 1MB und ca. 50.000 Kanten. Der Darpa-Datensatz hingegen hat eine Größe von 50 MB mit 4.5 Mio Kanten. Für die Berechnung ergibt sich hierbei eine Laufzeit von drei Stunden.
+Beim Darpa-Datensatz können die Aureißer besser klassifiziert werden. Die Gründe hierfür liegen an der Größe und Vielfalt des Datensatzes. Der Enron-Datensatz hat eine Größe von 1MB und ca. 50.000 Kanten. Der Darpa-Datensatz hingegen hat eine Größe von 50 MB mit 4.5 Mio Kanten. Für die Berechnung ergibt sich hierbei eine Laufzeit von drei Stunden.
 \\
 \\
 Wird für die Dateigröße der Faktor 50 und bei der Kantenanzahl der Faktor 90 gewählt, so ist bei der Berechnungszeit der Faktor 90 wiederzufinden. Bei Betrachtung der Laufzeit kann eine lineare Abhängigkeit zwischen Kantenanzahl und der benötigten Berechnungszeit festgestellt werden.
