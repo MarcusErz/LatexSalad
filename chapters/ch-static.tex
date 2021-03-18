@@ -2,15 +2,15 @@
 \chapter{Statische Algorithmen zur Ausreißererkennung}
 \label{chap:static}
 Die untersuchten Algorithmen können in statische und dynamische Algorithmen untergliedert werden. Für statische Algorithmen ist kennzeichnend, dass die Algorithmen 
-im Verlauf der Zeit keine Entwicklung aufweisen. Gleiches gilt auch für die zugrundeliegenden Daten. Diese bleiben während des Algorithmus unverändert. In diesem Kapitel werden zunächst zwei statische Algorithmen zur Ausreißererkennung auf unterschiedlichen Datentypen, wie bspw. Videos, Bildern oder Netzwerken, vorgestellt. Anschließend werden die Ergebnisse verschiedener Experimente mit den Algorithmen aufbereitet. Bei den Algorithmen handelt es sich um einen auf Perculation basierenden Algorithmus (vgl. \autoref{sec:per-intro}) und einen auf IsoMap basierenden Algorithmus (vgl. \autoref{sec:IsoBased}). In Abschnitt \autoref{sec:trsnsStatic} wird beschrieben, wie verschiedene Datentypen in ein Netzwerk umgewandelt werden können. Dieser Schritt ist als Vorverarbeitungsschritt der Daten erforderlich.
+im Verlauf der Zeit keine Entwicklung aufweisen. Gleiches gilt auch für die zugrundeliegenden Daten. Diese bleiben während des Algorithmus unverändert. In diesem Kapitel werden zunächst zwei statische Algorithmen zur Ausreißererkennung auf unterschiedlichen Datentypen, wie bspw. Videos, Bildern oder Netzwerken, vorgestellt. Anschließend werden die Ergebnisse verschiedener Experimente mit den Algorithmen aufbereitet. Bei den Algorithmen handelt es sich um einen auf Percolation basierenden Algorithmus (vgl. \autoref{sec:per-intro}) und einen auf IsoMap basierenden Algorithmus (vgl. \autoref{sec:IsoBased}). In Abschnitt \autoref{sec:trsnsStatic} wird beschrieben, wie verschiedene Datentypen in ein Netzwerk umgewandelt werden können. Dieser Schritt ist als Vorverarbeitungsschritt der Daten erforderlich.
 
 %Beide Algorithmen liefern lediglich einen Ausreißer Score zurück. Um zu bestimmen inwiefern ein Element konkret ein Ausreißer ist, wird zunächst den Mittelwert und die Standardabweichung des Outlier Scores berechnet. Falls ein Element in Abhängigkeit von der Standardabweichung sehr stark vom Mittelwert abweicht wird das Element als Ausreißer klassifiziert.
 
 \section{Transformation der Daten \label{sec:trsnsStatic}}
 
-Die IsoMap- und Perculation-basierten Ansätze stellen graphen-basierte Algorithmen dar. Aus diesem Grund können sie lediglich auf Netzwerkdaten angewandt werden. Andere Datenformen müssen zunächst in einen Graphen transformiert werden, bevor die zwei Algorithmen verwendet werden können. Voraussetzung für die Transformation ist, dass eine Distanz zwischen einzelnen Datenelementen berechnet werden kann \citep[vgl.][S.~2]{10.3389/fphy.2019.00194}. Der Fokus des Forschungsprojektes liegt hauptsächlich auf der Ausreißererkennung in Zeitreihen. Aus diesem Grund wird nachfolgend exemplarisch erläutert, wie Zeitreihen in Netzwerke transformiert werden können.  
+Die IsoMap- und Percolation-basierten Ansätze stellen graphen-basierte Algorithmen dar. Aus diesem Grund können sie lediglich auf Netzwerkdaten angewandt werden. Andere Datenformen müssen zunächst in einen Graphen transformiert werden, bevor die zwei Algorithmen verwendet werden können. Voraussetzung für die Transformation ist, dass eine Distanz zwischen einzelnen Datenelementen berechnet werden kann \citep[vgl.][S.~2]{10.3389/fphy.2019.00194}. Der Fokus des Forschungsprojektes liegt hauptsächlich auf der Ausreißererkennung in Zeitreihen. Aus diesem Grund wird nachfolgend exemplarisch erläutert, wie Zeitreihen in Netzwerke transformiert werden können.  
 
-Für die Transformation einer Zeitreihe muss zunächst die Distanz zwischen den einzelnen Elementen (Zeitpunkten) der Zeitreihe berechnet werden. Hierzu wird das Distanzmaß aus \autoref{eq:euklidianDist} genutzt. 
+Für die Transformation einer Zeitreihe muss zunächst die Distanz zwischen den einzelnen Elementen bzw. Zeitpunkten der Zeitreihe berechnet werden. Hierzu wird das Distanzmaß aus \autoref{eq:euklidianDist} genutzt. 
 
 \begin{equation}
 	D_{ij}=\left(\sum_{k} \left|v_{k}^{i}-v_{k}^{j}\right|^{p}\right)^{1/p} \label{eq:euklidianDist}
@@ -28,7 +28,7 @@ Der Algorithmus verfolgt den Ansatz, Informationen über Ausreißer, durch die Red
 \label{ssec:iso-algo}
 
 \subsubsection{IsoMap}
-Beim IsoMap handelt es sich um einen Algorithmus zur nichtlinearen Dimensionsreduktion. Zunächst werden hierbei die Nachbarn eines jeden Punktes bzw. Knotens über den Ball-Tree-Algorithmus oder den KD-Tree-Algorithmus bestimmt. Anschließend wird jeder Punkt mit den gefundenen Nachbarn verknüpft, wodurch ein neuer Körper bzw. ein neues Netzwerk entsteht. Daraufhin wird eine neue Distanzmatrix auf dem entstandenen Körper berechnet, indem die kürzeste Distanz zwischen allen Punkten auf dem Körper berechnet wird. Diese Matrix kann ebenso als geodätische Distanzmatrix $D_{G}$ bezeichnet werden. Die eigentliche Dimensionsreduktion wird anschließend über die Eigenvektoren und Eigenwerte der Matrix $D_{G}$ durchgeführt. Das Ergebnis der Dimensionsreduktion ist eine neue Menge an Features für jedes Element $V^{i} = {v^{i}_{1}. . . v^{i}_{r}}$ des ursprünglichen Datensatzes. Durch das Erzeugen der Matrix $D_{G}$ wird erreicht, dass nichtlineare Zusammenhänge bei der Dimensionsreduktion erhalten bleiben \citep[vgl.][S.~3-4]{Tenenbaum2319}.
+Beim IsoMap handelt es sich um einen Algorithmus zur nichtlinearen Dimensionsreduktion. Zunächst werden hierbei die Nachbarn eines jeden Punktes bzw. Knotens über den Ball-Tree-Algorithmus oder den KD-Tree-Algorithmus bestimmt. Anschließend wird jeder Punkt mit den gefundenen Nachbarn verknüpft, wodurch ein neuer Körper bzw. ein neues Netzwerk entsteht. Daraufhin wird eine neue Distanzmatrix auf dem entstandenen Körper berechnet, indem die kürzeste Distanz zwischen allen Punkten auf dem Körper berechnet wird. Diese Matrix kann ebenso als geodätische Distanzmatrix $D_{G}$ bezeichnet werden. Die eigentliche Dimensionsreduktion wird anschließend über die Eigenvektoren und Eigenwerte der Matrix $D_{G}$ durchgeführt. Das Ergebnis der Dimensionsreduktion ist eine neue Menge an Features für jedes Element $V^{i} = {v^{i}_{1}. . . v^{i}_{r}}$ des ursprünglichen Datensatzes. Durch das Erzeugen der Matrix $D_{G}$ wird erreicht, dass nichtlineare Zusammenhänge bei der Dimensionsreduktion erhalten bleiben \citep[vgl.][S.~3f.]{Tenenbaum2319}.
 
 \begin{figure}[H]
 	\centering
@@ -40,7 +40,8 @@ Beim IsoMap handelt es sich um einen Algorithmus zur nichtlinearen Dimensionsred
 
 \subsubsection{IsoMap-Algorithmus zur Erkennung von Ausreißern}
 \label{ssec:iso-weiter}
-Mithilfe des IsoMap-Algorithmus werden für jedes Element neue Features ($V^{i} = {v^{i}_{1}. . . v^{i}_{r}}$) berechnet. In einem nächsten Schritt wird versucht, aus diesen Eigenschaften, die ursprüngliche Distanzmatrix zu rekonstruieren. Dazu wird aus den Eigenschaften $V^{i}$, unter Verwendung von \autoref{eq:euklidianDist}, eine neue Distanzmatrix $\hat{D}$ berechnet. Nun können die Matrizen $D_{G}$ und $\hat{D}$ miteinander verglichen werden. Hierzu muss die Pearson-Korrelation zwischen den jeweiligen Spalten der Matrizen berechnet werden. Für Ausreißer wird angenommen, dass die Korrelation sehr niedrig ist, da Informationen über sie bei der Reduktion verloren gehen \citep[vgl.][S.~3]{10.3389/fphy.2019.00194}. Die Korrelation kann also als Ausreißer-Score genutzt werden. Um zu klassifizieren, ob es sich bei einem konkreten Element um einen Ausreißer handelt, wird zunächst der Mittelwert und die Standardabweichung des Ausreißer-Scores berechnet. Falls ein Element um einen bestimmten Schwellwert vom Mittelwert abweicht, wird es als Ausreißer klassifiziert.
+Mithilfe des IsoMap-Algorithmus werden für jedes Element neue Features ($V^{i} = {v^{i}_{1}. . . v^{i}_{r}}$) berechnet. In einem nächsten Schritt wird versucht, aus diesen Eigenschaften, die ursprüngliche Distanzmatrix zu rekonstruieren. Dazu wird aus den Eigenschaften $V^{i}$, unter Verwendung von \autoref{eq:euklidianDist}, eine neue Distanzmatrix $\hat{D}$ berechnet. \\ 
+Nun können die Matrizen $D_{G}$ und $\hat{D}$ miteinander verglichen werden. Hierzu muss die Pearson-Korrelation zwischen den jeweiligen Spalten der Matrizen berechnet werden. Für Ausreißer wird angenommen, dass die Korrelation sehr niedrig ist, da Informationen über sie bei der Reduktion verloren gehen \citep[vgl.][S.~3]{10.3389/fphy.2019.00194}. Die Korrelation kann also als Ausreißer-Score genutzt werden. Um zu klassifizieren, ob es sich bei einem konkreten Element um einen Ausreißer handelt, wird zunächst der Mittelwert und die Standardabweichung des Ausreißer-Scores berechnet. Falls ein Element um einen bestimmten Schwellwert vom Mittelwert abweicht, wird es als Ausreißer klassifiziert.
 
 \subsection{Implementierung}
 \label{sec:im-implement}
@@ -56,31 +57,32 @@ Für den IsoMap-Algorithmus stellt die Python Bibliothek 'scikit-learn' eine Impl
 		\textbf{Ausreißer Typ}& \textbf{Dateiname}&
 		\textbf{1D}\\
 		\midrule
-	Einzelne Peaks (vgl. \autoref{img:dailyPeaksIso}) & anomaly-art-daily-peaks & *\\
+	Einzelne Peaks  & anomaly-art-daily-peaks & *\\
 		\midrule
-	Zunahme an Rauschen (vgl. \autoref{img:increaseNoiseIso}) & anomaly-art-daily-increase-noise &**\\
+	Zunahme an Rauschen  & anomaly-art-daily-increase-noise &**\\
 		\midrule
-	Signal Drift (vgl. \autoref{img:dailyDriftIso}) & anomaly-art-daily-drift &**\\
+	Signal Drift & anomaly-art-daily-drift &**\\
 		\midrule
-	Kontinuierliche Zunahme der Amplitude (vgl. \autoref{img:ampRiseIso})& art-daily-amp-rise & **\\
+	Kontinuierliche Zunahme der Amplitude & art-daily-amp-rise & **\\
 		\midrule
-	Zyklus mit höherer Amplitude (vgl. \autoref{img:jumpsupIso})& art-daily-jumpsup &*\\
+	Zyklus mit höherer Amplitude & art-daily-jumpsup &*\\
 		\midrule
-	Zyklus mit geringerer Amplitude (vgl. \autoref{img:jumpsdownIso})& art-daily-jumpsdown & **\\
+	Zyklus mit geringerer Amplitude & art-daily-jumpsdown & **\\
 		\midrule
-	Zyklus-Aussetzer (vgl. \autoref{img:flatmiddleIso})& art-daily-flatmiddle &*\\
+	Zyklus-Aussetzer & art-daily-flatmiddle &*\\
 		\midrule
-	Signal-Aussetzer (vgl. \autoref{img:nojumpIso})& art-daily-nojump & -\\
+	Signal-Aussetzer & art-daily-nojump & -\\
 		\midrule
-	Frequenzänderung (vgl. \autoref{img:sequenceChangeIso})& anomaly-art-daily-sequence-change &-\\
+	Frequenzänderung & anomaly-art-daily-sequence-change &-\\
 		\bottomrule
 	\end{tabular}
-	\caption{IsoMap-Performance}
+	\caption{IsoMap-Performance (vgl. \autoref{app-iso})}
 	\label{tab:isomap:performance}
 \end{table}
 
 
-Für die durchgeführten Tests wurden die Zeitreihen aus \autoref{sec:numTS} verwendet. Um zu bewerten, wie gut der Algorithmus funktioniert, wird ein Punktesystem eingeführt. In diesem können maximal vier Sterne erreicht werden, die dafür stehen, dass Ausreißer sehr gut erkannt werden. Null Sterne hingegen bedeuten, dass Ausreißer überhaupt nicht erkannt wurden. Der IsoMap-Algorithmus liefert tendenziell schlechte Ergebnisse bei der Erkennung von Ausreißern in Zeitreihen. Das Hauptproblem hierbei ist, dass starke Anstiege, bei welchen es sich nicht um Ausreißer handelt, fälschlicherweise zu einem starken Anstieg des Ausreißer-Scores führen. Dies kann an den markierten Stellen in \autoref{img:iso_trans} illustriert werden. Dies kann, je nach Schwellwert, zu einer hohen Quote an \textit{false-positive}-Klassifizierungen führen. Aus diesem Grund können tatsächliche Ausreißer häufig nicht eindeutig identifiziert werden. Eine ähnliche Problematik tritt in \citep {Uzun} bei der Verwendung des Random-Walk-Algorithmus auf. Das Problem konnte hierbei gelöst werden, indem vor der Anwendung des Algorithmus, eine Glättung der Zeitreihe durchgeführt wird. Dadurch werden abrupte Übergänge in der Zeitreihe abgemildert und deshalb nicht mehr als Ausreißer erkannt \citep[vgl.][S.~31-36]{Uzun}. Dies könnte ein möglicher Ansatz sein, um zukünftig bessere Ergebnisse erzielen zu können. Des Weiteren ist zu erkennen, dass der Algorithmus für einige Ausreißertypen nicht geeignet ist. Hierzu gehören Signal-Aussetzer und Frequenzänderungen. Bei diesen Ausreißertypen treten keinerlei unüblichen Werte auf, sondern lediglich Änderungen in der Saisonalität. 
+Für die durchgeführten Tests wurden die Zeitreihen aus \autoref{sec:numTS} verwendet. Um zu bewerten, wie gut der Algorithmus funktioniert, wird ein Punktesystem eingeführt. In diesem können maximal vier Sterne erreicht werden, die dafür stehen, dass Ausreißer sehr gut erkannt werden. Null Sterne hingegen bedeuten, dass Ausreißer überhaupt nicht erkannt wurden. Der IsoMap-Algorithmus liefert tendenziell schlechte Ergebnisse bei der Erkennung von Ausreißern in Zeitreihen. Das Hauptproblem hierbei ist, dass starke Anstiege, bei welchen es sich nicht um Ausreißer handelt, fälschlicherweise zu einem starken Anstieg des Ausreißer-Scores führen. Dies kann an den markierten Stellen in \autoref{img:iso_trans} illustriert werden. Dies kann, je nach Schwellwert, zu einer hohen Quote an \textit{false-positive}-Klassifizierungen führen. Aus diesem Grund können tatsächliche Ausreißer häufig nicht eindeutig identifiziert werden.  Eine ähnliche Problematik tritt in \citep {Uzun} bei der Verwendung des Random-Walk-Algorithmus auf. \\ 
+Das Problem konnte hierbei gelöst werden, indem vor der Anwendung des Algorithmus, eine Glättung der Zeitreihe durchgeführt wird. Dadurch werden abrupte Übergänge in der Zeitreihe abgemildert und deshalb nicht mehr als Ausreißer erkannt \citep[vgl.][S.~31-36]{Uzun}. Dies könnte ein möglicher Ansatz sein, um zukünftig bessere Ergebnisse erzielen zu können. Des Weiteren ist zu erkennen, dass der Algorithmus für einige Ausreißertypen nicht geeignet ist. Hierzu gehören Signal-Aussetzer und Frequenzänderungen. Bei diesen Ausreißertypen treten keinerlei unüblichen Werte auf, sondern lediglich Änderungen in der Saisonalität. 
 
 \begin{figure}[H]
 	\centering
@@ -91,20 +93,23 @@ Für die durchgeführten Tests wurden die Zeitreihen aus \autoref{sec:numTS} verwe
 
 
 \newpage
-\section{Perculation-basierter Algorithmus}
+\section{Percolation-basierter Algorithmus}
 \label{sec:per-intro}
 Bei diesem Algorithmus werden schrittweise die Kanten mit den höchsten Gewichten, aus dem mit \autoref{eq:euklidianDist} erzeugten Netzwerk, entfernt. Ziel dieses Prozesses ist es, Ausreißer vom restlichen Teil des Netzwerks zu trennen. Die Annahme hierbei ist, dass Ausreißer höhere Kantengewichte zu Nachbarn aufweisen und deshalb schneller separiert werden. Sobald ein Knoten komplett separiert ist, wird diesem ein Ausreißer-Score zugeordnet. Der Wert des Ausreißer-Scores wird über die zuletzt entfernte Kante des Knotens definiert. Dadurch erhalten früher separierte Knoten höhere Ausreißer-Scores als nachfolgende separierte Knoten \citep[vgl.][S.~3]{10.3389/fphy.2019.00194}. 
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=15cm]{fig/perco_procedure.png}
-	\caption{Ablauf Perculation-basierter Algorithmus \citep{10.3389/fphy.2019.00194}}
+	\caption{Ablauf Percolation-basierter Algorithmus \citep{10.3389/fphy.2019.00194}}
 	\label{img:perc_proc}
 \end{figure}
 
 \subsection{Implementierung}
 \label{sec:per-imp}
-Für die Implementierung des Perculation-basierten Algorithmus wurde, wie in \autoref{sec:im-implement}, die Python Bibliothek 'NumPy' verwendet. Während der Implementierung des Algorithmus, konnte festgestellt werden, dass die Laufzeit des Algorithmus sehr langsam ist. Aus diesem Grund wurden einige Veränderungen an dem Algorithmus vorgenommen, um die Performance zu verbessern. Dazu gehörte, dass nicht einzelne Kanten, sondern Gruppen an Kanten aus dem Netzwerk entfernt werden. Der Vorteil dieser Modifikation ist, dass seltener überprüft werden muss, ob ein Knoten weiterhin mit dem Rest des Netzwerks verbunden ist. Eine weitere Optimierung, die eingeführt wurde, ist die Verankerung eines Abbruchkriteriums. Dabei wird der Algorithmus angehalten sobald, eine bestimmte Menge an Kanten aus dem Netzwerk entfernt wurde. Da der Algorithmus nicht alle Berechnungen ausführen muss, kann damit eine Laufzeitoptimierung erreicht werden. Weiterhin konnte festgestellt werden, dass diese Veränderung keinen Einfluss auf die Qualität der Ausreißererkennung hat, da Ausreißer lediglich zu Beginn des Algorithmus gefunden werden. Ein weiteres Problem des ursprünglichen Algorithmus war, dass bei aufeinanderfolgenden Elementen der Zeitreihe teilweise starke Schwankungen im Ausreißer-Score auftraten (vgl. \autoref{img:varSlidingWin}). Aus diesem Grund können Ausreißer, die sich über mehrere Zeitpunkte hinweg erstrecken, nicht vollständig erkannt werden. Um die Schwankungen im Ausreißer-Score abzumildern, wurde dieser geglättet. Dazu wurde die Methode des gleitenden Mittelwert auf den Ausreißer-Score angewandt.\citep{Hyndman2011} In \autoref{eq:slidingAverage} ist eine exemplarische Formel für den gleitenden Mittelwert der Ordnung drei dargestellt. In \autoref{img:varSlidingWin} ist zu sehen, wie sich der Ausreißer-Score durch das Glätten verändert.
+Für die Implementierung des Percolation-basierten Algorithmus wurde, wie in \autoref{sec:im-implement}, die Python-Bibliothek 'NumPy' verwendet. Während der Implementierung des Algorithmus, konnte festgestellt werden, dass die Laufzeit des Algorithmus sehr langsam ist. Aus diesem Grund wurden einige Veränderungen an dem Algorithmus vorgenommen, um die Performance zu verbessern. Dazu gehörte, dass nicht einzelne Kanten, sondern Gruppen an Kanten aus dem Netzwerk entfernt werden. Der Vorteil dieser Modifikation ist, dass seltener überprüft werden muss, ob ein Knoten weiterhin mit dem Rest des Netzwerks verbunden ist. Eine weitere Optimierung, die eingeführt wurde, ist die Verankerung eines Abbruchkriteriums. Dabei wird der Algorithmus angehalten sobald, eine bestimmte Menge an Kanten aus dem Netzwerk entfernt wurde. Da der Algorithmus nicht alle Berechnungen ausführen muss, kann damit eine Laufzeitoptimierung erreicht werden. Weiterhin konnte festgestellt werden, dass diese Veränderung keinen Einfluss auf die Qualität der Ausreißererkennung hat, da Ausreißer lediglich zu Beginn des Algorithmus gefunden werden. Ein weiteres Problem des ursprünglichen Algorithmus war, dass bei aufeinanderfolgenden Elementen der Zeitreihe teilweise starke Schwankungen im Ausreißer-Score auftraten (vgl. \autoref{img:varSlidingWin}). Aus diesem Grund können Ausreißer, die sich über mehrere Zeitpunkte hinweg erstrecken, nicht vollständig erkannt werden. Um die Schwankungen im Ausreißer-Score abzumildern, wurde dieser geglättet. Dazu wurde die Methode des gleitenden Mittelwert auf den Ausreißer-Score angewandt.\citep{Hyndman2011} In \autoref{eq:slidingAverage} ist eine exemplarische Formel für den gleitenden Mittelwert der Ordnung drei dargestellt.
+\\
+\\
+In \autoref{img:varSlidingWin} ist zu sehen, wie sich der Ausreißer-Score durch das Glätten verändert.
 
 \begin{equation}
 	m_{\text{MA}}^{(3)}(t)={\frac {1}{3}}{\Big (}x(t-1)+x(t)+x(t+1){\Big )} \label{eq:slidingAverage}
@@ -117,7 +122,7 @@ Für die Implementierung des Perculation-basierten Algorithmus wurde, wie in \aut
 		\includegraphics[width=0.5\textwidth]{fig/resultsPercolation/art_daily_jumpsup}}
 	\subfloat{
 		\includegraphics[width=0.5\textwidth]{fig/resultsPercolation/art_daily_jumpsup_ohne}}
-	\caption{Vergleich Perculation Algorithmus mit Sliding Window Verfahren und ohne Sliding Window Verfahren}
+	\caption{Vergleich Percolation-Algorithmus mit und ohne gleitendem Mittelwert}
 	\label{img:varSlidingWin}
 \end{figure}
 
@@ -152,10 +157,10 @@ Um zu klassifizieren, ob es sich bei einem konkreten Element um einen Ausreißer 
 	Frequenzänderung  & anomaly-art-daily-sequence-change &-\\
 		\bottomrule
 	\end{tabular}
-	\caption{Performance des Perculation-basierten Algorithmus auf Zeitreihen (vgl. \autoref{app-perc})}
-	\label{tab:perculation:timeseriesperformance}
+	\caption{Performance des Percolation-basierten Algorithmus auf Zeitreihen (vgl. \autoref{app-perc})}
+	\label{tab:Percolation:timeseriesperformance}
 \end{table}
 
 \label{sec:per-results-text}
-Es konnte festgestellt werden, dass der Perculation-basierte Algorithmus viele Ausreißertypen sehr gut erkennt. Ob Ausreißer in einer Zeitreihe mit einzelnen Peaks gefunden werden, hängt davon ab, ob der Ausreißer-Score geglättet wird. Eine Identifizierung von einzelnen Peaks ist nur bei ungeglätteten Ausreißer-Scores möglich. Denn durch die Glättung der Zeitreihe verschwinden die Ausschläge im Ausreißer-Score. Es sollte deshalb in Abhängigkeit des Anwendungsfalles entschieden werden, ob der Ausreißer Score geglättet wird. Dabei wäre ebenfalls denkbar, dass beide Varianten zur Erkennung von Ausreißern verwendet werden. Der Perculation basierte Algorithmus ist, genauso wie der Iso Map basierte Algorithmus (vgl. \autoref{sec:im-results}), nicht dazu im Stande Ausreißer in Zeitreihen mit Signal Aussetzern und Frequenzänderungen zu erkennen.  
+Es konnte festgestellt werden, dass der Percolation-basierte Algorithmus viele Ausreißertypen sehr gut erkennt. Ob Ausreißer in einer Zeitreihe mit einzelnen Peaks gefunden werden, hängt davon ab, ob der Ausreißer-Score geglättet wird. Eine Identifizierung von einzelnen Peaks ist nur bei ungeglätteten Ausreißer-Scores möglich. Denn durch die Glättung der Zeitreihe verschwinden die Ausschläge im Ausreißer-Score. Es sollte deshalb in Abhängigkeit des Anwendungsfalles entschieden werden, ob der Ausreißer Score geglättet wird. Dabei wäre ebenfalls denkbar, dass beide Varianten zur Erkennung von Ausreißern verwendet werden. Der Percolation-basierte Algorithmus ist, genauso wie der IsoMap-basierte Algorithmus (vgl. \autoref{sec:im-results}), nicht dazu im Stande Ausreißer in Zeitreihen mit Signal-Aussetzern und Frequenzänderungen zu erkennen.  
 

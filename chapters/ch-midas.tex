@@ -26,7 +26,8 @@ Die zweite Variante $a_{uv}$ wird als die Anzahl an Kanten von $u$ zu $v$ im akt
 Mithilfe der Näherungswerte $\hat{s}_{uv}$ und $\hat{a}_{uv}$ ist das Detektieren von Mikroclustern möglich. Hierzu wird der Mittelwert, \dah die durchschnittliche Rate mit der Kanten erscheinen, betrachtet. Es wird hierbei angenommen, dass dieser für den aktuellen Zeitpunkt (\zB $t = 10$) äquivalent ist zu dem vor dem aktuellen Zeitpunkt ($t < 10$). Dadurch wird die Annahme vermieden, dass die Daten auf einer bestimmten zugrundeliegenden Verteilung basieren oder Stationarität über die Zeit aufweisen.
 \\
 \\
-Durch die genannte Annahme lassen sich vergangene Kanten in zwei Klassen einteilen. Eine für den aktuellen Zeitpunkt $t = 10$ und eine für alle vergangenen Zeitpunkte $t < 10$. Hierbei beträgt die Anzahl der Ereignisse zum Zeitpunkt $t = 10$ $a_{uv}$ und die Anzahl der Kanten in vergangenen Zeitpunkten $t < 10$ ist $s_{uv} - a_{uv}$.
+Durch die genannte Annahme lassen sich vergangene Kanten in zwei Klassen einteilen. Eine für den aktuellen Zeitpunkt $t = 10$ und eine für alle vergangenen Zeitpunkte $t < 10$. \\
+Hierbei beträgt die Anzahl der Ereignisse zum Zeitpunkt $t = 10$ $a_{uv}$ und die Anzahl der Kanten in vergangenen Zeitpunkten $t < 10$ ist $s_{uv} - a_{uv}$.
 \\
 \\
 Die Auswertung der Daten kann mithilfe des \textit{chi-squared goodness-of-fit}-Test erfolgen. Hierbei wird die Summe der Klassen $t = 10$ und $t < 10$ für $\frac{(\text{beobachtet} - \text{erwartet})^2}{\text{erwartet}}$ bestimmt. Bei einer Gesamtanzahl von $s_{uv}$ Kanten ergibt sich, auf Basis eines Mittelwerts, für $t = 10$ eine erwartete Anzahl von $\frac{s_{uv}}{t}$ Kanten. Analog hierzu ergibt sich für $t < 10$ eine erwartete Anzahl an $\frac{t - 1}{t}s_{uv}$ vergangenen Kanten. Daraus ergibt sich für die \textit{chi-squared }-Statistik \cite[vgl.][S.~3]{MIDAS}:
@@ -53,6 +54,7 @@ Mithilfe des in \autoref{eqn:midas:score} angegeben Ausreißer-Score lässt sich e
 	\hat{a}_{uv} \leq a_{uv} + \nu \cdotp N_t
 \end{equation}
 
+\newpage
 $N_t$ beschreibt hierbei die Anzahl an Kanten zum Zeitpunkt $t$. Eine weitere Eigenschaft der CMS-Datenstrukturen ist, dass diese die tatsächliche Anzahl an Kanten nur überbewerten können:
 
 \begin{equation}
@@ -86,7 +88,10 @@ Bei dem MIDAS-R-Algorithmus handelt es sich um eine Erweiterung des MIDAS-Algori
 
 \textbf{Temporal Relations:} Durch diesen Ansatz soll der Algorithmus mehr zeitliche Flexibilität erhalten. Dabei sollen Kanten aus der jüngsten Vergangenheit auch in einem neuen Zeitabschnitt berücksichtigt werden. Allerdings reduziert um eine bestimmte Gewichtung. Anstatt die CMS Datenstruktur nach jedem Zeitabschnitt zu reseten, werden die Gewichte hierbei um einen bestimmten Prozentsatz reduziert \citep[vgl.][S.~4]{MIDAS}.
 
-\textbf{Spatial Relations:} Hierbei werden zwei neue Merkmale eingeführt, um verschiedene Ausreißer-Typen identifizieren zu können. Die neuen Merkmale werden hierbei in CMS-Datenstrukturen gespeichert. Der Algorithmus speichert demzufolge diese drei Merkmale:
+\textbf{Spatial Relations:} Hierbei werden zwei neue Merkmale eingeführt, um verschiedene Ausreißertypen identifizieren zu können. Die neuen Merkmale werden hierbei in CMS-Datenstrukturen gespeichert.
+\newpage 
+Der Algorithmus speichert demzufolge diese drei Merkmale:
+
 \begin{description}
 	\item[$ \hat{s}_{uv}$] Anzahl an Kanten zwischen Knoten u und Knoten v. Dieses Feature wird auch vom MIDAS Algorithmus verwendet.
 	\item[$ \hat{s}_{u}$] Gesamtanzahl an Nachbarknoten eines Knoten u.
@@ -131,18 +136,19 @@ Die \autoref{tab:enrontime} bietet eine Übersicht der historischen Ereignisse, d
 \end{table}
 
 
-Ein weiterer Test erfolgte mit dem DARPA-Datensatz. \citep{DARPA} In \autoref{img:midas:darpa_anomaly} werden die Ausreißer-Scores dargestellt.
+Ein weiterer Test erfolgte mit dem Darpa-Datensatz. \citep{Darpa} In \autoref{img:midas:Darpa_anomaly} werden die Ausreißer-Scores dargestellt.
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[height=0.6\linewidth,width=\linewidth]{fig/midas/Darpa_Anomaly}
-	\caption{Ausreißer-Score im Enron-Datensatz mit dem MIDAS-Algorithmus}
-	\label{img:midas:darpa_anomaly}
+	\caption{Ausreißer-Score im Darpa-Datensatz mit dem MIDAS-Algorithmus}
+	\label{img:midas:Darpa_anomaly}
 \end{figure}
 
-Bei der Anwendung des MIDAS auf dem DARPA-Datensatz sieht man klare einzelne Ausreißer, die entdeckt wurden. Für diesen Datensatz gibt es einen speziell für MIDAS entwickelten \textit{ground truth}, der die \textit{labels} für diesen Datensatz zur Verfügung stellt.
+\newpage
+Bei der Anwendung des MIDAS auf dem Darpa-Datensatz sieht man klare einzelne Ausreißer, die entdeckt wurden. Für diesen Datensatz gibt es einen speziell für MIDAS entwickelten \textit{ground truth}, der die \textit{labels} für diesen Datensatz zur Verfügung stellt.
 
-Bei der Berechnung der AUC für die ermittelten Ausreißer-Scores wird ein Wert von $0.91727$ berechnet. Das bedeutet, dass der MIDAS-Algorithmus mit einer Wahrscheinlichkeit von ca. 91,73\% die Ausreißer des Datensatzes richtig klassifiziert.  
+Bei der Berechnung der AUC für die ermittelten Ausreißer-Scores wird ein Wert von $0.91727$ berechnet. Das bedeutet, dass der MIDAS-Algorithmus mit einer Wahrscheinlichkeit von ca. 91,73\% die Ausreißer des Datensatzes richtig klassifiziert. \cite[vgl.][S.~6]{MIDAS}  
 
 Somit kann festgehalten werden, dass MIDAS hinsichtlich der Ausreißererkennung in Graphen, eine sehr hohe Genauigkeit erreicht.
 
@@ -173,7 +179,8 @@ Teilweise führen die Ausreißer ebenso zu besonders wenigen Kanten (vgl.\autoref{
 	\label{img:midasTSresultsDontWork}
 \end{figure}
 
-Es wurden außerdem Tests durchgeführt um zu untersuchen, wie sich der Algorithmus bei veränderter Fenstergröße verhält (vgl. \autoref{img:midasTSresults110}). Bei den Untersuchungen in \autoref{img:midasTSresultJumpsup} und \autoref{img:midasTSresultsDontWork} wurde einer Fenstergröße von 288 genutzt, die der Saisonalität der Zeitreihe entspricht. Für dieses Experiment wurde eine Fenstergröße von 110 verwendet. Es konnte festgestellt werden, dass diese Veränderung keinen zusätzlichen Nutzen erbringt. Allerdings ist der Ausschlag nach oben im Ausreißer-Score für die Zeitreihe mit erhöhter Amplitude noch deutlicher zu erkennen. Die anderen Ausreißertypen werden weiterhin nicht erkannt.
+Es wurden außerdem Tests durchgeführt um zu untersuchen, wie sich der Algorithmus bei veränderter Fenstergröße verhält (vgl. \autoref{img:midasTSresults110}). Bei den Untersuchungen in \autoref{img:midasTSresultJumpsup} und \autoref{img:midasTSresultsDontWork} wurde einer Fenstergröße von 288 genutzt, die der Saisonalität der Zeitreihe entspricht. Für dieses Experiment wurde eine Fenstergröße von 110 verwendet. Es konnte festgestellt werden, dass diese Veränderung keinen zusätzlichen Nutzen erbringt.\\
+Allerdings ist der Ausschlag nach oben im Ausreißer-Score für die Zeitreihe mit erhöhter Amplitude noch deutlicher zu erkennen. Die anderen Ausreißertypen werden weiterhin nicht erkannt.
 
 \begin{figure}[H]
 	\centering

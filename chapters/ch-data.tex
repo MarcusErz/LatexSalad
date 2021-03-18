@@ -3,7 +3,7 @@
 
 In dieser Ausarbeitung wurden mehrere Datensätze verwendet, um verschiedene Algorithmen auf ihre Leistungsfähigkeit zu testen. Nachfolgend werden die hierbei verwendeten Datensätze vorgestellt.
 
-\section*{Numenta-Zeitreihendaten}
+\section{Numenta-Zeitreihendaten}
 \label{sec:numTS}
 
 Der Numenta-Datensatz besteht aus einer Reihe an synthetisch erzeugten Zeitreihen, die unterschiedliche Arten von Ausreißern simulieren. Durch die Daten wird es möglich eine qualitative Aussage über die Fähigkeiten der Algorithmen zu treffen. Für die Tests auf multivariaten Zeitreihen wurden neue Zeitreihen erzeugt. Dabei wurde für die erste Dimension eine Zeitreihe der Numenta-Gruppe verwendet. Für höhere Dimensionen wurde auf eine Zeitreihe ohne Ausreißer zurückgegriffen \citep{AHMAD2017134}.
@@ -16,7 +16,7 @@ Der Numenta-Datensatz besteht aus einer Reihe an synthetisch erzeugten Zeitreihe
 \end{figure}
 
 
-\section*{Netzwerk-Datensätze}
+\section{Netzwerk-Datensätze}
 \label{sec:netData}
 
 Zwischen den Forschungsgruppen, welche sich mit der Ausreißererkennung in Netzwerken beschäftigen, herrscht große Konkurrenz. Aus diesem Grund werden gelabelte Datensätze häufig zurückgehalten. Dadurch wollen die Forscher verhindern, dass sie ihren Wettbewerbsvorteil gegenüber anderen verlieren \cite{Problematik}. Aus diesem Grund ist es schwer geeignete Datensätze zu finden. Mit dem Enron- und Darpa-Datensatz konnten dennoch zwei passende Datensätze ausgemacht werden. Diese Datensätze werden im Folgenden vorgestellt.
@@ -30,6 +30,6 @@ Der Enron Datensatz enthält die intern versendeten E-Mail Daten von rund 150 Mit
 Für den Enron Datensatz stehen keine Labels zur Verfügung. Aus diesem Grund wurden Ausreißer, die der SedanSpot-Algorithmus gefunden hat, als Labels verwendet. \cite{SedanSpot}. Außerdem vergleichen die Autoren des SedanSpot-Algorithmus ihre Ausreißer mit der offiziellen Enron-Zeitleiste. Diese enthält ebenfalls Informationen über mögliche historische Gründe für die Ausreißer \cite{EnronTimeline}.
 
 
-\subsubsection{DARPA}
+\subsubsection{Darpa}
 
-Der DARPA-Datensatz \citep{DARPA} beinhaltet 4.5 Millionen IP-zu-IP-Kommunikationen zwischen 9.400 Quell-IP's und 23.300 Ziel-IP's über einen Zeitraum von 87.700 Minuten. Jede Kommunikation ist zu einem Zeitpunkt eine gerichtete Kante von der Quell-IP zur Ziel-IP. Eine vierte Spalte des Datensatzes ist verfügbar, in der ein \textit{label} enthalten bzw. ein Angriff gekennzeichnet ist. Der DARPA-Datensatz besteht zu über 60\% aus Ausreißern. 
+Der Darpa-Datensatz \citep{Darpa} beinhaltet 4.5 Millionen IP-zu-IP-Kommunikationen zwischen 9.400 Quell-IP's und 23.300 Ziel-IP's über einen Zeitraum von 87.700 Minuten. Jede Kommunikation ist zu einem Zeitpunkt eine gerichtete Kante von der Quell-IP zur Ziel-IP. Eine vierte Spalte des Datensatzes ist verfügbar, in der ein \textit{label} enthalten bzw. ein Angriff gekennzeichnet ist. Der Darpa-Datensatz besteht zu über 60\% aus Ausreißern. 

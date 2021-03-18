@@ -1,11 +1,11 @@
 \newpage
 \section{NetSimile}
 \label{sec:ns}
-In \autoref{ssec:ns-gl} werden die Grundlagen des NetSimile-Algorithmus näher erläutert und in den Abschnitten \autoref{sec:ns-ext} und \autoref{sec:ns-ts-1} die Testergebnisse vorgestellt.
+%In \autoref{ssec:ns-gl} werden die Grundlagen des NetSimile-Algorithmus näher erläutert und in den Abschnitten \autoref{sec:ns-ext} und \autoref{sec:ns-ts-1} die Testergebnisse vorgestellt.
 \subsection{Grundlagen}
 \label{ssec:ns-gl}
 
-NetSimile ist ein skalierbarer Algorithmus zur Erkennung von Ähnlichkeiten sowie Anomalien, in Netzwerken unterschiedlicher Größen. Hierfür wird der Datensatz in gleich große Zeitintervalle unterteilt, um die daraus resultierenden Graphen auf unterschiedliche Merkmale zu untersuchen. Die Merkmale sind hierbei strukturelle Eigenschaften der einzelnen Knoten wie bspw. die Dichte eines Knotens oder die Anzahl an Nachbarn in einem Ego-Netzwerk. Die Signatur ergibt sich aus den einzelnen Aggregationen der Knoten wie bspw. dem Median aus der Dichte der jeweiligen Knoten. So entsteht aus sieben Merkmalen und fünf Aggregationen ein Signaturvektor mit 35 verschiedenen Signaturen. So ermöglicht der Signaturvektor die Beschreibung sowie den Vergleich der einzelnen Graphen. Für den Vergleich wird die Canberra-Distanz aus den beiden Signaturvektoren zweier zeitlich nebeneinander liegenden Graphen berechnet \citep[vgl.][S.~1]{Netsimile} Als Input für diesen Algorithmus wird eine Menge von $k$-anonymisierten Netzwerken mit beliebig unterschiedlichen Größen, die keine überlappenden Knoten oder Kanten besitzen, herangezogen. Das Resultat sind Werte für die strukturelle Ähnlichkeit oder den Abstand eines jeden Paares der gegebenen Netzwerke bzw. ein Merkmalsvektor für jedes Netzwerk \citep[vgl.][S.~1]{Netsimile}. NetSimile durchläuft drei Schritte, die im Folgenden beschrieben werden.
+NetSimile ist ein skalierbarer Algorithmus zur Erkennung von Ähnlichkeiten sowie Anomalien, in Netzwerken unterschiedlicher Größen. Hierfür wird der Datensatz in gleich große Zeitintervalle unterteilt, um die daraus resultierenden Graphen auf unterschiedliche Merkmale zu untersuchen. Diese Merkmale sind strukturelle Eigenschaften der einzelnen Knoten wie bspw. die Dichte eines Knotens oder die Anzahl an Nachbarn in einem Ego-Netzwerk. Die Signatur ergibt sich aus den einzelnen Aggregationen der Knoten wie  dem Median aus der Dichte der jeweiligen Knoten. So entsteht aus sieben Merkmalen und fünf Aggregationen ein Signaturvektor mit 35 verschiedenen Signaturen. So ermöglicht dieser Vektor die Beschreibung sowie den Vergleich der einzelnen Graphen. Für den Vergleich wird die Canberra-Distanz aus den Signaturvektoren zweier zeitlich nebeneinander liegenden Graphen berechnet \citep[vgl.][S.~1]{Netsimile} Als Input für diesen Algorithmus wird eine Menge von $k$-anonymisierten Netzwerken mit beliebig unterschiedlichen Größen, die keine überlappenden Knoten oder Kanten besitzen, herangezogen. Das Resultat sind Werte für die strukturelle Ähnlichkeit oder den Abstand eines jeden Paares der gegebenen Netzwerke bzw. ein Merkmalsvektor für jedes Netzwerk \citep[vgl.][S.~1]{Netsimile}. NetSimile durchläuft drei Schritte, die im Folgenden beschrieben werden.
 \subsubsection{Extrahierung von Merkmalen}
 Für jeden Knoten $i$ werden, basierend auf ihren Ego-Netzwerken, die folgenden Merkmale generiert:
 \begin{table}[H]
@@ -27,7 +27,7 @@ Für jeden Knoten $i$ werden, basierend auf ihren Ego-Netzwerken, die folgenden M
 		$|N(ego(i))|$ & Die Anzahl von Nachbarn von $ego(i)$. \\
 		\bottomrule
 	\end{tabular}
-	\caption{Inhalte des Merkmalsvektors}
+	\caption{Inhalte des Merkmalsvektors \citep{Netsimile}}
 	\label{tab:netfeat}
 \end{table}
 
@@ -43,14 +43,14 @@ Für jeden Knoten $i$ werden, basierend auf ihren Ego-Netzwerken, die folgenden M
 
 \subsubsection{Aggregierung von Merkmalen}
 Im nächsten Schritt wird für jeden Graphen \textit{$G_j$} eine $Knoten \times Merkmal$-Matrix $F_{G_j}$ zusammengefasst. Dieser besteht aus den Merkmalsvektoren aus Schritt 1.
-Da der Vergleich von $k$-ten $F_{G_j}$ sehr aufwändig ist, wird für jede $F_{G_j}$ ein Signaturvektor $\vec{s}_{G_j}$ ausgegeben. Dieser aggregiert den Median, den Mittelwert, die Standardabweichung, die Schiefe sowie die Kurtosis der Merkmale aus der Matrix.  
+Da der Vergleich von $k$-ten $F_{G_j}$ sehr aufwändig ist, wird für jede $F_{G_j}$ ein Signaturvektor $\vec{s}_{G_j}$ ausgegeben. Dieser aggregiert den Median, den Mittelwert, die Standardabweichung, die Schiefe sowie die Kurtosis der Merkmale aus der Matrix.  \citep[vgl.][S.~3]{Netsimile}
 
 \subsubsection{Vergleich der Signaturvektoren}
 \label{sec:ns-gl-cd}
 
-Für die Ausreißererkennung werden die letzten drei Graphen anhand der Canberra-Distanz, die als Ähnlichkeitsmaß dient, herangezogen. Steigt die Canberra-Distanz zwischen zwei Graphen oberhalb des Schwellwerts, so wird dies im Algorithmus festgehalten. Falls der darauf folgende Graph ebenfalls oberhalb des Schwellwerts liegt, so wird dieser als Ausreißer definiert. Dadurch wird die Anzahl der Ausreißer reduziert, damit nur diejenigen identifiziert werden, bei denen ein Trend hin zu einem abnormalen Verhalten erkennbar ist.
+Für die Ausreißererkennung werden die letzten drei Graphen anhand der Canberra-Distanz, die als Ähnlichkeitsmaß dient, herangezogen. Steigt die Canberra-Distanz zwischen zwei Graphen oberhalb des Schwellwerts, so wird dies im Algorithmus festgehalten. Falls der darauf folgende Graph ebenfalls oberhalb des Schwellwerts liegt, so wird dieser als Ausreißer definiert. Dadurch wird die Anzahl der Ausreißer reduziert, damit nur diejenigen identifiziert werden, bei denen ein Trend hin zu einem abnormalen Verhalten erkennbar ist. \citep[vgl.][S.~3]{Netsimile}
 
-Der Algorithmus arbeitet dabei dynamisch, da die Signaturen der Graphen in einzelne Teilberechnungen aufgeteilt und zwischengespeichert werden können, ohne dass eine Neuberechnung notwendig ist. Der Schwellwert wird aus dem Median und dem Mittelwert berechnet, die ebenfalls zwischengespeichert und nach Bedarf um weitere Graphen ergänzt werden können.
+Der Algorithmus arbeitet dabei dynamisch, da die Signaturen der Graphen in einzelne Teilberechnungen aufgeteilt und zwischengespeichert werden können, ohne dass eine Neuberechnung notwendig ist. Der Schwellwert wird aus dem Median und dem Mittelwert berechnet, die ebenfalls zwischengespeichert und nach Bedarf um weitere Graphen ergänzt werden können. \citep[vgl.][S.~3]{Netsimile}
 
 \FloatBarrier
 
@@ -67,7 +67,9 @@ for i in range(len(e_list)):
 
 Dadurch kann der Datensatz zum einen vollständig analysiert werden und zum anderen kann dadurch ein weiteres Feature hinzugefügt werden, das durch die fünf verschiedenen Aggregationen den Signaturvektor um diese fünf Werte erweitert.
 
-Dadurch, dass der Datensatz zuerst eingelesen und in einen Graphen transformiert wird und anschließend aus dem Graphen die jeweiligen Features extrahiert werden, verliert der Algorithmus an Performanz. Des Weiteren wird im ersten Schritt der maximale Knotenwert als Größe des Graphens übergeben. Wird bspw. für jeden Mitarbeiter eine eigene ID übergeben und diese inkrementell erhöht, so kann es sein, dass aus einem Netzwerk mit 20 verschiedenen Knoten ein Graph entsteht, der 1000 Knoten erzeugt, weil eine ID mit dem Wert 1000 vorhanden ist. Dadurch büßt die Performanz an Geschwindigkeit ein, da Iterationen nicht über die 20 Knoten durchgeführt werden, sondern über 1000. Hierbei muss entweder der Datensatz vorab angepasst werden, indem die IDs neu vergeben werden oder der Algorithmus muss grundlegend neu aufgebaut werden. Dies wäre grundsätzlich möglich, da der Algorithmus Graphen als Ausreißer zurück gibt und keine Knoten. 
+Dadurch, dass der Datensatz zuerst eingelesen und in einen Graphen transformiert wird und anschließend aus dem Graphen die jeweiligen Features extrahiert werden, verliert der Algorithmus an Performanz. Des Weiteren wird im ersten Schritt der maximale Knotenwert als Größe des Graphens übergeben. \\ 
+\\
+Wird bspw. für jeden Mitarbeiter eine eigene ID übergeben und diese inkrementell erhöht, so kann es sein, dass aus einem Netzwerk mit 20 verschiedenen Knoten ein Graph entsteht, der 1000 Knoten erzeugt, weil eine ID mit dem Wert 1000 vorhanden ist. Dadurch büßt die Performanz an Geschwindigkeit ein, da Iterationen nicht über die 20 Knoten durchgeführt werden, sondern über 1000. Hierbei muss entweder der Datensatz vorab angepasst werden, indem die IDs neu vergeben werden oder der Algorithmus muss grundlegend neu aufgebaut werden. Dies wäre grundsätzlich möglich, da der Algorithmus Graphen als Ausreißer zurück gibt und keine Knoten. 
 
 Da der Fokus auf der Anwendung von Zeitreihen liegt, werden Optimierungen erst im Abschnitt \autoref{sec:ns-ts-1} in Betracht gezogen. 
 
@@ -75,7 +77,7 @@ Da der Fokus auf der Anwendung von Zeitreihen liegt, werden Optimierungen erst i
 \label{sec:ns-enron}
 
 Da der Enron-Datensatz ebenfalls von einem anderen Paper analysiert und veröffentlicht wurde (vgl. \autoref{chap:ap-data}), können die dort erkannten Ausreißer, zum Vergleich, in Form eines gelabelten Datensatz herangezogen werden.
-Betrachtet man in diesem Kontext den Ausreißerscore, ist gut zu erkennen, dass der Ausreißer Ende 2001 als alleiniger herausstechender Ausreißer ebenso im NetSimile wiederzufinden ist. Grundlegend ist ebenso zu erkennen, dass die Ausreißer sich nur sehr wenig voneinander unterscheiden, wodurch sich eine Klassifizierung innerhalb des Ausreißerscores als schwierig erweist. Die Extrahierung weiterer Features könnte dieses Problem lösen, wobei dies nicht im Rahmen dieses Forschungsprojekts behandelt werden soll, da der Fokus auf Zeitreihen liegt. Der Datensatz lässt sich innerhalb von zwei Minuten analysieren, womit der NetSimile-Algorithmus performant zu sein scheint.
+Betrachtet man in diesem Kontext den Ausreißer-Score, ist gut zu erkennen, dass der Ausreißer Ende 2001 als alleiniger herausstechender Ausreißer ebenso im NetSimile wiederzufinden ist. Grundlegend ist ebenso zu erkennen, dass die Ausreißer sich nur sehr wenig voneinander unterscheiden, wodurch sich eine Klassifizierung innerhalb des Ausreißer-Scores als schwierig erweist. Die Extrahierung weiterer Features könnte dieses Problem lösen, wobei dies nicht im Rahmen dieses Forschungsprojekts behandelt werden soll, da der Fokus auf Zeitreihen liegt. Der Datensatz lässt sich innerhalb von zwei Minuten analysieren, womit der NetSimile-Algorithmus performant zu sein scheint.
 
 \begin{figure}[H]
 	\centering
@@ -97,9 +99,12 @@ Betrachtet man die Differenz aus dem Durchschnitt der Signaturvektoren und dem d
 \end{figure}
 
 \subsubsection{Anwendung auf Darpa-Datensatz}
-\label{sec:ns-darpa}
+\label{sec:ns-Darpa}
 
-Beim Darpa-Datensatz können die Aureißer besser klassifiziert werden. Die Gründe hierfür liegen auf der Größe und Vielfalt des Datensatzes. Der Enron-Datensatz hat eine Größe von 1MB und ca. 50.000 Kanten. Der Darpa-Datensatz hingegen hat eine Größe von 50 MB mit 4.5 Mio Kanten. Für die Berechnung ergibt sich hierbei eine Laufzeit von drei Stunden. Wird für die Dateigröße der Faktor 50 und bei der Kantenanzahl der Faktor 90 gewählt, so ist bei der Berechnungszeit der Faktor 90 wiederzufinden. Bei Betrachtung der Laufzeit kann eine lineare Abhängigkeit zwischen Kantenanzahl und der benötigten Berechnungszeit festgestellt werden.
+Beim Darpa-Datensatz können die Aureißer besser klassifiziert werden. Die Gründe hierfür liegen auf der Größe und Vielfalt des Datensatzes. Der Enron-Datensatz hat eine Größe von 1MB und ca. 50.000 Kanten. Der Darpa-Datensatz hingegen hat eine Größe von 50 MB mit 4.5 Mio Kanten. Für die Berechnung ergibt sich hierbei eine Laufzeit von drei Stunden.
+\\
+\\
+Wird für die Dateigröße der Faktor 50 und bei der Kantenanzahl der Faktor 90 gewählt, so ist bei der Berechnungszeit der Faktor 90 wiederzufinden. Bei Betrachtung der Laufzeit kann eine lineare Abhängigkeit zwischen Kantenanzahl und der benötigten Berechnungszeit festgestellt werden.
 
 \begin{figure}[H]
 	\centering
@@ -116,9 +121,11 @@ Wird der Algorithmus auf Zeitreihen angewandt, tritt folgendes Problem auf. Bei 
 \usetikzlibrary{graphs,graphs.standard}
 \begin{figure}[H]
 	\centering
+	\resizebox{0.32\textwidth}{!}{%
 	\begin{tikzpicture}
 		\graph[nodes={draw, circle,fill=black!20,minimum size = 6mm}, clockwise, empty nodes, radius=4cm, n=11] { subgraph K_n };
-	\end{tikzpicture}
+	\end{tikzpicture}%
+	}
 	\caption{Vollständiger Graph mit 11 Knoten}
 	\label{img:netsimile:graph_11}
 \end{figure}
@@ -155,7 +162,7 @@ Auf diesen Merkmalen wurden anschließend die bisherigen Aggregation durchgeführt
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[height=0.6\linewidth,width=\linewidth]{fig/netsimile/anomalie_2}
+	\includegraphics[height=0.5\linewidth,width=\linewidth]{fig/netsimile/anomalie_2}
 	\caption{Ausreißer-Score der vollständigen Graphen mit gewichteten Kanten}
 	\label{img:netsimile:anomalie_2}
 \end{figure}
@@ -191,7 +198,7 @@ Um zu untersuchen, wie gut der Algorithmus funktioniert, wurde er auf Zeitreihen
 	\caption{NetSimile-Performance auf Zeitreihen (vgl. \autoref{sec:appendix_net_original})}
 	\label{table:performanceNeti}
 \end{table}
-
+\newpage
 \autoref{table:performanceNeti} zeigt die Ergebnisse der Tests. Es ist zu erkennen, dass die Qualität der Ausreißererkennung im eindimensionalen Fall sehr gut ist. Lediglich einzelne Peaks können durch den Algorithmus nicht als Ausreißer identifiziert werden. Außerdem wird bei \textit{Signal Drifts} und der kontinuierlichen Zunahme der Amplitude lediglich der Anfang des Ausreißers detektiert. Aus diesem Grund wurde eine Bewertung mit drei Sternen vergeben. Im zweidimensionalen Fall ist die Qualität der Ausreißererkennung etwas durchwachsener. Auffallend ist, dass Zyklen mit höherer und niedriger Amplitude nicht als Ausreißer erkannt werden. Insbesondere ist dies auffällig, da diese Ausreißertypen üblicherweise zuverlässig erkannt werden.  Außerdem ist der Algorithmus im zweidimensionalen Fall nicht mehr dazu in der Lage \textit{Signal Drifts} zu erkennen. Andere Ausreißertypen können durch den Algorithmus weiterhin erkannt werden, jedoch oftmals nicht mit der selben Qualität. 
 
 \begin{table}[H]
@@ -202,7 +209,7 @@ Um zu untersuchen, wie gut der Algorithmus funktioniert, wurde er auf Zeitreihen
 		\midrule
 		Periodizität & Wie in \autoref{sec:transDym} erläutert, muss die Zeitreihe in kleinere Intervalle aufgegliedert werden. Über diesen Parameter wird die Größe der Intervalle gesteuert. Für die Tests wurde der Parameter auf 288 gesetzt, da es sich hierbei um die Saisonalität der Zeitreihen handelt.\\
 		\midrule
-		Abweichung & Legt fest, ab wann es sich bei einem Abschnitt um einen Ausreißer handelt. Der Parameter wurde für die Tests auf 3 gesetzt. Das bedeutet, wenn der Ausreißer Score um das dreifache der Standardabweichung vom Durchschnitt abweicht, wird der Abschnitt als Ausreißer gekennzeichnet.\\
+		Abweichung & Legt fest, ab wann es sich bei einem Abschnitt um einen Ausreißer handelt. Der Parameter wurde für die Tests auf \dq 3\dq\space gesetzt. Das bedeutet, wenn der Ausreißer Score um das dreifache der Standardabweichung vom Durchschnitt abweicht, wird der Abschnitt als Ausreißer gekennzeichnet.\\
 		\bottomrule
 	\end{tabular}
 	\caption{Parameter des NetSimile für die Anwendung auf Zeitreihen}
