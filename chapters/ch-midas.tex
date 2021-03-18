@@ -1,12 +1,12 @@
 \newpage
 \section{MIDAS}
 \label{sec:midas}
-Im Folgenden wird der MIDAS-Algorithmus vorgestellt, sowie die Anwendung auf verschiedenen Datentypen näher erläutert.
+Im Folgenden wird der MIDAS-Algorithmus vorgestellt und die Anwendung auf verschiedenen Datentypen näher erläutert.
 
 \subsection{Grundlagen}
 \label{sec:mc-gl}
 
-MIDAS, Eng. \textit{Microcluster-Based Detector of Anomalies in Edge Streams}, steht für einen Algorithmus, der plötzlich auftretende Ausbrüche von Aktivitäten in einem Netzwerk bzw. Graphen erkennt. Dieses vermehrte Auftreten von Aktivitäten zeigt sich durch viele sich wiederholende Knoten- und Kantenpaare in einem sich zeitlich entwickelnden Graphen, die Mikrocluster bezeichnet werden. Mikrocluster bestehen demnach aus einem vermehrten Vorkommen eines einzigen Quell- und Zielpaares bzw. einer Kante $(u,v)$. Dies geschieht in Echtzeit, wobei jede Kante in konstanter Zeit und Speicher verarbeitet wird.  \citep[vgl.][S.~1]{MIDAS}
+MIDAS, Eng. \textit{Microcluster-Based Detector of Anomalies in Edge Streams}, steht für einen Algorithmus, der plötzlich auftretende Ausbrüche von Aktivitäten in einem Netzwerk bzw. Graphen erkennt. Dieses vermehrte Auftreten von Aktivitäten zeigt sich durch viele sich wiederholende Knoten- und Kantenpaare in einem sich zeitlich entwickelnden Graphen, die Mikrocluster bezeichnet werden. Mikrocluster bestehen demnach aus einem vermehrten Vorkommen eines einzigen Quell- und Zielpaares bzw. einer Kante $(u,v)$. Dies geschieht in Echtzeit, wobei jede Kante mit konstanter Zeit und konstantem Speicher verarbeitet wird.  \citep[vgl.][S.~1]{MIDAS}
 
 Ursprüngliche Anwendungsfälle für MIDAS sind die Erkennung von Anomalien in Computer-Netzwerken, wie SPAM oder DoS-Angriffe, sowie Anomalien in Kreditkartentransaktionen.
 
@@ -14,16 +14,16 @@ Ursprüngliche Anwendungsfälle für MIDAS sind die Erkennung von Anomalien in Comp
 \subsubsection{Count-Min-Sketch}
 \label{sec:mc-gl-cms}
 
-Damit die relevanten Informationen für den Algorithmus mit einem konstanten Speicher verarbeitet werden, wird Count-Min-Sketch genutzt, dass eine Streaming-Datenstruktur mithilfe der Nutzung von Hash-Funktionen entspricht. Count-Min-Sketch zählt somit die Frequenz einer Aktivität in Datenströmen. Diese Datenstruktur hat ebenfalls den Vorteil, dass man zu Beginn keine Kenntnis über die Anzahl an Quell- und Zielpaaren haben muss. \citep{CMS04}
+Damit die relevanten Informationen für den Algorithmus mit einem konstanten Speicher verarbeitet werden, wird Count-Min-Sketch (CMS) genutzt, dass einer Streaming-Datenstruktur mithilfe der Nutzung von Hash-Funktionen entspricht. Count-Min-Sketch zählt somit die Frequenz einer Aktivität in Datenströmen. Diese Datenstruktur hat ebenfalls den Vorteil, dass man zu Beginn keine Kenntnis über die Anzahl an Quell- und Zielpaaren haben muss. \citep{CMS04}
 
-MIDAS verwendet zwei Arten von CMS. Die erste Variante $s_{uv}$ wird als die Anzahl an Kanten von $u$ zu $v$ bis zum aktuellen Zeitpunkt $t$ definiert. Durch die CMS-Datenstruktur werden alle Zählungen von $s_{uv}$ approximiert, sodass jederzeit eine annähernde Abfrage $\hat{s}_{uv}$ erhalten werden kann.
+MIDAS verwendet zwei Arten von CMS. Die erste Variante $s_{uv}$ wird als die Anzahl an Kanten von $u$ zu $v$ bis zum aktuellen Zeitpunkt $t$ definiert. Durch die CMS-Datenstruktur werden alle Zählungen von $s_{uv}$ approximiert, sodass jederzeit eine angenäherte Abfrage $\hat{s}_{uv}$ erhalten werden kann.
 Die zweite Variante $a_{uv}$ wird als die Anzahl an Kanten von $u$ zu $v$ im aktuellen Zeitpunkt $t$ definiert. Dieser CMS ist identisch zu $s_{uv}$, wobei bei jedem Übergang zum nächsten Zeitpunkt die Datenstruktur zurückgesetzt wird. Dadurch resultiert aus dem CMS für den aktuellen Zeitpunkt die annähernde Abfrage $\hat{a}_{uv}$. \citep[vgl.][S.~3]{MIDAS}
 
 
 \subsubsection{Erkennung von Mikrocluster}
 \label{sec:mc-gl-dm}
 
-Mithilfe der Näherungswerte $\hat{s}_{uv}$ und $\hat{a}_{uv}$ ist das Detektieren von Mikroclustern möglich. Hierzu wird der Mittelwert, \dah die durchschnittliche Rate mit der Kanten erscheinen), betrachtet. Es wird hierbei angenommen, dass dieser für den aktuellen Zeitpunkt (\zB $t = 10$) äquivalent ist zu dem vor dem aktuellen Zeitpunkt ($t < 10$). Dadurch wird die Annahmen vermieden, dass die Daten auf einer bestimmten zugrundeliegenden Verteilung basieren oder Stationarität über die Zeit aufweisen.
+Mithilfe der Näherungswerte $\hat{s}_{uv}$ und $\hat{a}_{uv}$ ist das Detektieren von Mikroclustern möglich. Hierzu wird der Mittelwert, \dah die durchschnittliche Rate mit der Kanten erscheinen, betrachtet. Es wird hierbei angenommen, dass dieser für den aktuellen Zeitpunkt (\zB $t = 10$) äquivalent ist zu dem vor dem aktuellen Zeitpunkt ($t < 10$). Dadurch wird die Annahme vermieden, dass die Daten auf einer bestimmten zugrundeliegenden Verteilung basieren oder Stationarität über die Zeit aufweisen.
 \\
 \\
 Durch die genannte Annahme lassen sich vergangene Kanten in zwei Klassen einteilen. Eine für den aktuellen Zeitpunkt $t = 10$ und eine für alle vergangenen Zeitpunkte $t < 10$. Hierbei beträgt die Anzahl der Ereignisse zum Zeitpunkt $t = 10$ $a_{uv}$ und die Anzahl der Kanten in vergangenen Zeitpunkten $t < 10$ ist $s_{uv} - a_{uv}$.
@@ -40,20 +40,20 @@ Die Auswertung der Daten kann mithilfe des \textit{chi-squared goodness-of-fit}-
 	\label{eqn:midas:chi2}
 \end{align}
 
-Die Größen $a_{uv}$ und $s_{uv}$ können, mithilfe der CMS-Datenstruktur, approximiert werden. Daraus ergibt sich, unter Verwendung der approximierten Größen $\hat{a}_{uv}$ und $\hat{s}_{uv}$, der folgende Ausreißer-Score \cite[vgl.][S.~4]{MIDAS}:
+Die Größen $a_{uv}$ und $s_{uv}$ können, mithilfe der CMS-Datenstruktur, approximiert werden. Daraus ergibt sich, unter Verwendung der approximierten Größen $\hat{a}_{uv}$ und $\hat{s}_{uv}$, der folgende Ausreißer-Score \cite[S.~4]{MIDAS}:
 
 \begin{equation}
 	score((u,v,t)) = \left(\hat{a}_{uv} - \frac{\hat{s}_{uv}}{t}\right)^2\frac{t^2}{\hat{s}_{uv}(t - 1)}
 	\label{eqn:midas:score}
 \end{equation}
 
-Mithilfe des in \autoref{eqn:midas:score} angegeben Ausreißer-Score lässt sich eine neue Kante $(u,v)$ zum Zeitpunkt $t$ bewerten. Dieser wird in einem binären Entscheidungsverfahren verwendet, um zu bestimmen, ob es sich bei einer neuen Kante um Anomalie handelt oder nicht. Die Wahrscheinlichkeit von \textit{false-positive}-Ergebnissen soll hierbei nicht den Schwellwert $\epsilon$ übersteigen. CMS-Datenstrukturen besitzen die Eigenschaft, dass die Approximationen $\hat{a}_{uv}$, für beliebige $\epsilon$ und $\nu$, folgende Vorschrift mit einer Wahrscheinlichkeit von mindestens $1 - \frac{\epsilon}{2}$ erfüllen:
+Mithilfe des in \autoref{eqn:midas:score} angegeben Ausreißer-Score lässt sich eine neue Kante $(u,v)$ zum Zeitpunkt $t$ bewerten. Dieser wird in einem binären Entscheidungsverfahren verwendet, um zu bestimmen, ob es sich bei einer neuen Kante um Anomalie handelt oder nicht. Die Wahrscheinlichkeit von \textit{false-positive}-Ergebnissen soll hierbei den Schwellwert $\epsilon$ nicht übersteigen. CMS-Datenstrukturen besitzen die Eigenschaft, dass die Approximationen $\hat{a}_{uv}$, für beliebige $\epsilon$ und $\nu$, folgende Vorschrift mit einer Wahrscheinlichkeit von mindestens $1 - \frac{\epsilon}{2}$ erfüllen:
 
 \begin{equation}
 	\hat{a}_{uv} \leq a_{uv} + \nu \cdotp N_t
 \end{equation}
 
-$N_t$ beschreibt hierbei die Anzahl an Kanten zum Zeitpunkt $t$. Eine weitere Eigenschaft der CMS-Datenstrukturen ist, dass diese die tatsächlichen Anzahl an Kanten nur überbewerten können:
+$N_t$ beschreibt hierbei die Anzahl an Kanten zum Zeitpunkt $t$. Eine weitere Eigenschaft der CMS-Datenstrukturen ist, dass diese die tatsächliche Anzahl an Kanten nur überbewerten können:
 
 \begin{equation}
 	s_{uv} \leq \hat{s}_{uv}
@@ -82,15 +82,15 @@ Bei Verwendung der Teststatistik in \autoref{eqn:midas:chi2angepasst} und eines 
 Der Term $\chi^2_{1 - \frac{\epsilon}{2}}(1)$ beschreibt hierbei das $1 - \frac{\epsilon}{2}$-Quantil.
 
 \subsubsection{Die Erweiterung zu MIDAS-R}
-Bei dem MIDAS-R-Algorithmus handelt es sich um eine Erweiterung des MIDAS-Algorithmus. Das R steht hierbei für den Relationalen Ansatz des MIDAS-R Algorithmus. Dabei wird versucht die räumliche oder zeitliche Verknüpfung zwischen Kanten stärker zu berücksichtigten. Es werden hierzu zwei neue Konzepte eingeführt \citep[vgl.][S.~4]{MIDAS}.
+Bei dem MIDAS-R-Algorithmus handelt es sich um eine Erweiterung des MIDAS-Algorithmus. Das R steht hierbei für den relationalen Ansatz des MIDAS-R Algorithmus. Dabei wird versucht die räumliche oder zeitliche Verknüpfung zwischen Kanten stärker zu berücksichtigten. Es werden hierzu zwei neue Konzepte eingeführt \citep[vgl.][S.~4]{MIDAS}.
 
 \textbf{Temporal Relations:} Durch diesen Ansatz soll der Algorithmus mehr zeitliche Flexibilität erhalten. Dabei sollen Kanten aus der jüngsten Vergangenheit auch in einem neuen Zeitabschnitt berücksichtigt werden. Allerdings reduziert um eine bestimmte Gewichtung. Anstatt die CMS Datenstruktur nach jedem Zeitabschnitt zu reseten, werden die Gewichte hierbei um einen bestimmten Prozentsatz reduziert \citep[vgl.][S.~4]{MIDAS}.
 
-\textbf{Spatial Relations:} Hierbei werden zwei neue Merkmale eingeführt, um verschiedene Ausreißer-Typen identifizieren zu können. Die neuen Merkmale werden hierbei in einer CMS-Datenstrukturen gespeichert. Der Algorithmus speichert demzufolge diese drei Merkmale:
+\textbf{Spatial Relations:} Hierbei werden zwei neue Merkmale eingeführt, um verschiedene Ausreißer-Typen identifizieren zu können. Die neuen Merkmale werden hierbei in CMS-Datenstrukturen gespeichert. Der Algorithmus speichert demzufolge diese drei Merkmale:
 \begin{description}
-	\item[$ \hat{s}_{uv}$]\hfill\\ Anzahl an Kanten zwischen Knoten u und Knoten v. Dieses Feature wird auch vom MIDAS Algorithmus verwendet.
-	\item[$ \hat{s}_{u}$]\hfill\\ Gesamtanzahl an Nachbarknoten eines Knoten u.
-	\item[$ \hat{a}_{u}$]\hfill\\ Aktuelle Anzahl an Nachbarknoten eines Knoten u.
+	\item[$ \hat{s}_{uv}$] Anzahl an Kanten zwischen Knoten u und Knoten v. Dieses Feature wird auch vom MIDAS Algorithmus verwendet.
+	\item[$ \hat{s}_{u}$] Gesamtanzahl an Nachbarknoten eines Knoten u.
+	\item[$ \hat{a}_{u}$] Aktuelle Anzahl an Nachbarknoten eines Knoten u.
 \end{description}
 
 Aus diesen drei Features wird anschließend ein Ausreißer-Score abgeleitet.
@@ -100,7 +100,7 @@ Aus diesen drei Features wird anschließend ein Ausreißer-Score abgeleitet.
 \subsection{Anwendung auf Netzwerkdaten}
 \label{sec:m-ex}
 
-Die Anwendung des MIDAS-Algorithmus auf Netzwerkdaten erfolgte problemlos. Es werden lediglich Daten benötigt, die in jeder Zeile aus einem Ausgangs-, einem Zielpunkt, sowie einem Zeitstempel bestehen. In welcher Form der Zeitstempel bereitgestellt wird, ist hierbei unwichtig. Nachfolgend werden die Ergebnisse mithilfe des MIDAS-Algorithmus auf Netzwerkdaten dargestellt.
+Die Anwendung des MIDAS-Algorithmus auf Netzwerkdaten erfolgte problemlos. Es werden lediglich Daten benötigt, die in jeder Zeile aus einem Eingangs-, einem Ausgangsknoten und einem Zeitstempel bestehen. In welcher Form der Zeitstempel bereitgestellt wird, ist hierbei unwichtig. Nachfolgend werden die Ergebnisse mithilfe des MIDAS-Algorithmus auf Netzwerkdaten dargestellt.
 
 \begin{figure}[H]
 	\centering
@@ -109,7 +109,7 @@ Die Anwendung des MIDAS-Algorithmus auf Netzwerkdaten erfolgte problemlos. Es we
 	\label{img:midas:enron_anomaly}
 \end{figure}
 
-Vergleicht man die Ergebnisse aus \autoref{img:midas:enron_anomaly} mit den Ergebnissen aus \autoref{chap:ap-data} so kann erkannt werden, dass beide Algorithmen einen ähnlichen Verlauf vorweisen. Damit eine genauere Aussage getroffen werden kann, werden die MIDAS-Ergebnisse nachfolgend mit der Enron-Zeitleiste abgeglichen. So können mögliche Auswirkungen für die identifizierten Ausreißer deklariert werden. \workTodo{EnronTimelineQuelle}
+Vergleicht man die Ergebnisse aus \autoref{img:midas:enron_anomaly} mit den Ergebnissen aus \autoref{chap:ap-data}, so ist zu erkennen, dass beide Algorithmen einen ähnlichen Verlauf vorweisen. Damit eine genauere Aussage getroffen werden kann, werden die MIDAS-Ergebnisse nachfolgend mit der Enron-Zeitleiste abgeglichen. So können mögliche Auswirkungen für die identifizierten Ausreißer deklariert werden. \cite{EnronTimeline}
 
 Die \autoref{tab:enrontime} bietet eine Übersicht der historischen Ereignisse, die die Ausreißer des MIDAS-Algorithmus bestätigen. Im Vergleich zu \citep{SedanSpot} werden mehr Ausreißer erkannt.
   
@@ -123,7 +123,7 @@ Die \autoref{tab:enrontime} bietet eine Übersicht der historischen Ereignisse, d
 	\midrule
 	3. & \textbullet Skilling (CEO) kündigt. Mitarbeiterin warnt Lay (Gründer) vor Pleite. Skilling verkauft seine Aktien. \newline \textbullet Enron veröffentlicht 618 Mio. \$ Verlust. Interessenskonflikt wird untersucht und Akten vernichtet. \\
 	\midrule
-	4. & \textbullet Beginn der Strafermittlung. Lay's Rücktritt \newline \textbullet Internen Ermittlung verteilt die Schuld auf Führungskräfte und den Vorstand \\
+	4. & \textbullet Beginn der Strafermittlung. Lay's Rücktritt \newline \textbullet Interne Ermittlung verteilt die Schuld auf Führungskräfte und den Vorstand \\
 	\bottomrule
 \end{tabular}
 	\caption{Übersicht über historische Ereignisse, die den Ausreißern zuzuordnen sind}
@@ -144,15 +144,15 @@ Bei der Anwendung des MIDAS auf dem DARPA-Datensatz sieht man klare einzelne Aus
 
 Bei der Berechnung der AUC für die ermittelten Ausreißer-Scores wird ein Wert von $0.91727$ berechnet. Das bedeutet, dass der MIDAS-Algorithmus mit einer Wahrscheinlichkeit von ca. 91,73\% die Ausreißer des Datensatzes richtig klassifiziert.  
 
-Somit kann festgehalten werden, dass MIDAS hinsichtlich der Ausreißererkennung in Graphen, ein sehr guter Algorithmus ist und eine sehr hohe Genauigkeit erreicht.
+Somit kann festgehalten werden, dass MIDAS hinsichtlich der Ausreißererkennung in Graphen, eine sehr hohe Genauigkeit erreicht.
 
 
 \subsection{Anwendung auf Zeitreihen}
 \label{sec:resultsOTs}
 
-Um den MIDAS-Algorithmus auf Zeitreihen anwenden zu können, muss die Zeitreihe, wie in \autoref{chap:trsnsMidas} beschrieben, zunächst in verschiedene Netzwerke umgewandelt werden. Bei den Tests konnte festgestellt werden, dass der MIDAS-Algorithmus nicht dazu in der Lage ist Ausreißer in Zeitreihen zu erkennen. Die vollständigen Ergebnisse der Tests können in \autoref{chap:appendix_midas_ts} eingesehen werden. Hierbei ist jedoch der Verlauf des Ausreißer-Scores schwierig zu interpretieren. Es ist zu erkennen, das der Ausreißer-Score zu Beginn eines jeden Abschnitts sehr hoch ist, am Ende des Abschnitts ist der Ausreißer-Score hingegen relativ niedrig. Grund hierfür ist, das die Anzahl an Kanten zu Beginn eines Abschnittes im Verhältnis zu der Anzahl an Kanten aus den vorangegangenen Abschnitten deutlich niedriger ist. Im weiteren Verlauf werden weitere Kanten innerhalb des Abschnitts hinzugefügt. Dadurch gleicht sich die Anzahl an Kanten innerhalb der Abschnitte an und der Ausreißer-Score sinkt.
+Um den MIDAS-Algorithmus auf Zeitreihen anwenden zu können, muss die Zeitreihe, wie in \autoref{sec:transDym} beschrieben, zunächst in verschiedene Netzwerke umgewandelt werden. Bei den Tests konnte festgestellt werden, dass der MIDAS-Algorithmus nicht dazu in der Lage ist Ausreißer in Zeitreihen zu erkennen. Die vollständigen Ergebnisse der Tests können in \autoref{chap:appendix_midas_ts} eingesehen werden. Hierbei ist jedoch der Verlauf des Ausreißer-Scores schwierig zu interpretieren. Es ist zu erkennen, dass der Ausreißer-Score zu Beginn eines jeden Abschnitts sehr hoch und am Ende des Abschnitts hingegen relativ niedrig ist. Grund hierfür ist, dass die Anzahl an Kanten zu Beginn eines Abschnittes, im Verhältnis zu der Anzahl an Kanten aus den vorangegangenen Abschnitten, deutlich niedriger ist. Im weiteren Verlauf werden weitere Kanten innerhalb des Abschnitts hinzugefügt. Dadurch gleicht sich die Anzahl an Kanten innerhalb der Abschnitte an und der Ausreißer-Score sinkt.
 
-Der MIDAS-Algorithmus ist lediglich bei einer Zeitreihe dazu in der Lage den Ausreißer zu identifizieren. Hierbei handelt es sich um die Zeitreihe mit erhöhter Amplitude (vgl. \autoref{img:midasTSresultJumpsup}). Durch den Ausschlag nach oben in der Zeitreihe entsteht ein Netzwerk, mit sehr hohen Gewichten. Die hohen Gewichte führen zu einer erhöhten Anzahl an Kanten, das schlussendlich zu einem Ausschlag des Ausreißer Scores führt. Die erhöhte Anzahl an Kanten führt ebenfalls dazu das der Abschnitt mit dem Ausreißer in der Abbildung deutlich breiter ist als die anderen. Bei anderen Ausreißertypen sind die Differenzen zwischen den verschiedenen Elementen der Zeitreihe nicht so groß. Dadurch ergeben sich keinerlei hohe Kantengewichte und der Ausreißer kann nicht erkannt werden.
+Der MIDAS-Algorithmus ist lediglich bei einer Zeitreihe dazu in der Lage den Ausreißer zu identifizieren. Hierbei handelt es sich um die Zeitreihe mit erhöhter Amplitude (vgl. \autoref{img:midasTSresultJumpsup}). Durch den Ausschlag nach oben in der Zeitreihe entsteht ein Netzwerk mit sehr hohen Gewichten. Die hohen Gewichte führen zu einer erhöhten Anzahl an Kanten, das schlussendlich zu einem Ausschlag des Ausreißer Scores führt. Die erhöhte Anzahl an Kanten führt ebenfalls dazu, dass der Abschnitt mit dem Ausreißer in der Abbildung deutlich breiter ist als die anderen. Bei anderen Ausreißertypen sind die Differenzen zwischen den verschiedenen Elementen der Zeitreihe nicht so groß. Dadurch ergeben sich keinerlei hohe Kantengewichte und der Ausreißer kann nicht erkannt werden.
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.5\textwidth]{fig/resultsMidasTS/art_daily_jumpsup_MIDAS_hdrei_labeled_result.png}
@@ -160,7 +160,7 @@ Der MIDAS-Algorithmus ist lediglich bei einer Zeitreihe dazu in der Lage den Aus
 	\label{img:midasTSresultJumpsup}
 \end{figure}
 
-Teilweise führen die Ausreißer ebenso zu besonders wenigen Kanten (vgl. \autoref{img:midasTSresultsZykAus}). Bei diesem Ausreißertyp sind alle Werte auf der selben Ebene. Dadurch gehen die Kantengewichte gegen Null. Dies führt zu einem sehr kurzen Abschnitt in \autoref{img:midasTSresultJumpsup}, der mit einem Pfeil markiert wurde. Des Weiteren ergibt sich durch die Ausreißer eine leicht veränderte Anzahl an Kanten in dem Abschnitt mit diesem(vgl. \autoref{img:midasTSresultsFreqChange}). Die Abweichungen sind jedoch so gering, dass es zu keinem starken Anstieg des Ausreißer-Score führt.
+Teilweise führen die Ausreißer ebenso zu besonders wenigen Kanten (vgl.\autoref{img:midasTSresultsZykAus}). Bei diesem Ausreißertyp sind alle Werte auf der selben Ebene. Dadurch gehen die Kantengewichte gegen Null. Dies führt zu einem sehr kurzen Abschnitt in \autoref{img:midasTSresultJumpsup}, der mit einem Pfeil markiert wurde. Des Weiteren ergibt sich eine leicht veränderte Anzahl an Kanten in dem Abschnitt mit Ausreißern (vgl.\autoref{img:midasTSresultsFreqChange}). Die Abweichungen sind jedoch so gering, dass es zu keinem starken Anstieg des Ausreißer-Score kommt.
 \label{sec:resultTSwithoutMidas}
 
 \begin{figure}[H]
@@ -173,7 +173,7 @@ Teilweise führen die Ausreißer ebenso zu besonders wenigen Kanten (vgl. \autoref
 	\label{img:midasTSresultsDontWork}
 \end{figure}
 
-Es wurden außerdem Tests durchgeführt um zu untersuchen, wie sich der Algorithmus bei veränderter Fenstergröße verhält (vgl. \autoref{img:midasTSresults110}). Bei den Untersuchungen in \autoref{img:midasTSresultJumpsup} und \autoref{img:midasTSresultsDontWork} wurde einer Fenstergröße von 288 genutzt, das der Saisonalität der Zeitreihe entspricht. Für dieses Experiment wurde einer Fenstergröße von 110 verwendet. Es konnte festgestellt werden, das diese Veränderung keinen zusätzlichen Nutzen erbringt. Allerdings ist der Ausschlag nach oben im Ausreißer-Score für die Zeitreihe mit erhöhter Amplitude noch deutlicher zu erkennen. Die anderen Ausreißertypen werden weiterhin nicht erkannt.
+Es wurden außerdem Tests durchgeführt um zu untersuchen, wie sich der Algorithmus bei veränderter Fenstergröße verhält (vgl. \autoref{img:midasTSresults110}). Bei den Untersuchungen in \autoref{img:midasTSresultJumpsup} und \autoref{img:midasTSresultsDontWork} wurde einer Fenstergröße von 288 genutzt, die der Saisonalität der Zeitreihe entspricht. Für dieses Experiment wurde eine Fenstergröße von 110 verwendet. Es konnte festgestellt werden, dass diese Veränderung keinen zusätzlichen Nutzen erbringt. Allerdings ist der Ausschlag nach oben im Ausreißer-Score für die Zeitreihe mit erhöhter Amplitude noch deutlicher zu erkennen. Die anderen Ausreißertypen werden weiterhin nicht erkannt.
 
 \begin{figure}[H]
 	\centering
@@ -185,7 +185,7 @@ Es wurden außerdem Tests durchgeführt um zu untersuchen, wie sich der Algorithmu
 	\label{img:midasTSresults110}
 \end{figure}
 
-In einem nächsten Schritt wurde untersucht inwiefern der MIDAS-R-Algorithmus zu einer Verbesserung bei der Ausreißererkennung beitragen kann (vgl. \autoref{img:midasRTSresults}). Der MIDAS-R-Algorithmus berücksichtigt bei der Berechnung des Ausreißer-Scores für den aktuellen Abschnitt ebenso die Daten aus der den vorangegangenen Abschnitten. Aus diesem Grund wurde angenommen, dass durch den Einsatz des MIDAS-R-Algorithmus  die Ausschläge zu Beginn eines jeden Abschnitts aus bleiben, sodass Ausreißer deutlicher hervortreten. Es konnte festgestellt werden, dass der Ausschlag des Ausreißer-Scores zu Beginn der Abschnitte deutlich kleiner ist. Jedoch steigt der Ausreißer-Score zum Ende eines jeden Abschnitts wieder an. Es konnte somit keine signifikante Verbesserung bei der Erkennung von Ausreißern erreicht werden. Insbesondere da der MIDAS-R-Algorithmus ebenfalls nur den Ausreißer in der Zeitreihe mit erhöhter Amplitude anzeigt. Somit konnte festgestellt werden, dass die, durch den MIDAS-R-Algorithmus, eingeführten Merkmale ebenso zu keiner Verbesserung der Ergebnisse geführt haben. 
+In einem nächsten Schritt wurde untersucht, inwiefern der MIDAS-R-Algorithmus zu einer Verbesserung bei der Ausreißererkennung beitragen kann (vgl. \autoref{img:midasRTSresults}). Der MIDAS-R-Algorithmus berücksichtigt, bei der Berechnung des Ausreißer-Scores, für den aktuellen Abschnitt, ebenso die Daten aus den vorherigen Abschnitten. Aus diesem Grund wurde angenommen, dass durch den Einsatz des MIDAS-R-Algorithmus die Ausschläge zu Beginn eines jeden Abschnitts ausbleiben, sodass Ausreißer deutlicher hervortreten. Es konnte festgestellt werden, dass der Ausschlag des Ausreißer-Scores, zu Beginn der Abschnitte, deutlich kleiner ist. Jedoch steigt der Ausreißer-Score zum Ende eines jeden Abschnitts wieder an. Es konnte somit keine signifikante Verbesserung bei der Erkennung von Ausreißern erreicht werden. Insbesondere, da der MIDAS-R-Algorithmus ebenso nur den Ausreißer in der Zeitreihe mit erhöhter Amplitude anzeigt. Somit wurde deutlich, dass die durch den MIDAS-R-Algorithmus eingeführten Merkmale, zu keiner Verbesserung der Ergebnisse geführt haben. 
 
 \begin{figure}[H]
 	\centering
